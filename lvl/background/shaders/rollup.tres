@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cy1crpqko6rbm"]
+
+[ext_resource type="Shader" uid="uid://bc1xj7abw4kwe" path="res://lvl/background/shaders/rollup.gdshader" id="1_42p5q"]
+
+[resource]
+shader = ExtResource("1_42p5q")
+shader_parameter/direction = Vector2(0, -1)
+shader_parameter/speed = 0.1

@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://gdjrn1thxdwn"]
+
+[ext_resource type="SpriteFrames" uid="uid://2h7pdm33hnqr" path="res://actors/player/img/base_0.tres" id="1_u3vtx"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D"]
+polygon = PackedVector2Array(-165, 69, -239, 88, -240, 78, -204, 33, -67, -46, 1, -122, 10, -122, 83, -43, 212, 34, 244, 77, 244, 87, 173, 69, 5, 120)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("1_u3vtx")
