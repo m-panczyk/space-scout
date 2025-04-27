@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://dc5clugcbfcl6"]
+
+[ext_resource type="Script" uid="uid://ka0sf6v4nu1l" path="res://ui/lobby.gd" id="1_sja6r"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sja6r")
+metadata/_custom_type_script = "uid://ka0sf6v4nu1l"

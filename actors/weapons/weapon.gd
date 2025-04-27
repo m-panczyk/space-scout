@@ -17,4 +17,5 @@ func fire() -> void:
 	var new_bullet = bullet.instantiate()
 	new_bullet.speed = speed
 	new_bullet.position = get_parent().position
+	new_bullet.scale = get_parent().scale
 	get_parent().get_parent().add_child(new_bullet)

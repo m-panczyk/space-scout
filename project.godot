@@ -11,17 +11,19 @@ config_version=5
 [application]
 
 config/name="Space Scout"
+run/main_scene="uid://dpo40s8065wkx"
 config/features=PackedStringArray("4.4", "GL Compatibility")
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/image="uid://nbg0cnufie8x"
 config/icon="res://icon.svg"
 
 [autoload]
 
 EventBus="*res://addons/event_bus_plugin/EventBus.gd"
+GlobalSettings="*res://global_settings.gd"
 
 [display]
 
-window/size/viewport_width=648
-window/size/viewport_height=1152
 window/size/initial_position_type=3
 
 [editor]

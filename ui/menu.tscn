@@ -1,0 +1,57 @@
+[gd_scene load_steps=4 format=3 uid="uid://dpo40s8065wkx"]
+
+[ext_resource type="Script" uid="uid://d25k2wqra5wqq" path="res://ui/menu.gd" id="1_q23uf"]
+[ext_resource type="Texture2D" uid="uid://nbg0cnufie8x" path="res://icon.png" id="2_4c782"]
+[ext_resource type="Script" uid="uid://ka0sf6v4nu1l" path="res://ui/lobby.gd" id="2_7msyv"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_q23uf")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_4c782")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.5
+offset_top = -20.0
+offset_right = 50.5
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "    Trening    "
+
+[node name="Lobby" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_7msyv")
+metadata/_custom_type_script = "uid://ka0sf6v4nu1l"
+
+[connection signal="resized" from="." to="." method="_on_resized"]
+[connection signal="button_down" from="VBoxContainer/Button" to="." method="training"]

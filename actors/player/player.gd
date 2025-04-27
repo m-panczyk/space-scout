@@ -20,8 +20,12 @@ func get_size() -> Vector2:
 
 func _alt_ready() -> void:
 	health_changed()
+	if speed == Actor.DEFAULT_SPEED:
+		speed = 400
+		
 	collision_layer = 1
 	collision_mask = 2
+	
 	#energy production
 	energy_production_timer = Timer.new()
 	energy_production_timer.wait_time = energy_production[1]
@@ -38,10 +42,10 @@ func _alt_ready() -> void:
 func _on_energy_production_timer_timeout():
 	energy += energy_production[0]
 	energy = min(energy, energy_max)
-	print("Energy:", energy)
+
 
 func process_clamping():
-	var screen_size = get_viewport_rect().size
+	var screen_size = GlobalSettings.virtual_resolution
 	position = position.clamp(Vector2.ZERO, screen_size)
 
 func health_change():
@@ -69,7 +73,8 @@ func _input(event: InputEvent) -> void:
 	if event.is_action("game_fire"):
 		if energy >= weapon.consumption:
 			weapon.fire()
-			energy -= weapon.consumption
+			energy -= weapon.consumption  
 		
 func died():
-	EventBus.emit("game_over",[false,0])
+	#EventBus.emit("game_over",[false,0])
+	pass

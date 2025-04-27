@@ -1,10 +1,11 @@
 extends Area2D
 class_name Actor
 
+const DEFAULT_SPEED = 100
 @export var damage = 99999
 @export var health = 1
 @export var max_health = 1
-@export var speed = 100
+@export var speed = DEFAULT_SPEED
 @export var direction = Vector2.ZERO
 @export var skin_path = ""
 

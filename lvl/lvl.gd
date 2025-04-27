@@ -4,28 +4,24 @@ class_name GameLevel
 @export var bg_type = "0"
 @export var bg_speed = .1
 @export var fall_speed = 100
-@export var player_speed = 400
-@export var player_health = 1
-@export var player_weapon = "missle_0"
-@export var player_skin = "base_0"
+#@export var player_speed = 400
+#@export var player_health = 1
 
 var player:Player
 var bg:LevelBackground
 
 var screen_size:Vector2
 
-func _init() -> void:
-	player = Player.new()
-	player.skin_path = "res://actors/player/img/"+player_skin+".tscn"
-	player.max_health = player_health
-	player.speed = player_speed
+func _init(new_player:Player = Player.new()) -> void:
+	player = new_player
 	
 	bg = LevelBackground.new()
 	bg.speed = bg_speed
 	bg.lvl = bg_type
 
 func _ready() -> void:
-	screen_size = get_viewport().size
+	screen_size = GlobalSettings.virtual_resolution
+	print("games_size:" + str(screen_size))
 	add_child(bg)
 	add_child(player)
 	player.position = Vector2(screen_size.x/2,screen_size.y*0.8)

@@ -14,15 +14,19 @@ func _ready() -> void:
 	material = preload("res://lvl/background/shaders/rollup.tres")
 	material.set_shader_parameter("direction",direction)
 	material.set_shader_parameter("speed", speed)
-	get_tree().get_root().size_changed.connect(update_size)
+	get_parent().item_rect_changed.connect(update_size)
 	update_size()
 	
 func update_size() -> void:
-	screen_size = get_viewport_rect().size
+	screen_size = GlobalSettings.virtual_resolution
+	print(screen_size)
+	print(texture.get_size())
 
 	position.x = screen_size.x/2
 	position.y = screen_size.y/2
 	
-	var new_scale = max(screen_size.x / texture.get_width(),screen_size.y/texture.get_height())
+	var new_scale = max(float(screen_size.x) / texture.get_width(),float(screen_size.y)/texture.get_height())
+	
 	scale = Vector2(new_scale,new_scale)
+	print("scale: "+str(scale))
 	

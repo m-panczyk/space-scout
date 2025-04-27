@@ -1,0 +1,36 @@
+[gd_scene load_steps=3 format=3 uid="uid://ch47nd3iei8k7"]
+
+[ext_resource type="Script" uid="uid://beaf3hr6264to" path="res://game.gd" id="1_80nbo"]
+[ext_resource type="Script" uid="uid://dulhmwxqskfm" path="res://lvl/lvl.gd" id="2_e2o6t"]
+
+[node name="Game" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1088.0
+offset_bottom = 1920.0
+script = ExtResource("1_80nbo")
+
+[node name="RightSide" type="VBoxContainer" parent="."]
+layout_mode = 2
+offset_left = 4.0
+offset_right = 4.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Center" type="SubViewportContainer" parent="."]
+layout_mode = 0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Center"]
+handle_input_locally = false
+size = Vector2i(2, 2)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="GameLevel" type="Node2D" parent="Center/SubViewport"]
+script = ExtResource("2_e2o6t")
+metadata/_custom_type_script = "uid://dulhmwxqskfm"
+
+[node name="LeftSide" type="VBoxContainer" parent="."]
+layout_mode = 2
+grow_vertical = 2

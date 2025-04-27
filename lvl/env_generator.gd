@@ -10,7 +10,7 @@ signal difficulty_increased(level, speed)
 @export var pace_level_decrement: float = 0.1
 @export var base_speed: int = 100
 @export var speed_increment: int = 1
-@export var item_scale: float = 0.2  # Relative to screen width
+@export var item_scale: float = 0.2  
 
 # Runtime properties
 var run: bool = true
@@ -38,7 +38,7 @@ var answers = [
 var added_item_speed: int = 0
 
 func _ready() -> void:
-	screen_size = get_viewport().get_visible_rect().size
+	screen_size = GlobalSettings.virtual_resolution
 	item_size = screen_size.x * item_scale
 	pace_level = pace_level_start
 	current_speed = base_speed
