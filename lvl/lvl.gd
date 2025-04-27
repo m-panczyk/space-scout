@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 class_name GameLevel
 
 @export var bg_type = "0"
@@ -33,5 +33,5 @@ func _ready() -> void:
 	var player_scale = (screen_size.x/5)/player_size
 	player.scale = Vector2(player_scale,player_scale)
 	var env_gen = EnvGenerator.new()
-	env_gen.speed = fall_speed
+	env_gen.base_speed = fall_speed
 	add_child(env_gen)

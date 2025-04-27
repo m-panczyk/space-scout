@@ -1,6 +1,13 @@
 extends Actor
 class_name Player
 
+@export var weapon_name = 'basic'
+@export var energy:int = 1
+@export var energy_max = 10
+@export var energy_production = [1,1]
+var energy_production_timer: Timer
+var weapon:Weapon
+
 func _init() -> void:
 	if skin_path == "":
 		skin_path = "res://actors/player/img/base_0.tscn"
@@ -15,8 +22,27 @@ func _alt_ready() -> void:
 	health_changed()
 	collision_layer = 1
 	collision_mask = 2
-
+	#energy production
+	energy_production_timer = Timer.new()
+	energy_production_timer.wait_time = energy_production[1]
+	energy_production_timer.one_shot = false
+	energy_production_timer.autostart = true
+	add_child(energy_production_timer)
+	energy_production_timer.timeout.connect(_on_energy_production_timer_timeout)
 	
+	if weapon_name != '':
+		var load_weapon = load("res://actors/weapons/"+weapon_name+".tscn")
+		weapon = load_weapon.instantiate()
+		add_child(weapon)
+
+func _on_energy_production_timer_timeout():
+	energy += energy_production[0]
+	energy = min(energy, energy_max)
+	print("Energy:", energy)
+
+func process_clamping():
+	var screen_size = get_viewport_rect().size
+	position = position.clamp(Vector2.ZERO, screen_size)
 
 func health_change():
 	EventBus.emit("health_changed", [health,max_health])
@@ -39,5 +65,11 @@ func process_move(delta: float):
 			velocity = velocity.normalized() * speed
 		position += velocity * delta
 
+func _input(event: InputEvent) -> void:
+	if event.is_action("game_fire"):
+		if energy >= weapon.consumption:
+			weapon.fire()
+			energy -= weapon.consumption
+		
 func died():
 	EventBus.emit("game_over",[false,0])

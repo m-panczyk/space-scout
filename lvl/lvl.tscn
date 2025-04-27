@@ -1,6 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://bs1hu7lpdivca"]
+[gd_scene load_steps=3 format=3 uid="uid://bs1hu7lpdivca"]
 
 [ext_resource type="Script" uid="uid://dulhmwxqskfm" path="res://lvl/lvl.gd" id="1_ox0hx"]
+[ext_resource type="PackedScene" uid="uid://coxnu0awju7de" path="res://actors/bullets/basic.tscn" id="2_e2nlt"]
 
-[node name="lvl" type="Node"]
+[node name="lvl" type="Node2D"]
 script = ExtResource("1_ox0hx")
+
+[node name="Basic" parent="." instance=ExtResource("2_e2nlt")]
+z_index = 999
+position = Vector2(345, 979)

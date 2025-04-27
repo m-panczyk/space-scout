@@ -5,14 +5,15 @@ class_name Actor
 @export var health = 1
 @export var max_health = 1
 @export var speed = 100
-@export var direction = Vector2(0,1)
+@export var direction = Vector2.ZERO
 @export var skin_path = ""
 
 var visibility_notifier: VisibleOnScreenNotifier2D
 
 func _enter_tree() -> void:
-	var skin_instance = load(skin_path).instantiate()
-	add_child(skin_instance)
+	if skin_path != "":
+		var skin_instance = load(skin_path).instantiate()
+		add_child(skin_instance)
 
 func _ready() -> void:
 	area_entered.connect(_on_area_entered)
@@ -40,8 +41,7 @@ func process_move(delta: float) -> void:
 	
 
 func process_clamping() -> void:
-	var screen_size = get_viewport_rect().size
-	position = position.clamp(Vector2.ZERO, screen_size)
+	pass
 
 func _on_area_entered(other_area) -> void:
 	if other_area.has_method("get_damage"):
@@ -65,7 +65,7 @@ func _on_screen_entered() -> void:
 	pass
 
 func _on_screen_exited() -> void:
-	pass
+	died()
 
 func get_size() -> Vector2:
 	return get_child(0).get_child(0).texture.get_size()
