@@ -1,4 +1,4 @@
-image: barichello/godot-ci
+image: barichello/godot-ci:4.4.1
 
 stages:
   - export
@@ -12,6 +12,7 @@ before_script:
   - mkdir -v -p build/windows
   - mkdir -v -p build/mac
   - mkdir -v -p build/web
+  - mkdir -v -p build/android
 
 linux:
   stage: export
@@ -39,7 +40,14 @@ mac:
     name: $EXPORT_NAME-$CI_JOB_NAME
     paths:
       - build/mac
-
+android:
+  stage: export
+  script:
+    - godot --headless --verbose --export-release "Android" ./build/android/$EXPORT_NAME.x86_64
+  artifacts:
+    name: $EXPORT_NAME-$CI_JOB_NAME
+    paths:
+      - build/android
 web:
   stage: export
   script:
