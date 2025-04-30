@@ -5,7 +5,7 @@ stages:
   - deploy
 
 variables:
-  EXPORT_NAME: Space Scout
+  EXPORT_NAME: Space_Scout
 
 before_script:
   - mkdir -v -p build/linux
