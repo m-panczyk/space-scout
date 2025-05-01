@@ -97,53 +97,58 @@ serve_artifacts:
     
     # Check and copy artifacts with error handling
     - echo "Copying Linux build..."
-    - if [ -d "build/linux" ] && [ "$(ls -A build/linux 2>/dev/null)" ]; then
-        mkdir -p ${BUILD_DIR}/linux;
-        cp -r build/linux/* ${BUILD_DIR}/linux/ || echo "Warning: Some Linux files may not have copied";
+    - |
+      if [ -d "build/linux" ] && [ "$(ls -A build/linux 2>/dev/null)" ]; then
+        mkdir -p ${BUILD_DIR}/linux
+        cp -r build/linux/* ${BUILD_DIR}/linux/ || echo "Warning: Some Linux files may not have copied"
       else
-        echo "No Linux build files found";
-        mkdir -p ${BUILD_DIR}/linux;
-        echo "No build available" > ${BUILD_DIR}/linux/README.txt;
+        echo "No Linux build files found"
+        mkdir -p ${BUILD_DIR}/linux
+        echo "No build available" > ${BUILD_DIR}/linux/README.txt
       fi
       
     - echo "Copying Windows build..."
-    - if [ -d "build/windows" ] && [ "$(ls -A build/windows 2>/dev/null)" ]; then
-        mkdir -p ${BUILD_DIR}/windows;
-        cp -r build/windows/* ${BUILD_DIR}/windows/ || echo "Warning: Some Windows files may not have copied";
+    - |
+      if [ -d "build/windows" ] && [ "$(ls -A build/windows 2>/dev/null)" ]; then
+        mkdir -p ${BUILD_DIR}/windows
+        cp -r build/windows/* ${BUILD_DIR}/windows/ || echo "Warning: Some Windows files may not have copied"
       else
-        echo "No Windows build files found";
-        mkdir -p ${BUILD_DIR}/windows;
-        echo "No build available" > ${BUILD_DIR}/windows/README.txt;
+        echo "No Windows build files found"
+        mkdir -p ${BUILD_DIR}/windows
+        echo "No build available" > ${BUILD_DIR}/windows/README.txt
       fi
       
     - echo "Copying macOS build..."
-    - if [ -d "build/mac" ] && [ "$(ls -A build/mac 2>/dev/null)" ]; then
-        mkdir -p ${BUILD_DIR}/mac;
-        cp -r build/mac/* ${BUILD_DIR}/mac/ || echo "Warning: Some macOS files may not have copied";
+    - |
+      if [ -d "build/mac" ] && [ "$(ls -A build/mac 2>/dev/null)" ]; then
+        mkdir -p ${BUILD_DIR}/mac
+        cp -r build/mac/* ${BUILD_DIR}/mac/ || echo "Warning: Some macOS files may not have copied"
       else
-        echo "No macOS build files found";
-        mkdir -p ${BUILD_DIR}/mac;
-        echo "No build available" > ${BUILD_DIR}/mac/README.txt;
+        echo "No macOS build files found"
+        mkdir -p ${BUILD_DIR}/mac
+        echo "No build available" > ${BUILD_DIR}/mac/README.txt
       fi
       
     - echo "Copying Android build..."
-    - if [ -d "build/android" ] && [ "$(ls -A build/android 2>/dev/null)" ]; then
-        mkdir -p ${BUILD_DIR}/android;
-        cp -r build/android/* ${BUILD_DIR}/android/ || echo "Warning: Some Android files may not have copied";
+    - |
+      if [ -d "build/android" ] && [ "$(ls -A build/android 2>/dev/null)" ]; then
+        mkdir -p ${BUILD_DIR}/android
+        cp -r build/android/* ${BUILD_DIR}/android/ || echo "Warning: Some Android files may not have copied"
       else
-        echo "No Android build files found";
-        mkdir -p ${BUILD_DIR}/android;
-        echo "No build available" > ${BUILD_DIR}/android/README.txt;
+        echo "No Android build files found"
+        mkdir -p ${BUILD_DIR}/android
+        echo "No build available" > ${BUILD_DIR}/android/README.txt
       fi
       
     - echo "Copying Web build..."
-    - if [ -d "build/web" ] && [ "$(ls -A build/web 2>/dev/null)" ]; then
-        mkdir -p ${BUILD_DIR}/web;
-        cp -r build/web/* ${BUILD_DIR}/web/ || echo "Warning: Some Web files may not have copied";
+    - |
+      if [ -d "build/web" ] && [ "$(ls -A build/web 2>/dev/null)" ]; then
+        mkdir -p ${BUILD_DIR}/web
+        cp -r build/web/* ${BUILD_DIR}/web/ || echo "Warning: Some Web files may not have copied"
       else
-        echo "No Web build files found";
-        mkdir -p ${BUILD_DIR}/web;
-        echo "No build available" > ${BUILD_DIR}/web/README.txt;
+        echo "No Web build files found"
+        mkdir -p ${BUILD_DIR}/web
+        echo "No build available" > ${BUILD_DIR}/web/README.txt
       fi
     
     # Create latest symlinks - link to directories, not files
