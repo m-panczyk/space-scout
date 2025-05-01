@@ -46,7 +46,7 @@ mac:
 android:
   stage: export
   script:
-    - godot --headless --verbose --export-release "Android" ./build/android/$EXPORT_NAME.apk
+    - godot --headless --verbose --export-debug "Android" ./build/android/$EXPORT_NAME.apk
   artifacts:
     name: $EXPORT_NAME-$CI_JOB_NAME
     paths:
