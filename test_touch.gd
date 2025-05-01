@@ -8,14 +8,16 @@ var releasePos : Vector2
 func _input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		$TextureRect.set_visible(!$TextureRect.is_visible())
-	if Input.is_action_just_pressed("click"):
-		pressedPos = event.position
-		print(pressedPos)
-	if Input.is_action_just_released("click"):
-		releasePos = event.position
-		print(releasePos)
-		calculateGesture()
+		$TouchScreenJoystick.set_position(event.position)
+	if event.is_action("ui_left"):
+		$TextureRect.flip_h = true
+	elif event.is_action("ui_right"):
+		$TextureRect.flip_h = false
 
+	if event.is_action("ui_up"):
+		$TextureRect.flip_v = true
+	elif event.is_action("ui_up"):
+		$TextureRect.flip_v = false
 
 func calculateGesture() -> void:
 	var d := releasePos - pressedPos
