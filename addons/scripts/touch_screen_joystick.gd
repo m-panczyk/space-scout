@@ -127,30 +127,85 @@ func reset_knob_pos() -> void:
 
 # triggers a specific input action based on the --
 # -- current direction
+#func trigger_input_actions() -> void:
+#	var dir := get_deadzoned_vector()
+#	
+#	if dir.x > 0:
+#		Input.action_release(action_left)
+#		Input.action_press(action_right, dir.x)
+#	else:
+#		Input.action_release(action_right)
+#		Input.action_press(action_left, -dir.x)
+#	
+#	if dir.y < 0:
+#		Input.action_release(action_down)
+#		Input.action_press(action_up, -dir.y)
+#	else:
+#		Input.action_release(action_up)
+#		Input.action_press(action_down, dir.y)
 func trigger_input_actions() -> void:
 	var dir := get_deadzoned_vector()
 	
-	if dir.x > 0:
-		Input.action_release(action_left)
-		Input.action_press(action_right, dir.x)
-	else:
-		Input.action_release(action_right)
-		Input.action_press(action_left, -dir.x)
+	# Create input events
+	var event_right := InputEventAction.new()
+	event_right.action = action_right
+	event_right.pressed = dir.x > 0
+	event_right.strength = abs(dir.x) if dir.x > 0 else 0.0
 	
-	if dir.y < 0:
-		Input.action_release(action_down)
-		Input.action_press(action_up, -dir.y)
-	else:
-		Input.action_release(action_up)
-		Input.action_press(action_down, dir.y)
+	var event_left := InputEventAction.new()
+	event_left.action = action_left
+	event_left.pressed = dir.x < 0
+	event_left.strength = abs(dir.x) if dir.x < 0 else 0.0
+	
+	var event_up := InputEventAction.new()
+	event_up.action = action_up
+	event_up.pressed = dir.y < 0
+	event_up.strength = abs(dir.y) if dir.y < 0 else 0.0
+	
+	var event_down := InputEventAction.new()
+	event_down.action = action_down
+	event_down.pressed = dir.y > 0
+	event_down.strength = abs(dir.y) if dir.y > 0 else 0.0
+	
+	# Parse input events
+	Input.parse_input_event(event_right)
+	Input.parse_input_event(event_left)
+	Input.parse_input_event(event_up)
+	Input.parse_input_event(event_down)
 
-# releases all input actions
+## releases all input actions
+#func release_input_actions() -> void:
+#	Input.action_release(action_right)
+#	Input.action_release(action_left)
+#	Input.action_release(action_up)
+#	Input.action_release(action_down)
+# Releases all input actions
 func release_input_actions() -> void:
-	Input.action_release(action_right)
-	Input.action_release(action_left)
-	Input.action_release(action_up)
-	Input.action_release(action_down)
-
+	var event_right := InputEventAction.new()
+	event_right.action = action_right
+	event_right.pressed = false
+	event_right.strength = 0.0
+	
+	var event_left := InputEventAction.new()
+	event_left.action = action_left
+	event_left.pressed = false
+	event_left.strength = 0.0
+	
+	var event_up := InputEventAction.new()
+	event_up.action = action_up
+	event_up.pressed = false
+	event_up.strength = 0.0
+	
+	var event_down := InputEventAction.new()
+	event_down.action = action_down
+	event_down.pressed = false
+	event_down.strength = 0.0
+	
+	# Parse input events
+	Input.parse_input_event(event_right)
+	Input.parse_input_event(event_left)
+	Input.parse_input_event(event_up)
+	Input.parse_input_event(event_down)
 func update_input_actions() -> void:
 	if use_input_actions and is_pressing:
 		trigger_input_actions()

@@ -39,18 +39,27 @@ grow_vertical = 2
 
 [node name="NewGame" type="Button" parent="TextureRect/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 text = "New Game"
 
 [node name="Button" type="Button" parent="TextureRect/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 text = "    Trening    "
 
 [node name="Settings" type="Button" parent="TextureRect/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 text = "Settings "
+
+[node name="Settings2" type="Button" parent="TextureRect/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Settings 2"
 
 [node name="Exit" type="Button" parent="TextureRect/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 text = "Exit"
 
 [node name="Lobby" type="Control" parent="."]
@@ -68,4 +77,5 @@ metadata/_custom_type_script = "uid://ka0sf6v4nu1l"
 [connection signal="button_down" from="TextureRect/VBoxContainer/NewGame" to="." method="new_game"]
 [connection signal="button_down" from="TextureRect/VBoxContainer/Button" to="." method="training"]
 [connection signal="button_down" from="TextureRect/VBoxContainer/Settings" to="." method="_on_settings_button_down"]
+[connection signal="button_down" from="TextureRect/VBoxContainer/Settings2" to="." method="_on_settings_2_button_down"]
 [connection signal="button_down" from="TextureRect/VBoxContainer/Exit" to="." method="_on_exit_button_down"]
