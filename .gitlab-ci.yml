@@ -4,7 +4,7 @@ stages:
   - serve
 
 variables:
-  EXPORT_NAME: Space Scout
+  EXPORT_NAME: Space_Scout
   ARTIFACTS_DIR: "/srv/artifacts"
   NGINX_PORT: 8080
 
