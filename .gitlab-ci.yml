@@ -1,4 +1,5 @@
 image: barichello/godot-ci:4.4.1
+
 stages:
   - export
   - serve
@@ -7,6 +8,10 @@ variables:
   EXPORT_NAME: Space_Scout
   ARTIFACTS_DIR: "/srv/artifacts"
   NGINX_PORT: 8080
+  DOCKER_HOST: "unix:///var/run/docker.sock"
+  DOCKER_TLS_CERTDIR: ""
+  WEB_CONTAINER_NAME: "spacescout-web"
+  WEB_HOST_PORT: 8443  # HTTPS port on the host
 
 before_script:
   - mkdir -v -p build/linux
@@ -60,225 +65,79 @@ web:
     paths:
       - build/web
 
-# Web server for artifacts
-serve_artifacts:
+serve:
   stage: serve
-  image: nginx:alpine
+  image: docker:24.0.5-git
+  services:
+    - docker:24.0.5-dind
   dependencies:
-    - linux
-    - windows
-    - mac
-    - android
     - web
   before_script:
-    - apk add --no-cache bash jq curl
+    - docker info
   script:
-    # Create timestamp and version info
-    - BUILD_TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-    - BUILD_VERSION=$(echo $CI_COMMIT_SHA | cut -c1-8)
-    - BUILD_DIR="${ARTIFACTS_DIR}/${CI_COMMIT_REF_NAME}_${BUILD_VERSION}_${BUILD_TIMESTAMP}"
+    # Create SSL certificates directory on the Docker host
+    - mkdir -p /mnt/docker/compose/volumes/spacescout/ssl
     
-    # Debug info
-    - echo "Inspecting build directories and files:"
-    - ls -la build/
-    - echo "Linux build files:"
-    - ls -la build/linux/ || echo "No Linux directory or empty"
-    - echo "Windows build files:"
-    - ls -la build/windows/ || echo "No Windows directory or empty"
-    - echo "Mac build files:"
-    - ls -la build/mac/ || echo "No Mac directory or empty"
-    - echo "Android build files:"
-    - ls -la build/android/ || echo "No Android directory or empty"
-    - echo "Web build files:"
-    - ls -la build/web/ || echo "No Web directory or empty"
-    
-    # Create destination directories
-    - mkdir -p ${ARTIFACTS_DIR}/latest/{linux,windows,mac,android,web}
-    
-    # Check and copy artifacts with error handling
-    - echo "Copying Linux build..."
+    # Generate self-signed SSL certificate if not exists
     - |
-      if [ -d "build/linux" ] && [ "$(ls -A build/linux 2>/dev/null)" ]; then
-        mkdir -p ${BUILD_DIR}/linux
-        cp -r build/linux/* ${BUILD_DIR}/linux/ || echo "Warning: Some Linux files may not have copied"
-      else
-        echo "No Linux build files found"
-        mkdir -p ${BUILD_DIR}/linux
-        echo "No build available" > ${BUILD_DIR}/linux/README.txt
-      fi
-      
-    - echo "Copying Windows build..."
-    - |
-      if [ -d "build/windows" ] && [ "$(ls -A build/windows 2>/dev/null)" ]; then
-        mkdir -p ${BUILD_DIR}/windows
-        cp -r build/windows/* ${BUILD_DIR}/windows/ || echo "Warning: Some Windows files may not have copied"
-      else
-        echo "No Windows build files found"
-        mkdir -p ${BUILD_DIR}/windows
-        echo "No build available" > ${BUILD_DIR}/windows/README.txt
-      fi
-      
-    - echo "Copying macOS build..."
-    - |
-      if [ -d "build/mac" ] && [ "$(ls -A build/mac 2>/dev/null)" ]; then
-        mkdir -p ${BUILD_DIR}/mac
-        cp -r build/mac/* ${BUILD_DIR}/mac/ || echo "Warning: Some macOS files may not have copied"
-      else
-        echo "No macOS build files found"
-        mkdir -p ${BUILD_DIR}/mac
-        echo "No build available" > ${BUILD_DIR}/mac/README.txt
-      fi
-      
-    - echo "Copying Android build..."
-    - |
-      if [ -d "build/android" ] && [ "$(ls -A build/android 2>/dev/null)" ]; then
-        mkdir -p ${BUILD_DIR}/android
-        cp -r build/android/* ${BUILD_DIR}/android/ || echo "Warning: Some Android files may not have copied"
-      else
-        echo "No Android build files found"
-        mkdir -p ${BUILD_DIR}/android
-        echo "No build available" > ${BUILD_DIR}/android/README.txt
-      fi
-      
-    - echo "Copying Web build..."
-    - |
-      if [ -d "build/web" ] && [ "$(ls -A build/web 2>/dev/null)" ]; then
-        mkdir -p ${BUILD_DIR}/web
-        cp -r build/web/* ${BUILD_DIR}/web/ || echo "Warning: Some Web files may not have copied"
-      else
-        echo "No Web build files found"
-        mkdir -p ${BUILD_DIR}/web
-        echo "No build available" > ${BUILD_DIR}/web/README.txt
+      if [ ! -f /mnt/docker/compose/volumes/spacescout/ssl/cert.pem ]; then
+        apk add --no-cache openssl
+        openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+          -keyout /mnt/docker/compose/volumes/spacescout/ssl/privkey.pem \
+          -out /mnt/docker/compose/volumes/spacescout/ssl/cert.pem \
+          -subj "/CN=spacescout.home"
       fi
     
-    # Create latest symlinks - link to directories, not files
-    - ln -sfn ${BUILD_DIR}/linux ${ARTIFACTS_DIR}/latest/linux
-    - ln -sfn ${BUILD_DIR}/windows ${ARTIFACTS_DIR}/latest/windows
-    - ln -sfn ${BUILD_DIR}/mac ${ARTIFACTS_DIR}/latest/mac
-    - ln -sfn ${BUILD_DIR}/android ${ARTIFACTS_DIR}/latest/android
-    - ln -sfn ${BUILD_DIR}/web ${ARTIFACTS_DIR}/latest/web
-    
-    # Generate build information file
+    # Create nginx config
     - |
-      cat > ${BUILD_DIR}/build_info.json << EOF
-      {
-        "project": "$CI_PROJECT_NAME",
-        "version": "$BUILD_VERSION",
-        "branch": "$CI_COMMIT_REF_NAME",
-        "commit": "$CI_COMMIT_SHA",
-        "built_by": "$GITLAB_USER_NAME",
-        "build_date": "$(date)",
-        "pipeline_id": "$CI_PIPELINE_ID",
-        "job_id": "$CI_JOB_ID"
-      }
-      EOF
-    
-    # Create index.html for root
-    - |
-      cat > ${ARTIFACTS_DIR}/index.html << EOF
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Space Scout Builds</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; color: #333; }
-          h1 { color: #2c3e50; }
-          .build-section { margin-bottom: 40px; }
-          .platform-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-          .platform-btn { padding: 8px 16px; background: #3498db; color: white; text-decoration: none; border-radius: 4px; }
-          .platform-btn:hover { background: #2980b9; }
-          .build-info { background: #f5f5f5; padding: 15px; border-radius: 4px; margin-top: 15px; }
-          .latest-section { background: #e8f4f8; padding: 20px; border-radius: 4px; margin-bottom: 30px; }
-        </style>
-      </head>
-      <body>
-        <h1>Space Scout Game Builds</h1>
-        
-        <div class="latest-section">
-          <h2>Latest Build</h2>
-          <div class="platform-links">
-            <a class="platform-btn" href="latest/linux/">Linux</a>
-            <a class="platform-btn" href="latest/windows/">Windows</a>
-            <a class="platform-btn" href="latest/mac/">macOS</a>
-            <a class="platform-btn" href="latest/android/">Android</a>
-            <a class="platform-btn" href="latest/web/">Web</a>
-          </div>
-        </div>
-        
-        <div class="build-section">
-          <h2>Build from $CI_COMMIT_REF_NAME ($BUILD_VERSION)</h2>
-          <p>Built on $(date)</p>
-          <div class="platform-links">
-            <a class="platform-btn" href="${CI_COMMIT_REF_NAME}_${BUILD_VERSION}_${BUILD_TIMESTAMP}/linux/">Linux</a>
-            <a class="platform-btn" href="${CI_COMMIT_REF_NAME}_${BUILD_VERSION}_${BUILD_TIMESTAMP}/windows/">Windows</a>
-            <a class="platform-btn" href="${CI_COMMIT_REF_NAME}_${BUILD_VERSION}_${BUILD_TIMESTAMP}/mac/">macOS</a>
-            <a class="platform-btn" href="${CI_COMMIT_REF_NAME}_${BUILD_VERSION}_${BUILD_TIMESTAMP}/android/">Android</a>
-            <a class="platform-btn" href="${CI_COMMIT_REF_NAME}_${BUILD_VERSION}_${BUILD_TIMESTAMP}/web/">Web</a>
-          </div>
-          <div class="build-info">
-            <p>Commit: $CI_COMMIT_SHA</p>
-            <p>Branch: $CI_COMMIT_REF_NAME</p>
-            <p>Built by: $GITLAB_USER_NAME</p>
-            <p>Pipeline: <a href="$CI_PROJECT_URL/-/pipelines/$CI_PIPELINE_ID">$CI_PIPELINE_ID</a></p>
-          </div>
-        </div>
-      </body>
-      </html>
-      EOF
-    
-    # Configure Nginx to serve the artifacts
-    - |
-      cat > /etc/nginx/conf.d/default.conf << EOF
+      cat > nginx.conf << EOF
       server {
-          listen ${NGINX_PORT};
-          server_name _;
+          listen 443 ssl;
+          server_name spacescout.home;
           
-          root ${ARTIFACTS_DIR};
-          autoindex on;
+          ssl_certificate /etc/nginx/ssl/cert.pem;
+          ssl_certificate_key /etc/nginx/ssl/privkey.pem;
           
-          # Add headers for better security
-          add_header X-Content-Type-Options "nosniff";
-          add_header X-Frame-Options "SAMEORIGIN";
-          add_header X-XSS-Protection "1; mode=block";
-          
-          # Set proper MIME types
-          include /etc/nginx/mime.types;
-          default_type application/octet-stream;
-          
-          # Configure directory listing
           location / {
-              try_files \$uri \$uri/ =404;
-              autoindex on;
-              autoindex_exact_size off;
-              autoindex_localtime on;
+              root /usr/share/nginx/html;
+              index index.html;
+              try_files \$uri \$uri/ /index.html;
           }
           
-          # For web build to run properly
-          location /web/ {
-              types {
-                  application/wasm wasm;
-                  application/octet-stream pck;
-              }
+          location /downloads/ {
+              alias /usr/share/nginx/downloads/;
+              autoindex on;
           }
       }
       EOF
     
-    # Start Nginx in the foreground
-    - echo "Starting artifacts web server on port ${NGINX_PORT}"
-    - echo "Artifacts will be available at http://$(hostname -i):${NGINX_PORT}/"
-    - nginx -g "daemon off;" &
+    # Stop and remove existing container if it exists
+    - docker rm -f $WEB_CONTAINER_NAME || true
     
-    # Keep container running
-    - echo "Web server is now running. Press Ctrl+C to stop."
-    - echo "This job will stay active for the duration of the pipeline."
-    - sleep infinity
-  environment:
-    name: artifacts
-    url: http://$CI_SERVER_HOST:$NGINX_PORT
-  artifacts:
-    expose_as: 'Game Builds'
-    paths:
-      - ${ARTIFACTS_DIR}
+    # Create directory structure for downloads
+    - mkdir -p /mnt/docker/compose/volumes/spacescout/downloads
+    
+    # Copy all build artifacts to downloads directory
+    - cp -R build/* /mnt/docker/compose/volumes/spacescout/downloads/
+    
+    # Start nginx container with HTTPS
+    - |
+      docker run -d \
+        --name $WEB_CONTAINER_NAME \
+        --restart always \
+        -p $WEB_HOST_PORT:443 \
+        -v /mnt/docker/compose/volumes/spacescout/ssl:/etc/nginx/ssl:ro \
+        -v /mnt/docker/compose/volumes/spacescout/downloads:/usr/share/nginx/downloads:ro \
+        -v $(pwd)/build/web:/usr/share/nginx/html:ro \
+        -v $(pwd)/nginx.conf:/etc/nginx/conf.d/default.conf:ro \
+        nginx:alpine
+    
+    # Verify container is running
+    - docker ps | grep $WEB_CONTAINER_NAME
+    
+    # Output access information
+    - echo "Game web build is now available at https://spacescout.home:$WEB_HOST_PORT"
+    - echo "Download all builds at https://spacescout.home:$WEB_HOST_PORT/downloads/"
+  only:
+    - main  # Only run on the main branch
 
