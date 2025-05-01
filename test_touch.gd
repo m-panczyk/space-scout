@@ -7,9 +7,9 @@ var releasePos : Vector2
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
-		$TouchScreenJoystick.show()
-		$TouchScreenJoystick.set_position(event.position)
-		$TouchScreenJoystick.is_pressing = true
+		if event.is_double_tap():
+			pass
+
 	if event.is_action("ui_left"):
 		$TextureRect.flip_h = true
 	elif event.is_action("ui_right"):
