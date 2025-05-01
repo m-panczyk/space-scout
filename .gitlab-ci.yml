@@ -167,4 +167,4 @@ serve:
     - echo "Game web build is now available at https://spacescout.home:$WEB_HOST_PORT"
     - echo "Download all builds at https://spacescout.home:$WEB_HOST_PORT/downloads/"
   only:
-    - main  # Only run on the main branch
+    - master
