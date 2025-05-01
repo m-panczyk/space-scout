@@ -281,18 +281,4 @@ serve_artifacts:
     expose_as: 'Game Builds'
     paths:
       - ${ARTIFACTS_DIR}
-    
-# GitLab Pages Deploy for web version playable demo
-pages:
-  stage: serve
-  dependencies:
-    - web
-  script:
-    - mkdir -p public
-    - cp -r build/web/* ./public/
-  artifacts:
-    paths:
-      - public
-  only:
-    - master
-    - main
+
