@@ -1,13 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://ch47nd3iei8k7"]
+[gd_scene load_steps=4 format=3 uid="uid://ch47nd3iei8k7"]
 
 [ext_resource type="Script" uid="uid://beaf3hr6264to" path="res://game.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://dulhmwxqskfm" path="res://lvl/lvl.gd" id="2_e2o6t"]
+[ext_resource type="Script" uid="uid://cpu2p4fufbfh" path="res://addons/scripts/touch_screen_joystick.gd" id="3_feb5d"]
 
 [node name="Game" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 1088.0
-offset_bottom = 1920.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_80nbo")
 
 [node name="RightSide" type="VBoxContainer" parent="."]
@@ -34,3 +37,12 @@ metadata/_custom_type_script = "uid://dulhmwxqskfm"
 [node name="LeftSide" type="VBoxContainer" parent="."]
 layout_mode = 2
 grow_vertical = 2
+
+[node name="TouchScreenJoystick" type="Control" parent="."]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+pivot_offset = Vector2(20, 20)
+script = ExtResource("3_feb5d")
+metadata/_custom_type_script = "uid://cpu2p4fufbfh"

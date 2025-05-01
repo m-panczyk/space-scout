@@ -34,3 +34,7 @@ func _on_resized() -> void:
 	$TextureRect.size = Vector2(new_size,new_size)
 	$TextureRect.position = Vector2((size.x-new_size)/2,(size.y-new_size)/2)
 	
+
+
+func _on_exit_button_down() -> void:
+	get_tree().quit()
