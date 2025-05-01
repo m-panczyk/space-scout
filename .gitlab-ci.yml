@@ -80,8 +80,6 @@ serve:
     - apk add --no-cache bash curl
     - docker info
   script:
-    # No longer needed - moved to Docker volume operations
-    
     # Create nginx config
     - |
       cat > nginx.conf << EOF
@@ -108,11 +106,11 @@ serve:
     # Stop and remove existing container if it exists
     - docker rm -f $WEB_CONTAINER_NAME || true
     
-    # Create directory structure for downloads
+    # Create directory structure for downloads and verify content
     - mkdir -p artifacts-temp
-    
-    # Copy all build artifacts to temporary directory
     - cp -R build/* artifacts-temp/
+    - ls -la artifacts-temp
+    - ls -la build
     
     # Create Docker volume for artifacts
     - docker volume create spacescout-artifacts
