@@ -67,5 +67,5 @@ metadata/_custom_type_script = "uid://ka0sf6v4nu1l"
 [connection signal="resized" from="." to="." method="_on_resized"]
 [connection signal="button_down" from="TextureRect/VBoxContainer/NewGame" to="." method="new_game"]
 [connection signal="button_down" from="TextureRect/VBoxContainer/Button" to="." method="training"]
-[connection signal="button_down" from="TextureRect/VBoxContainer/Settings" to="." method="training"]
+[connection signal="button_down" from="TextureRect/VBoxContainer/Settings" to="." method="_on_settings_button_down"]
 [connection signal="button_down" from="TextureRect/VBoxContainer/Exit" to="." method="_on_exit_button_down"]

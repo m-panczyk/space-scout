@@ -1,6 +1,7 @@
 extends Control
 
 var game_scene = preload("res://game.tscn")
+var settings = preload("res://test_touch.tscn")
 
 var lobby:Lobby
 
@@ -38,3 +39,7 @@ func _on_resized() -> void:
 
 func _on_exit_button_down() -> void:
 	get_tree().quit()
+
+
+func _on_settings_button_down() -> void:
+	get_tree().change_scene_to_packed(settings)

@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=3 uid="uid://bku040osd16g8"]
+
+[ext_resource type="Script" uid="uid://bfaifkcdty6wy" path="res://test_touch.gd" id="1_d4g0e"]
+[ext_resource type="Script" uid="uid://cpu2p4fufbfh" path="res://addons/scripts/touch_screen_joystick.gd" id="1_ukjeb"]
+[ext_resource type="Texture2D" uid="uid://dh0vnqhxkt2wb" path="res://test_touch.jpeg" id="2_unyuy"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_d4g0e")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_unyuy")
+expand_mode = 2
+stretch_mode = 3
+
+[node name="TouchScreenJoystick" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 20)
+script = ExtResource("1_ukjeb")
+mode = 1
+change_opacity_when_touched = true
+use_input_actions = true
+draw_debugs = true
+metadata/_custom_type_script = "uid://cpu2p4fufbfh"
