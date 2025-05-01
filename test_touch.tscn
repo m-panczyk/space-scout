@@ -14,7 +14,6 @@ grow_vertical = 2
 script = ExtResource("1_d4g0e")
 
 [node name="TextureRect" type="TextureRect" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -32,6 +31,7 @@ expand_mode = 2
 stretch_mode = 3
 
 [node name="TouchScreenJoystick" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -47,7 +47,16 @@ grow_vertical = 2
 pivot_offset = Vector2(20, 20)
 script = ExtResource("1_ukjeb")
 mode = 1
-change_opacity_when_touched = true
 use_input_actions = true
 draw_debugs = true
 metadata/_custom_type_script = "uid://cpu2p4fufbfh"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
