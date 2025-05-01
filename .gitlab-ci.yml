@@ -119,8 +119,8 @@ serve:
     - |
       docker run --rm \
         -v spacescout-artifacts:/data \
-        -v $(pwd)/artifacts-temp:/src \
-        alpine sh -c "mkdir -p /data/downloads && cp -R /src/* /data/downloads/ && ls -la /data/downloads"
+        -v $(pwd)/artifacts-temp:/src:ro \
+        alpine sh -c "mkdir -p /data/downloads && ls -la /src && cp -R /src/. /data/downloads/ && ls -la /data/downloads"
     
     # Create SSL certificates inside a container
     - |
