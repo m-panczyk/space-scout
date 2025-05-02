@@ -2,44 +2,32 @@
 
 [ext_resource type="Script" uid="uid://d25k2wqra5wqq" path="res://ui/main_menu.gd" id="1_q23uf"]
 
-[node name="Control" type="Control"]
-layout_mode = 3
+[node name="Control" type="VBoxContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
 script = ExtResource("1_q23uf")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -90.5
-offset_top = 191.0
-offset_right = 91.5
-offset_bottom = -191.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="NewGame" type="Button" parent="VBoxContainer"]
+[node name="NewGame" type="Button" parent="."]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "MENU_LABEL_NEW_GAME"
 
-[node name="Settings" type="Button" parent="VBoxContainer"]
+[node name="Settings" type="Button" parent="."]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "MENU_OPTIONS"
 
-[node name="QuitGame" type="Button" parent="VBoxContainer"]
+[node name="QuitGame" type="Button" parent="."]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "MENU_LABEL_QUIT"
 
-[connection signal="resized" from="." to="." method="_on_resized"]
-[connection signal="button_down" from="VBoxContainer/NewGame" to="." method="new_game"]
-[connection signal="button_down" from="VBoxContainer/Settings" to="." method="_on_settings_button_down"]
-[connection signal="button_down" from="VBoxContainer/QuitGame" to="." method="_on_exit_button_down"]
+[connection signal="button_down" from="NewGame" to="." method="new_game"]
+[connection signal="button_down" from="Settings" to="." method="_on_settings_button_down"]
+[connection signal="button_down" from="QuitGame" to="." method="_on_exit_button_down"]

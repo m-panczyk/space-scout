@@ -1,4 +1,4 @@
-extends CanvasLayer
+extends VBoxContainer
 var scene_history:Array = []
 var current_scene
 
@@ -12,7 +12,6 @@ func replace_current_scene(new_scene: PackedScene) -> void:
 	print(scene_history)
 	remove_child(current_scene)
 	current_scene = new_scene_instance
-	#current_scene.set_z_index(-1)
 	add_child(current_scene)
 	%Back.visible = !scene_history.is_empty()
 	%Title.text = current_scene.title
@@ -22,7 +21,6 @@ func _on_back_pressed() -> void:
 	remove_child(current_scene)
 	current_scene.queue_free()
 	current_scene = scene_history.pop_back()
-	#current_scene.set_z_index(-1)
 	add_child(current_scene)
 	%Back.visible = !scene_history.is_empty()
 	%Title.text = current_scene.title

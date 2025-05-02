@@ -4,7 +4,8 @@ var config = ConfigFile.new()
 var virtual_resolution:Vector2 = Vector2(1080,1920)
 var language = 0
 var landscape:bool = false
-const LANGUAGE = ['pl','en']
+const LANDSCAPE =[DisplayServer.ScreenOrientation.SCREEN_PORTRAIT,DisplayServer.ScreenOrientation.SCREEN_LANDSCAPE]
+const LANGUAGE = ['pl','en','fr','es','de','it','pt_br','pt_pt','ru','el','tr','da','nb','sv','nl','fi','ja','zh_cn','zh_tw','ko','cs','hu','ro','th','bg','he','ar','bs']
 
 func _ready() -> void:
 	print("loading global settings")
@@ -15,6 +16,7 @@ func _ready() -> void:
 func set_landscape(landscape_value:bool) -> void:
 	landscape = landscape_value
 	ProjectSettings.set_setting("display/window/handheld/orientation",int(landscape))
+	DisplayServer.screen_set_orientation(LANDSCAPE[int(landscape_value)])
 	
 func set_language(lang_id:int) -> void:
 	language = lang_id
