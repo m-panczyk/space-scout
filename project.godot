@@ -11,11 +11,11 @@ config_version=5
 [application]
 
 config/name="Space Scout"
-run/main_scene="uid://dpo40s8065wkx"
+run/main_scene="uid://w0qjg81gr6vw"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="uid://nbg0cnufie8x"
-config/icon="res://icon.svg"
+config/icon="uid://nbg0cnufie8x"
 
 [autoload]
 
@@ -24,7 +24,10 @@ GlobalSettings="*res://global_settings.gd"
 
 [display]
 
+window/size/mode=3
 window/size/initial_position_type=3
+window/size/resizable=false
+window/handheld/orientation=1
 
 [editor]
 
@@ -42,6 +45,10 @@ game_fire={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":32,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
+
+[internationalization]
+
+locale/translations_pot_files=PackedStringArray("res://ui/root_ui.tscn")
 
 [rendering]
 

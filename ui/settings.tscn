@@ -1,0 +1,60 @@
+[gd_scene load_steps=2 format=3 uid="uid://caqaqo08a1mgq"]
+
+[ext_resource type="Script" uid="uid://bm311m6rg1nhm" path="res://ui/settings.gd" id="1_7kwmf"]
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7kwmf")
+
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -61.5
+offset_top = -27.0
+offset_right = 61.5
+offset_bottom = 27.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 1
+
+[node name="VIDEO_SETTINGS" type="VBoxContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Landscape" type="HBoxContainer" parent="TabContainer/VIDEO_SETTINGS"]
+layout_mode = 2
+
+[node name="LandscapeLabel" type="Label" parent="TabContainer/VIDEO_SETTINGS/Landscape"]
+layout_mode = 2
+text = "LANDSCAPE"
+
+[node name="LandscapeOption" type="CheckButton" parent="TabContainer/VIDEO_SETTINGS/Landscape"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="GAME_SETTINGS" type="VBoxContainer" parent="TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Lang" type="HBoxContainer" parent="TabContainer/GAME_SETTINGS"]
+layout_mode = 2
+
+[node name="LangLabel" type="Label" parent="TabContainer/GAME_SETTINGS/Lang"]
+layout_mode = 2
+text = "LANGUAGE"
+
+[node name="LangOption" type="OptionButton" parent="TabContainer/GAME_SETTINGS/Lang"]
+unique_name_in_owner = true
+layout_mode = 2

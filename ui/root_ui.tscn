@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://w0qjg81gr6vw"]
+
+[ext_resource type="Script" uid="uid://cyutugxh7gbh4" path="res://ui/root_ui.gd" id="1_amgmw"]
+[ext_resource type="Texture2D" uid="uid://nbg0cnufie8x" path="res://icon.png" id="2_pu426"]
+[ext_resource type="PackedScene" uid="uid://u83wwivbovfd" path="res://ui/menu_container.tscn" id="3_pu426"]
+
+[node name="RootUi" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
+script = ExtResource("1_amgmw")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("2_pu426")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MenuContainer" parent="." instance=ExtResource("3_pu426")]

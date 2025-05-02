@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dh0vnqhxkt2wb"
-path="res://.godot/imported/test_touch.jpeg-434a9e12cfec8558585e3423700e772e.ctex"
+uid="uid://ec0d6b1lj183"
+path="res://.godot/imported/back_arrow.png-5d4a79221974c20c096bfa276d625a21.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://test_touch.jpeg"
-dest_files=["res://.godot/imported/test_touch.jpeg-434a9e12cfec8558585e3423700e772e.ctex"]
+source_file="res://ui/img/back_arrow.png"
+dest_files=["res://.godot/imported/back_arrow.png-5d4a79221974c20c096bfa276d625a21.ctex"]
 
 [params]
 
