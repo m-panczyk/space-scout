@@ -24,6 +24,9 @@ linux:
     name: $EXPORT_NAME-$CI_JOB_NAME
     paths:
       - build/linux
+  only:
+    - pc
+    - master
 
 windows:
   stage: export
@@ -33,6 +36,9 @@ windows:
     name: $EXPORT_NAME-$CI_JOB_NAME
     paths:
       - build/windows
+  only:
+    - pc
+    - master
 
 mac:
   stage: export
@@ -42,6 +48,9 @@ mac:
     name: $EXPORT_NAME-$CI_JOB_NAME
     paths:
       - build/mac
+  only:
+    - pc
+    - master
 
 android:
   stage: export
@@ -51,6 +60,9 @@ android:
     name: $EXPORT_NAME-$CI_JOB_NAME
     paths:
       - build/android
+  only:
+    - mobile
+    - master
 
 web:
   stage: export
@@ -60,6 +72,9 @@ web:
     name: $EXPORT_NAME-$CI_JOB_NAME
     paths:
       - build/web
+  only:
+    - mobile
+    - master
 
 deploy:
   stage: deploy
@@ -147,5 +162,3 @@ deploy:
     # Output access information
     - echo "Game web build is now available at https://spacescout.home:8443"
     - echo "Download all builds at https://spacescout.home:8443/downloads/"
-  only:
-    - master
