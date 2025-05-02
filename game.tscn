@@ -39,13 +39,16 @@ layout_mode = 2
 grow_vertical = 2
 
 [node name="TouchScreenJoystick" type="Control" parent="."]
-anchors_preset = 0
-offset_left = 187.0
-offset_top = 180.0
-offset_right = 227.0
-offset_bottom = 220.0
-pivot_offset = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(576, 324)
 script = ExtResource("3_feb5d")
 mode = 1
+change_opacity_when_touched = true
+from_opacity = 0.0
 use_input_actions = true
 metadata/_custom_type_script = "uid://cpu2p4fufbfh"

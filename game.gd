@@ -6,6 +6,12 @@ func _enter_tree() -> void:
 	$Center/SubViewport.size_2d_override = GlobalSettings.virtual_resolution
 	_on_viewport_size_changed()
 
+func _input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch:
+		var fire_event = InputEventAction.new()
+		fire_event.action = "game_fire"
+		fire_event.pressed = event.is_double_tap()
+		Input.parse_input_event(fire_event)
 func _ready():
 	# Connect to window resize notification
 	get_viewport().connect("size_changed", _on_viewport_size_changed)
