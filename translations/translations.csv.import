@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://by6yip0eld3qn"
+
+[deps]
+
+files=["res://translations/translations.en.translation", "res://translations/translations.fr.translation", "res://translations/translations.es.translation", "res://translations/translations.de.translation", "res://translations/translations.it.translation", "res://translations/translations.pt.translation", "res://translations/translations.pt.translation", "res://translations/translations.ru.translation", "res://translations/translations.el.translation", "res://translations/translations.tr.translation", "res://translations/translations.da.translation", "res://translations/translations.nb.translation", "res://translations/translations.sv.translation", "res://translations/translations.nl.translation", "res://translations/translations.pl.translation", "res://translations/translations.fi.translation", "res://translations/translations.ja.translation", "res://translations/translations.zh.translation", "res://translations/translations.zh.translation", "res://translations/translations.ko.translation", "res://translations/translations.cs.translation", "res://translations/translations.hu.translation", "res://translations/translations.ro.translation", "res://translations/translations.th.translation", "res://translations/translations.bg.translation", "res://translations/translations.he.translation", "res://translations/translations.ar.translation", "res://translations/translations.bs.translation"]
+
+source_file="res://translations/translations.csv"
+dest_files=["res://translations/translations.en.translation", "res://translations/translations.fr.translation", "res://translations/translations.es.translation", "res://translations/translations.de.translation", "res://translations/translations.it.translation", "res://translations/translations.pt.translation", "res://translations/translations.pt.translation", "res://translations/translations.ru.translation", "res://translations/translations.el.translation", "res://translations/translations.tr.translation", "res://translations/translations.da.translation", "res://translations/translations.nb.translation", "res://translations/translations.sv.translation", "res://translations/translations.nl.translation", "res://translations/translations.pl.translation", "res://translations/translations.fi.translation", "res://translations/translations.ja.translation", "res://translations/translations.zh.translation", "res://translations/translations.zh.translation", "res://translations/translations.ko.translation", "res://translations/translations.cs.translation", "res://translations/translations.hu.translation", "res://translations/translations.ro.translation", "res://translations/translations.th.translation", "res://translations/translations.bg.translation", "res://translations/translations.he.translation", "res://translations/translations.ar.translation", "res://translations/translations.bs.translation"]
+
+[params]
+
+compress=true
+delimiter=0

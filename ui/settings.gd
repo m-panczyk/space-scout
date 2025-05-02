@@ -1,6 +1,6 @@
 extends Control
 
-var title = "SETTINGS"
+var title = tr("MENU_OPTIONS")
 
 func _ready() -> void:
 	for lang in GlobalSettings.LANGUAGE:

@@ -27,19 +27,19 @@ grow_vertical = 2
 [node name="NewGame" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
-text = "New Game"
+text = "MENU_LABEL_NEW_GAME"
 
 [node name="Settings" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
-text = "Settings "
+text = "MENU_OPTIONS"
 
-[node name="Exit" type="Button" parent="VBoxContainer"]
+[node name="QuitGame" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
-text = "Exit"
+text = "MENU_LABEL_QUIT"
 
 [connection signal="resized" from="." to="." method="_on_resized"]
 [connection signal="button_down" from="VBoxContainer/NewGame" to="." method="new_game"]
 [connection signal="button_down" from="VBoxContainer/Settings" to="." method="_on_settings_button_down"]
-[connection signal="button_down" from="VBoxContainer/Exit" to="." method="_on_exit_button_down"]
+[connection signal="button_down" from="VBoxContainer/QuitGame" to="." method="_on_exit_button_down"]

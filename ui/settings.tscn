@@ -26,35 +26,37 @@ offset_right = 61.5
 offset_bottom = 27.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/side_margin = 14
 current_tab = 1
+clip_tabs = false
 
-[node name="VIDEO_SETTINGS" type="VBoxContainer" parent="TabContainer"]
+[node name="MENU_OPTIONS_GRAPHICS" type="VBoxContainer" parent="TabContainer"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Landscape" type="HBoxContainer" parent="TabContainer/VIDEO_SETTINGS"]
+[node name="Landscape" type="HBoxContainer" parent="TabContainer/MENU_OPTIONS_GRAPHICS"]
 layout_mode = 2
 
-[node name="LandscapeLabel" type="Label" parent="TabContainer/VIDEO_SETTINGS/Landscape"]
+[node name="LandscapeLabel" type="Label" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Landscape"]
 layout_mode = 2
-text = "LANDSCAPE"
+text = "MENU_LABEL_LANDSCAPE_ORIENTATION"
 
-[node name="LandscapeOption" type="CheckButton" parent="TabContainer/VIDEO_SETTINGS/Landscape"]
+[node name="LandscapeOption" type="CheckButton" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Landscape"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="GAME_SETTINGS" type="VBoxContainer" parent="TabContainer"]
+[node name="MENU_OPTIONS_GAMEPLAY" type="VBoxContainer" parent="TabContainer"]
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Lang" type="HBoxContainer" parent="TabContainer/GAME_SETTINGS"]
+[node name="Lang" type="HBoxContainer" parent="TabContainer/MENU_OPTIONS_GAMEPLAY"]
 layout_mode = 2
 
-[node name="LangLabel" type="Label" parent="TabContainer/GAME_SETTINGS/Lang"]
+[node name="LangLabel" type="Label" parent="TabContainer/MENU_OPTIONS_GAMEPLAY/Lang"]
 layout_mode = 2
-text = "LANGUAGE"
+text = "MENU_LABEL_LANGUAGE"
 
-[node name="LangOption" type="OptionButton" parent="TabContainer/GAME_SETTINGS/Lang"]
+[node name="LangOption" type="OptionButton" parent="TabContainer/MENU_OPTIONS_GAMEPLAY/Lang"]
 unique_name_in_owner = true
 layout_mode = 2

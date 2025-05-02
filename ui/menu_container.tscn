@@ -19,7 +19,7 @@ unique_name_in_owner = true
 visible = false
 offset_right = 50.0
 offset_bottom = 31.0
-text = "BACK"
+text = "MENU_LABEL_BACK"
 
 [node name="Title" type="Label" parent="."]
 unique_name_in_owner = true
