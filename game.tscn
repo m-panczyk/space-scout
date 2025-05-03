@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://ch47nd3iei8k7"]
+[gd_scene load_steps=6 format=3 uid="uid://ch47nd3iei8k7"]
 
 [ext_resource type="Script" uid="uid://beaf3hr6264to" path="res://game.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://dulhmwxqskfm" path="res://lvl/lvl.gd" id="2_e2o6t"]
+[ext_resource type="Script" uid="uid://b8aclcm6ewxmq" path="res://ui/HUD/heath_bar.gd" id="3_fc0e3"]
 [ext_resource type="Script" uid="uid://cpu2p4fufbfh" path="res://addons/scripts/touch_screen_joystick.gd" id="3_feb5d"]
+[ext_resource type="Texture2D" uid="uid://c1ni8e1fd815l" path="res://ui/img/metal.png" id="5_7jktm"]
 
 [node name="Game" type="Control"]
 layout_mode = 3
@@ -13,39 +15,45 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_80nbo")
 
-[node name="RightSide" type="VBoxContainer" parent="."]
+[node name="Center" type="SubViewportContainer" parent="."]
+z_index = -1
 layout_mode = 2
 offset_left = 4.0
 offset_right = 4.0
-grow_horizontal = 0
-grow_vertical = 2
-
-[node name="Center" type="SubViewportContainer" parent="."]
-layout_mode = 0
+offset_bottom = 100.0
 stretch = true
+
+[node name="HUD" type="VBoxContainer" parent="Center"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1080, 500)
+layout_mode = 2
+
+[node name="HeathBar2" type="ProgressBar" parent="Center/HUD"]
+clip_contents = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+value = 60.0
+show_percentage = false
+script = ExtResource("3_fc0e3")
+
+[node name="PauseSide" type="Button" parent="Center/HUD"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "<<<"
 
 [node name="SubViewport" type="SubViewport" parent="Center"]
 handle_input_locally = false
-size = Vector2i(2, 2)
+size = Vector2i(2, 100)
 size_2d_override_stretch = true
 render_target_update_mode = 4
 
 [node name="GameLevel" type="Node2D" parent="Center/SubViewport"]
+unique_name_in_owner = true
 script = ExtResource("2_e2o6t")
 metadata/_custom_type_script = "uid://dulhmwxqskfm"
 
-[node name="LeftSide" type="VBoxContainer" parent="."]
+[node name="TouchScreenJoystick" type="Control" parent="Center"]
 layout_mode = 2
-grow_vertical = 2
-
-[node name="TouchScreenJoystick" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(576, 324)
 script = ExtResource("3_feb5d")
 base_radius = 200.0
 knob_radius = 20.0
@@ -55,3 +63,46 @@ change_opacity_when_touched = true
 from_opacity = 0.0
 use_input_actions = true
 metadata/_custom_type_script = "uid://cpu2p4fufbfh"
+
+[node name="RightSide" type="TextureRect" parent="."]
+visible = false
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -100.0
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(1.01105, 1)
+texture = ExtResource("5_7jktm")
+expand_mode = 1
+
+[node name="LeftSide" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
+scale = Vector2(1.01105, 1)
+texture = ExtResource("5_7jktm")
+expand_mode = 1
+flip_h = true
+
+[node name="VBox" type="VBoxContainer" parent="LeftSide"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HeathBar" type="ProgressBar" parent="LeftSide/VBox"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 1
+value = 60.0
+show_percentage = false
+script = ExtResource("3_fc0e3")

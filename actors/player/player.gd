@@ -13,13 +13,13 @@ func _init() -> void:
 		skin_path = "res://actors/player/img/base_0.tscn"
 
 func get_animation() -> AnimatedSprite2D:
-	return get_child(0).get_child(0)
+	return $Skin.get_child(0)
 	
 func get_size() -> Vector2:
 	return get_animation().sprite_frames.get_frame_texture(get_animation().animation,0).get_size()
 
 func _alt_ready() -> void:
-	health_changed()
+	health_change()
 	if speed == Actor.DEFAULT_SPEED:
 		speed = 400
 		

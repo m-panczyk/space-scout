@@ -21,6 +21,7 @@ config/icon="uid://nbg0cnufie8x"
 
 EventBus="*res://addons/event_bus_plugin/EventBus.gd"
 GlobalSettings="*res://global_settings.gd"
+SaveData="*res://save_data.gd"
 
 [display]
 
@@ -37,6 +38,10 @@ version_control/autoload_on_startup=true
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/event_bus_plugin/plugin.cfg")
+
+[gui]
+
+theme/custom="uid://carquq4vxe8bu"
 
 [input]
 

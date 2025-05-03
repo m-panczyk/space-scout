@@ -15,6 +15,8 @@ func _enter_tree() -> void:
 	if skin_path != "":
 		var skin_instance = load(skin_path).instantiate()
 		add_child(skin_instance)
+		skin_instance.name = "Skin"
+	print(get_children())
 
 func _ready() -> void:
 	area_entered.connect(_on_area_entered)

@@ -20,13 +20,23 @@ func _ready():
 	
 func _on_viewport_size_changed():
 	viewport_size = get_viewport_rect().size
-
 	if viewport_size.x < viewport_size.y:
 		# Portrait mode: hide side columns
 		set_portrait_mode(true)
+		$LeftSide.hide()
+		$RightSide.hide()
+		%HUD.show()
+		for child in get_children():
+			child.size = viewport_size
 	else:
 		# Landscape mode: show all columns
 		set_portrait_mode(false)
+		for child in get_children():
+			child.size = Vector2(viewport_size.x/3,viewport_size.y)
+		%HUD.hide()
+		$LeftSide.show()
+		$RightSide.show()
+	
 		
 func set_portrait_mode(is_portrait: bool):
 	if is_portrait:

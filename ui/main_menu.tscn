@@ -15,17 +15,14 @@ script = ExtResource("1_q23uf")
 
 [node name="NewGame" type="Button" parent="."]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
 text = "MENU_LABEL_NEW_GAME"
 
 [node name="Settings" type="Button" parent="."]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
 text = "MENU_OPTIONS"
 
 [node name="QuitGame" type="Button" parent="."]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
 text = "MENU_LABEL_QUIT"
 
 [connection signal="button_down" from="NewGame" to="." method="new_game"]
