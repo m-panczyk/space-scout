@@ -28,13 +28,22 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(1080, 500)
 layout_mode = 2
 
-[node name="HeathBar2" type="ProgressBar" parent="Center/HUD"]
+[node name="HealthBar2" type="ProgressBar" parent="Center/HUD"]
 clip_contents = true
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 value = 60.0
 show_percentage = false
 script = ExtResource("3_fc0e3")
+
+[node name="EnergyBar2" type="ProgressBar" parent="Center/HUD"]
+clip_contents = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+value = 60.0
+show_percentage = false
+script = ExtResource("3_fc0e3")
+data_type = "energy"
 
 [node name="PauseSide" type="Button" parent="Center/HUD"]
 unique_name_in_owner = true
@@ -99,10 +108,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HeathBar" type="ProgressBar" parent="LeftSide/VBox"]
+[node name="HealthBar" type="ProgressBar" parent="LeftSide/VBox"]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_vertical = 1
 value = 60.0
 show_percentage = false
 script = ExtResource("3_fc0e3")
+
+[node name="EnergyBar2" type="ProgressBar" parent="LeftSide/VBox"]
+clip_contents = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+value = 60.0
+show_percentage = false
+script = ExtResource("3_fc0e3")
+data_type = "energy"

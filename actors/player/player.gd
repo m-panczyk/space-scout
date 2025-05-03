@@ -40,8 +40,10 @@ func _alt_ready() -> void:
 		add_child(weapon)
 
 func _on_energy_production_timer_timeout():
-	energy += energy_production[0]
-	energy = min(energy, energy_max)
+	if energy<energy_max:
+		energy += energy_production[0]
+		energy = min(energy, energy_max)
+		EventBus.emit("energy_changed", [energy,energy_max])
 
 
 func process_clamping():
@@ -73,7 +75,8 @@ func _input(event: InputEvent) -> void:
 	if event.is_action("game_fire"):
 		if energy >= weapon.consumption:
 			weapon.fire()
-			energy -= weapon.consumption  
+			energy -= weapon.consumption 
+			EventBus.emit("energy_changed", [energy,energy_max])
 		
 func died():
 	#EventBus.emit("game_over",[false,0])
