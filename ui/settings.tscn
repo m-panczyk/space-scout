@@ -2,80 +2,105 @@
 
 [ext_resource type="Script" uid="uid://bm311m6rg1nhm" path="res://ui/settings.gd" id="1_7kwmf"]
 
-[node name="Settings" type="TabContainer"]
+[node name="Settings" type="Control"]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -676.0
-offset_bottom = -617.0
+offset_right = -542.0
+offset_bottom = -393.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
-current_tab = 1
-clip_tabs = false
 script = ExtResource("1_7kwmf")
 
-[node name="MENU_OPTIONS_GAMEPLAY" type="PanelContainer" parent="."]
-visible = false
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+
+[node name="MENU_OPTIONS_GRAPHICS" type="PanelContainer" parent="TabContainer"]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Panel" type="MarginContainer" parent="MENU_OPTIONS_GAMEPLAY"]
+[node name="Panel2" type="MarginContainer" parent="TabContainer/MENU_OPTIONS_GRAPHICS"]
 layout_mode = 2
 theme_override_constants/margin_left = 100
 theme_override_constants/margin_top = 100
 theme_override_constants/margin_right = 100
 theme_override_constants/margin_bottom = 100
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MENU_OPTIONS_GAMEPLAY/Panel"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_constants/separation = 50
+
+[node name="Landscape" type="HBoxContainer" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 50
+alignment = 1
+
+[node name="LandscapeLabel" type="Label" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/Landscape"]
+layout_mode = 2
+text = "MENU_LABEL_LANDSCAPE_ORIENTATION"
+
+[node name="LandscapeOption" type="CheckButton" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/Landscape"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+expand_icon = true
+
+[node name="MENU_OPTIONS_GAMEPLAY" type="PanelContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Panel" type="MarginContainer" parent="TabContainer/MENU_OPTIONS_GAMEPLAY"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/MENU_OPTIONS_GAMEPLAY/Panel"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_constants/separation = 50
 alignment = 1
 
-[node name="Lang" type="HBoxContainer" parent="MENU_OPTIONS_GAMEPLAY/Panel/VBoxContainer"]
+[node name="Lang" type="HBoxContainer" parent="TabContainer/MENU_OPTIONS_GAMEPLAY/Panel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_constants/separation = 50
 alignment = 1
 
-[node name="LangLabel" type="Label" parent="MENU_OPTIONS_GAMEPLAY/Panel/VBoxContainer/Lang"]
+[node name="LangLabel" type="Label" parent="TabContainer/MENU_OPTIONS_GAMEPLAY/Panel/VBoxContainer/Lang"]
 layout_mode = 2
 text = "MENU_LABEL_LANGUAGE"
 
-[node name="LangOption" type="OptionButton" parent="MENU_OPTIONS_GAMEPLAY/Panel/VBoxContainer/Lang"]
+[node name="LangOption" type="OptionButton" parent="TabContainer/MENU_OPTIONS_GAMEPLAY/Panel/VBoxContainer/Lang"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="MENU_OPTIONS_GRAPHICS" type="PanelContainer" parent="."]
-layout_mode = 2
-metadata/_tab_index = 1
+[node name="SaveSettings" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -156.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+disabled = true
+text = "MENU_IO_SAVE"
 
-[node name="Panel2" type="MarginContainer" parent="MENU_OPTIONS_GRAPHICS"]
-layout_mode = 2
-theme_override_constants/margin_left = 100
-theme_override_constants/margin_top = 100
-theme_override_constants/margin_right = 100
-theme_override_constants/margin_bottom = 100
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="MENU_OPTIONS_GRAPHICS/Panel2"]
-layout_mode = 2
-size_flags_horizontal = 2
-theme_override_constants/separation = 50
-
-[node name="Landscape" type="HBoxContainer" parent="MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2"]
-layout_mode = 2
-theme_override_constants/separation = 50
-alignment = 1
-
-[node name="LandscapeLabel" type="Label" parent="MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/Landscape"]
-layout_mode = 2
-text = "MENU_LABEL_LANDSCAPE_ORIENTATION"
-
-[node name="LandscapeOption" type="CheckButton" parent="MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/Landscape"]
-unique_name_in_owner = true
-layout_mode = 2
-
-[connection signal="item_selected" from="MENU_OPTIONS_GAMEPLAY/Panel/VBoxContainer/Lang/LangOption" to="." method="_on_lang_option_item_selected"]
-[connection signal="toggled" from="MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/Landscape/LandscapeOption" to="." method="_on_landscape_option_toggled"]
+[connection signal="toggled" from="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/Landscape/LandscapeOption" to="." method="_on_landscape_option_toggled"]
+[connection signal="item_selected" from="TabContainer/MENU_OPTIONS_GAMEPLAY/Panel/VBoxContainer/Lang/LangOption" to="." method="_on_lang_option_item_selected"]
+[connection signal="pressed" from="SaveSettings" to="." method="_on_save_settings_pressed"]

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dpo40s8065wkx"]
+[gd_scene load_steps=3 format=3 uid="uid://dpo40s8065wkx"]
 
 [ext_resource type="Script" uid="uid://d25k2wqra5wqq" path="res://ui/main_menu.gd" id="1_q23uf"]
+[ext_resource type="Texture2D" uid="uid://nbg0cnufie8x" path="res://icon.png" id="2_0dkrt"]
 
 [node name="Control" type="VBoxContainer"]
 anchors_preset = 15
@@ -12,6 +13,13 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
 script = ExtResource("1_q23uf")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(270, 270)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("2_0dkrt")
+expand_mode = 5
 
 [node name="NewGame" type="Button" parent="."]
 layout_mode = 2
