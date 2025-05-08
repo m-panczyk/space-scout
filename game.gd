@@ -4,18 +4,15 @@ var viewport_size:Vector2
 
 func _enter_tree() -> void:
 	$Center/SubViewport.size_2d_override = GlobalSettings.virtual_resolution
-	_on_viewport_size_changed()
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventScreenTouch:
-		var fire_event = InputEventAction.new()
-		fire_event.action = "game_fire"
-		fire_event.pressed = event.is_double_tap()
-		Input.parse_input_event(fire_event)
 func _ready():
+	if DisplayServer.is_touchscreen_available():
+		var touch_controls = TouchControls.new()
+		get_tree().root.add_child(touch_controls)
 	# Connect to window resize notification
 	get_viewport().connect("size_changed", _on_viewport_size_changed)
 	# Initial layout check
+	_on_viewport_size_changed()
 
 	
 func _on_viewport_size_changed():
@@ -28,6 +25,7 @@ func _on_viewport_size_changed():
 		%HUD.show()
 		for child in get_children():
 			child.size = viewport_size
+		%HUD.size.x = viewport_size.x
 	else:
 		# Landscape mode: show all columns
 		set_portrait_mode(false)

@@ -39,6 +39,7 @@ func _alt_ready() -> void:
 		weapon = load_weapon.instantiate()
 		add_child(weapon)
 
+
 func _on_energy_production_timer_timeout():
 	if energy<energy_max:
 		energy += energy_production[0]
@@ -73,6 +74,7 @@ func process_move(delta: float):
 
 func _input(event: InputEvent) -> void:
 	if event.is_action("game_fire"):
+		print(event)
 		if energy >= weapon.consumption:
 			weapon.fire()
 			energy -= weapon.consumption 

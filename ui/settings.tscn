@@ -7,8 +7,6 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -542.0
-offset_bottom = -393.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
@@ -21,7 +19,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+tab_alignment = 1
 current_tab = 0
+clip_tabs = false
 
 [node name="MENU_OPTIONS_GRAPHICS" type="PanelContainer" parent="TabContainer"]
 layout_mode = 2
@@ -53,6 +53,25 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 expand_icon = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2"]
+layout_mode = 2
+
+[node name="DPILabel" type="Label" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+text = "DPI"
+
+[node name="DPIAuto" type="CheckBox" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "auto
+"
+
+[node name="DPIScale" type="SpinBox" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+step = 0.1
 
 [node name="MENU_OPTIONS_GAMEPLAY" type="PanelContainer" parent="TabContainer"]
 visible = false
@@ -87,20 +106,62 @@ text = "MENU_LABEL_LANGUAGE"
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="MENU_OPTIONS_CONTROLS" type="PanelContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="Panel" type="MarginContainer" parent="TabContainer/MENU_OPTIONS_CONTROLS"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/MENU_OPTIONS_CONTROLS/Panel"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/separation = 50
+alignment = 1
+
+[node name="Touch" type="HBoxContainer" parent="TabContainer/MENU_OPTIONS_CONTROLS/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="TouchLabel" type="Label" parent="TabContainer/MENU_OPTIONS_CONTROLS/Panel/VBoxContainer/Touch"]
+layout_mode = 2
+text = "MENU_OPTIONS_TOUCH_CONTROL"
+
+[node name="TouchOption" type="OptionButton" parent="TabContainer/MENU_OPTIONS_CONTROLS/Panel/VBoxContainer/Touch"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 2
+popup/item_0/text = "TOUCH_CONTROL_VIRTUAL_GAMEPAD"
+popup/item_0/id = 0
+popup/item_1/text = "TOUCH_CONTROL_POINT"
+popup/item_1/id = 1
+
 [node name="SaveSettings" type="Button" parent="."]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -156.0
-offset_top = -31.0
+anchors_preset = -1
+anchor_left = 0.642
+anchor_top = 0.881
+anchor_right = 0.94
+anchor_bottom = 0.942
+offset_left = -0.360046
+offset_top = 1.51996
+offset_right = -0.200073
+offset_bottom = -0.360046
 grow_horizontal = 0
 grow_vertical = 0
 disabled = true
 text = "MENU_IO_SAVE"
 
+[connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
 [connection signal="toggled" from="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/Landscape/LandscapeOption" to="." method="_on_landscape_option_toggled"]
+[connection signal="toggled" from="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/HBoxContainer/DPIAuto" to="." method="_on_dpi_auto_toggled"]
+[connection signal="changed" from="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/HBoxContainer/DPIScale" to="." method="_on_dpi_scale_changed"]
+[connection signal="value_changed" from="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/HBoxContainer/DPIScale" to="." method="_on_dpi_scale_value_changed"]
 [connection signal="item_selected" from="TabContainer/MENU_OPTIONS_GAMEPLAY/Panel/VBoxContainer/Lang/LangOption" to="." method="_on_lang_option_item_selected"]
+[connection signal="item_selected" from="TabContainer/MENU_OPTIONS_CONTROLS/Panel/VBoxContainer/Touch/TouchOption" to="." method="_on_touch_option_item_selected"]
 [connection signal="pressed" from="SaveSettings" to="." method="_on_save_settings_pressed"]
