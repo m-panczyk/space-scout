@@ -4,6 +4,8 @@ var portrait_mode = false
 
 func _enter_tree() -> void:
 	$Center/SubViewport.size_2d_override = GlobalSettings.virtual_resolution
+	if get_tree().paused:
+		get_tree().paused = false
 
 func _ready():
 	if DisplayServer.is_touchscreen_available():
@@ -71,5 +73,6 @@ func _on_start_level_button_pressed() -> void:
 	get_tree().call_group("MAP","prepare_lvl")
 	if portrait_mode:
 		$RightSide.hide()
+		%HUD.show()
 	%GameLevel.start_lvl()
 	%StartLevelButton.disabled = true

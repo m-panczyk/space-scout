@@ -7,7 +7,7 @@ class_name GameLevel
 
 var env = null
 var lvl_points = 0
-var max_level_points = 100
+var max_level_points = 30
 var player:Player
 var bg:LevelBackground
 
@@ -30,6 +30,9 @@ func _ready() -> void:
 	var player_size = player.get_size().x
 	var player_scale = (screen_size.x/5)/player_size
 	player.scale = Vector2(player_scale,player_scale)
+	EventBus.subscribe("add_point",end_lvl_check)
+func _exit_tree() -> void:
+	EventBus.unsubscribe("add_point",end_lvl_check)
 
 func end_lvl_check(new_points:int):
 	lvl_points += new_points
