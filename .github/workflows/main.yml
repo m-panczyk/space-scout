@@ -1,0 +1,295 @@
+# Godot CI/CD for Space Scout Game
+name: Build and Deploy Space Scout
+
+on:
+  push:
+    branches:
+      - main
+      - pc
+      - mobile
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+env:
+  EXPORT_NAME: Space_Scout
+  GODOT_VERSION: "4.4.1"
+
+jobs:
+  export-linux:
+    name: Export Linux
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v1
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          use-dotnet: false
+      
+      - name: Setup Build Directories
+        run: |
+          mkdir -p build/linux
+      
+      - name: Export Linux Build
+        run: |
+          godot --headless --verbose --export-release "Linux" "./build/linux/$EXPORT_NAME.x86_64"
+      
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-build
+          path: build/linux/
+          retention-days: 5
+
+  export-windows:
+    name: Export Windows
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v1
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          use-dotnet: false
+      
+      - name: Setup Build Directories
+        run: |
+          mkdir -p build/windows
+      
+      - name: Export Windows Build
+        run: |
+          godot --headless --verbose --export-release "Windows Desktop" "./build/windows/$EXPORT_NAME.exe"
+      
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: build/windows/
+          retention-days: 5
+
+  export-mac:
+    name: Export Mac
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v1
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          use-dotnet: false
+      
+      - name: Setup Build Directories
+        run: |
+          mkdir -p build/mac
+      
+      - name: Export Mac Build
+        run: |
+          godot --headless --verbose --export-release "macOS" "./build/mac/$EXPORT_NAME.zip"
+      
+      - name: Upload Mac Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-build
+          path: build/mac/
+          retention-days: 5
+
+  export-android:
+    name: Export Android
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.modified, 'mobile') || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/mobile' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v1
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          use-dotnet: false
+      
+      - name: Setup Build Directories
+        run: |
+          mkdir -p build/android
+      
+      - name: Export Android Build
+        run: |
+          godot --headless --verbose --export-debug "Android" "./build/android/$EXPORT_NAME.apk"
+      
+      - name: Upload Android Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-build
+          path: build/android/
+          retention-days: 5
+
+  export-web:
+    name: Export Web
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v1
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          use-dotnet: false
+      
+      - name: Setup Build Directories
+        run: |
+          mkdir -p build/web
+      
+      - name: Export Web Build
+        run: |
+          godot --headless --verbose --export-release "Web" "./build/web/index.html"
+      
+      - name: Upload Web Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: build/web/
+          retention-days: 5
+
+  deploy:
+    name: Deploy to GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: [export-web, export-linux, export-windows, export-mac, export-android]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      
+      - name: Setup deploy directory
+        run: |
+          mkdir -p deploy
+          
+          # Copy web build to root
+          if [ -d "artifacts/web-build" ]; then
+            echo "Copying web build to root..."
+            cp -r artifacts/web-build/* deploy/
+          fi
+          
+          # Create downloads directory for other builds
+          mkdir -p deploy/downloads
+          
+          # Copy other builds to downloads directory
+          for dir in linux windows mac android; do
+            if [ -d "artifacts/${dir}-build" ]; then
+              echo "Copying ${dir} build..."
+              mkdir -p deploy/downloads/${dir}
+              cp -r artifacts/${dir}-build/* deploy/downloads/${dir}/
+            fi
+          done
+          
+          # Create a simple downloads page
+          cat > deploy/downloads/index.html << EOF
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>Space Scout Downloads</title>
+              <style>
+                  body {
+                      font-family: Arial, sans-serif;
+                      max-width: 800px;
+                      margin: 40px auto;
+                      padding: 20px;
+                      background: #1a1a1a;
+                      color: #fff;
+                  }
+                  h1 { text-align: center; color: #4CAF50; }
+                  .build-list {
+                      list-style: none;
+                      padding: 0;
+                  }
+                  .build-list li {
+                      background: #333;
+                      margin: 10px 0;
+                      padding: 15px;
+                      border-radius: 5px;
+                  }
+                  .build-list a {
+                      color: #4CAF50;
+                      text-decoration: none;
+                      font-weight: bold;
+                  }
+                  .build-list a:hover {
+                      text-decoration: underline;
+                  }
+                  .back-link {
+                      display: block;
+                      text-align: center;
+                      margin-top: 30px;
+                  }
+              </style>
+          </head>
+          <body>
+              <h1>Space Scout Downloads</h1>
+              <ul class="build-list">
+                  <li>🐧 <a href="linux/">Linux Build</a></li>
+                  <li>🪟 <a href="windows/">Windows Build</a></li>
+                  <li>🍎 <a href="mac/">macOS Build</a></li>
+                  <li>📱 <a href="android/">Android Build</a></li>
+              </ul>
+              <a href="../" class="back-link">← Back to Web Game</a>
+          </body>
+          </html>
+          EOF
+          
+          # Add headers file for proper MIME types
+          cat > deploy/_headers << EOF
+          /*
+              Cross-Origin-Embedder-Policy: require-corp
+              Cross-Origin-Opener-Policy: same-origin
+          /downloads/*
+              Content-Type: application/octet-stream
+          EOF
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: deploy
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
