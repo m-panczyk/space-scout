@@ -30,7 +30,13 @@ size_flags_horizontal = 6
 size_flags_vertical = 2
 uppercase = true
 
-[node name="CurrentScene" parent="." instance=ExtResource("2_t42sx")]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CurrentScene" parent="ScrollContainer" instance=ExtResource("2_t42sx")]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 0
 
 [connection signal="pressed" from="HBoxContainer/Back" to="." method="_on_back_pressed"]

@@ -46,23 +46,23 @@ func _on_viewport_size_changed():
 func set_portrait_mode(is_portrait: bool):
 	portrait_mode = is_portrait
 	if is_portrait:
-		#$Center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		$Center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		$Center.position = Vector2.ZERO
 		$Center.size = viewport_size
 		$RightSide.visible = false
+		$RightSide.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		$LeftSide.visible = false
+		$LeftSide.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	else:
 		$Center.position = Vector2(viewport_size.x/3,0)
 		#$Center.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 		$Center.size = Vector2(viewport_size.x/3.0,viewport_size.y)
-		
-	print("viewport: "+str(viewport_size.x)+"/"+str(viewport_size.y))
-	print("container: "+ str($Center.size)+ "on: "+ str($Center.position))
-	print("subview: "+ str($Center/SubViewport.size))
-
 
 func _on_pause_side_pressed() -> void:
-	get_tree().change_scene_to_packed(load("res://ui/root_ui.tscn"))
+	$RightSide.show()
+	%HUD.hide()
+	if %GameLevel.env != null:
+		%GameLevel.env.pause()
 
 
 func _on_start_level_button_pressed() -> void:
@@ -71,3 +71,8 @@ func _on_start_level_button_pressed() -> void:
 		$RightSide.hide()
 	%GameLevel.start_lvl()
 	%StartLevelButton.disabled = true
+
+func _input(event: InputEvent) -> void:
+	if event.is_action("ui_cancel"):
+		#%MenuContainer.visible = !%MenuContainer.visible
+		print(get_children())

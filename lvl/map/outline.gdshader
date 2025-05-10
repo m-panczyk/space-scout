@@ -29,9 +29,9 @@ vec3 fresnel_glow(float amount, float intensity, vec3 color, vec3 normal, vec3 v
 
 void fragment() {
 	vec3 glow_fresnel = fresnel_glow(glow_amount, glow_intensity, glow_color, NORMAL, VIEW);
-	
+
 	float rimLevel = texture(noise, vec2(NORMAL.x + (TIME * speed),NORMAL.y)).r;
-	
+
 	ALBEDO = Color + glow_fresnel * rimLevel;
 	float fresnel = fresnel(dist, NORMAL, VIEW);
 	RIM = rimLevel;

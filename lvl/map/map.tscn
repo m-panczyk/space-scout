@@ -1,5 +1,6 @@
-[gd_scene load_steps=12 format=4 uid="uid://bh5o0r5ut5y0d"]
+[gd_scene load_steps=13 format=4 uid="uid://bh5o0r5ut5y0d"]
 
+[ext_resource type="Script" uid="uid://c1svmg0ms4pti" path="res://lvl/map/hex_tile_controller.gd" id="1_xsbyp"]
 [ext_resource type="Texture2D" uid="uid://c2dt2jr24n77q" path="res://lvl/map/img/basic.png" id="1_ywyak"]
 [ext_resource type="Texture2D" uid="uid://cerg7u1qsjtgq" path="res://lvl/map/img/black.png" id="2_aemh6"]
 [ext_resource type="Texture2D" uid="uid://cjr6me1gol8wb" path="res://lvl/map/img/highlighted.png" id="3_fvr80"]
@@ -69,6 +70,7 @@ grow_horizontal = 2
 grow_vertical = 2
 stretch = true
 mouse_target = true
+script = ExtResource("1_xsbyp")
 
 [node name="SubViewport" type="SubViewport" parent="."]
 handle_input_locally = false

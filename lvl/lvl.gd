@@ -5,6 +5,7 @@ class_name GameLevel
 @export var bg_speed = .1
 @export var fall_speed = 100
 
+var env = null
 
 var player:Player
 var bg:LevelBackground
@@ -28,9 +29,10 @@ func _ready() -> void:
 	var player_size = player.get_size().x
 	var player_scale = (screen_size.x/5)/player_size
 	player.scale = Vector2(player_scale,player_scale)
+
 func start_lvl():
 	bg.set_lvl(str(randi_range(1,34)))
-	var env = EnvGenerator.new()
+	env = EnvGenerator.new()
 	env.level_points
 	add_child(env)
 	

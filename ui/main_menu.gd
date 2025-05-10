@@ -11,6 +11,5 @@ func new_game() -> void:
 func _on_exit_button_down() -> void:
 	get_tree().quit()
 
-
 func _on_settings_button_down() -> void:
 	get_parent().replace_current_scene(settings)

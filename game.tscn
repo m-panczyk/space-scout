@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ch47nd3iei8k7"]
+[gd_scene load_steps=9 format=3 uid="uid://ch47nd3iei8k7"]
 
 [ext_resource type="Script" uid="uid://beaf3hr6264to" path="res://game.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://dulhmwxqskfm" path="res://lvl/lvl.gd" id="2_e2o6t"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://bh5o0r5ut5y0d" path="res://lvl/map/map.tscn" id="3_ryrav"]
 [ext_resource type="Texture2D" uid="uid://dbcbprxmyl5ik" path="res://ui/img/frame.png" id="4_7jktm"]
 [ext_resource type="Texture2D" uid="uid://c1ni8e1fd815l" path="res://ui/img/metal.png" id="5_7jktm"]
+[ext_resource type="Script" uid="uid://d1pnprmds7e2g" path="res://ui/zoom_slider.gd" id="6_eow3j"]
+[ext_resource type="PackedScene" uid="uid://u83wwivbovfd" path="res://ui/menu_container.tscn" id="8_j5wjh"]
 
 [node name="Game" type="ColorRect"]
 anchors_preset = 15
@@ -65,13 +67,15 @@ stretch_mode = 1
 
 [node name="TextureRect" type="TextureRect" parent="RightSide"]
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -340.0
-offset_top = 17.0
-offset_right = -24.0
-offset_bottom = 349.0
+anchors_preset = -1
+anchor_left = 0.056
+anchor_top = 0.016
+anchor_right = 0.933
+anchor_bottom = 0.323
+offset_left = -0.16
+offset_top = -0.280001
+offset_right = 0.119995
+offset_bottom = 0.159973
 grow_horizontal = 0
 texture = ExtResource("4_7jktm")
 expand_mode = 1
@@ -87,6 +91,20 @@ offset_left = -0.076004
 offset_top = -0.112003
 offset_right = -0.136017
 offset_bottom = 0.108002
+
+[node name="HSlider" type="HSlider" parent="RightSide/TextureRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.123418
+anchor_top = 0.885542
+anchor_right = 0.89557
+anchor_bottom = 0.933735
+min_value = 0.1
+max_value = 1.0
+step = 0.1
+value = 0.1
+script = ExtResource("6_eow3j")
+metadata/_edit_use_anchors_ = true
 
 [node name="StartLevelButton" type="Button" parent="RightSide/TextureRect"]
 unique_name_in_owner = true
@@ -107,9 +125,9 @@ clip_children = 2
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.333
-anchor_bottom = 0.169
+anchor_bottom = 0.207
 offset_right = 0.359985
-offset_bottom = 0.47998
+offset_bottom = 0.439987
 texture = ExtResource("4_7jktm")
 expand_mode = 1
 
@@ -156,5 +174,9 @@ visible = false
 layout_mode = 2
 text = "<<<"
 
+[node name="MenuContainer" parent="." instance=ExtResource("8_j5wjh")]
+layout_mode = 1
+
+[connection signal="value_changed" from="RightSide/TextureRect/HSlider" to="RightSide/TextureRect/HSlider" method="_on_value_changed"]
 [connection signal="pressed" from="RightSide/TextureRect/StartLevelButton" to="." method="_on_start_level_button_pressed"]
 [connection signal="pressed" from="HUD/VBoxContainer/PauseSide" to="." method="_on_pause_side_pressed"]
