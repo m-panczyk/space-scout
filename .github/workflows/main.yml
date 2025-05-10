@@ -4,11 +4,11 @@ name: Build and Deploy Space Scout
 on:
   push:
     branches:
-      - main
+      - master
       - pc
       - mobile
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
@@ -31,7 +31,7 @@ jobs:
   export-linux:
     name: Export Linux
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
+    if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -60,7 +60,7 @@ jobs:
   export-windows:
     name: Export Windows
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
+    if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -89,7 +89,7 @@ jobs:
   export-mac:
     name: Export Mac
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
+    if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -118,7 +118,7 @@ jobs:
   export-android:
     name: Export Android
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.modified, 'mobile') || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/mobile' || github.event_name == 'workflow_dispatch'
+    if: contains(github.event.head_commit.modified, 'mobile') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/mobile' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
