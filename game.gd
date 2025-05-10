@@ -13,6 +13,7 @@ func _ready():
 	get_viewport().connect("size_changed", _on_viewport_size_changed)
 	# Initial layout check
 	_on_viewport_size_changed()
+	$PausePanel/MenuContainer.current_scene.pause_menu()
 
 	
 func _on_viewport_size_changed():
@@ -24,9 +25,9 @@ func _on_viewport_size_changed():
 		$LeftSide.hide()
 		$RightSide.hide()
 		%PauseSide.show()
-		$Center.size = viewport_size
-		$LeftSide.size = viewport_size
-		$RightSide.size = viewport_size
+		for child in get_children():
+			if child.is_in_group("columns"):
+				child.size = viewport_size
 		%HUD.position.y = 0
 		%HUD.size.y = viewport_size.y*0.2
 		%HUD.size.x = viewport_size.x
@@ -34,7 +35,8 @@ func _on_viewport_size_changed():
 		# Landscape mode: show all columns
 		set_portrait_mode(false)
 		for child in get_children():
-			child.size = Vector2(viewport_size.x/3,viewport_size.y)
+			if child.is_in_group("columns"):
+				child.size = Vector2(viewport_size.x/3,viewport_size.y)
 		%HUD.size.y = viewport_size.y*0.2
 
 		%PauseSide.hide()
@@ -71,8 +73,3 @@ func _on_start_level_button_pressed() -> void:
 		$RightSide.hide()
 	%GameLevel.start_lvl()
 	%StartLevelButton.disabled = true
-
-func _input(event: InputEvent) -> void:
-	if event.is_action("ui_cancel"):
-		#%MenuContainer.visible = !%MenuContainer.visible
-		print(get_children())

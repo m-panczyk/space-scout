@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://ch47nd3iei8k7"]
+[gd_scene load_steps=11 format=3 uid="uid://ch47nd3iei8k7"]
 
 [ext_resource type="Script" uid="uid://beaf3hr6264to" path="res://game.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://dulhmwxqskfm" path="res://lvl/lvl.gd" id="2_e2o6t"]
@@ -7,7 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://dbcbprxmyl5ik" path="res://ui/img/frame.png" id="4_7jktm"]
 [ext_resource type="Texture2D" uid="uid://c1ni8e1fd815l" path="res://ui/img/metal.png" id="5_7jktm"]
 [ext_resource type="Script" uid="uid://d1pnprmds7e2g" path="res://ui/zoom_slider.gd" id="6_eow3j"]
+[ext_resource type="Script" uid="uid://chmfum2qqdak5" path="res://ui/point_count.gd" id="8_hve3p"]
 [ext_resource type="PackedScene" uid="uid://u83wwivbovfd" path="res://ui/menu_container.tscn" id="8_j5wjh"]
+[ext_resource type="Script" uid="uid://orvcs75vjfdf" path="res://ui/pause_panel.gd" id="8_vef74"]
 
 [node name="Game" type="ColorRect"]
 anchors_preset = 15
@@ -18,7 +20,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 script = ExtResource("1_80nbo")
 
-[node name="Center" type="SubViewportContainer" parent="."]
+[node name="Center" type="SubViewportContainer" parent="." groups=["columns"]]
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
@@ -41,7 +43,7 @@ unique_name_in_owner = true
 script = ExtResource("2_e2o6t")
 metadata/_custom_type_script = "uid://dulhmwxqskfm"
 
-[node name="LeftSide" type="TextureRect" parent="."]
+[node name="LeftSide" type="TextureRect" parent="." groups=["columns"]]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -52,7 +54,7 @@ expand_mode = 1
 stretch_mode = 1
 flip_h = true
 
-[node name="RightSide" type="TextureRect" parent="."]
+[node name="RightSide" type="TextureRect" parent="." groups=["columns"]]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -99,6 +101,7 @@ anchor_left = 0.123418
 anchor_top = 0.885542
 anchor_right = 0.89557
 anchor_bottom = 0.933735
+focus_mode = 1
 min_value = 0.1
 max_value = 1.0
 step = 0.1
@@ -163,10 +166,11 @@ show_percentage = false
 script = ExtResource("3_fc0e3")
 data_type = "energy"
 
-[node name="Label" type="Label" parent="HUD/VBoxContainer"]
+[node name="PointCount" type="Label" parent="HUD/VBoxContainer"]
 layout_mode = 2
 text = "0 pts"
 horizontal_alignment = 2
+script = ExtResource("8_hve3p")
 
 [node name="PauseSide" type="Button" parent="HUD/VBoxContainer"]
 unique_name_in_owner = true
@@ -174,7 +178,19 @@ visible = false
 layout_mode = 2
 text = "<<<"
 
-[node name="MenuContainer" parent="." instance=ExtResource("8_j5wjh")]
+[node name="PausePanel" type="Panel" parent="."]
+unique_name_in_owner = true
+process_mode = 3
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("8_vef74")
+
+[node name="MenuContainer" parent="PausePanel" instance=ExtResource("8_j5wjh")]
 layout_mode = 1
 
 [connection signal="value_changed" from="RightSide/TextureRect/HSlider" to="RightSide/TextureRect/HSlider" method="_on_value_changed"]

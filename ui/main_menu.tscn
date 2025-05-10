@@ -31,9 +31,22 @@ texture = ExtResource("2_0dkrt")
 expand_mode = 1
 stretch_mode = 4
 
+[node name="ContinueGame" type="Button" parent="."]
+layout_mode = 2
+text = "MENU_LABEL_CONTINUE"
+
 [node name="NewGame" type="Button" parent="."]
 layout_mode = 2
 text = "MENU_LABEL_NEW_GAME"
+
+[node name="SaveGame" type="Button" parent="."]
+visible = false
+layout_mode = 2
+text = "MENU_IO_SAVE_GAME"
+
+[node name="LoadGame" type="Button" parent="."]
+layout_mode = 2
+text = "MENU_IO_LOAD_GAME"
 
 [node name="Settings" type="Button" parent="."]
 layout_mode = 2
@@ -43,6 +56,9 @@ text = "MENU_OPTIONS"
 layout_mode = 2
 text = "MENU_LABEL_QUIT"
 
+[connection signal="button_down" from="ContinueGame" to="." method="new_game"]
 [connection signal="button_down" from="NewGame" to="." method="new_game"]
+[connection signal="button_down" from="SaveGame" to="." method="new_game"]
+[connection signal="button_down" from="LoadGame" to="." method="new_game"]
 [connection signal="button_down" from="Settings" to="." method="_on_settings_button_down"]
 [connection signal="button_down" from="QuitGame" to="." method="_on_exit_button_down"]

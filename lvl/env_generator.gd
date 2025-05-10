@@ -20,7 +20,6 @@ signal difficulty_increased(level, speed)
 var run: bool = true
 var pace_level: float
 var current_speed: int
-var level_points: int = 0
 var timer: float = 0.0
 var screen_size: Vector2
 var spawn_lanes: Array[Vector2] = []
@@ -340,7 +339,6 @@ func resume() -> void:
 func reset() -> void:
 	pace_level = pace_level_start
 	current_speed = base_speed
-	level_points = 0
 	added_item_speed = 0
 	timer = 0.0
 	last_lane_index = -1
