@@ -23,9 +23,14 @@ func _ready() -> void:
 		fall_speed = SaveData.fall_speed
 		player = SaveData.get_player()
 	bg.speed = bg_speed
-	bg.lvl = bg_type
 	add_child(bg)
 	add_child(player)
 	var player_size = player.get_size().x
 	var player_scale = (screen_size.x/5)/player_size
 	player.scale = Vector2(player_scale,player_scale)
+func start_lvl():
+	bg.set_lvl(str(randi_range(1,34)))
+	var env = EnvGenerator.new()
+	env.level_points
+	add_child(env)
+	

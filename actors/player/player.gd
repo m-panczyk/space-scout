@@ -19,7 +19,10 @@ func get_size() -> Vector2:
 	return get_animation().sprite_frames.get_frame_texture(get_animation().animation,0).get_size()
 
 func _alt_ready() -> void:
-	health_change()
+	for rouge_player in get_tree().get_nodes_in_group("PLAYER"):
+		rouge_player.queue_free()
+	add_to_group("PLAYER")
+	health_changed()
 	if speed == Actor.DEFAULT_SPEED:
 		speed = 400
 		
@@ -32,13 +35,17 @@ func _alt_ready() -> void:
 	energy_production_timer.one_shot = false
 	energy_production_timer.autostart = true
 	add_child(energy_production_timer)
+	_on_energy_production_timer_timeout()
 	energy_production_timer.timeout.connect(_on_energy_production_timer_timeout)
 	
 	if weapon_name != '':
 		var load_weapon = load("res://actors/weapons/"+weapon_name+".tscn")
 		weapon = load_weapon.instantiate()
 		add_child(weapon)
+		EventBus.subscribe("player_fire",fire_weapon)
 
+func _exit_tree() -> void:
+	EventBus.unsubscribe("player_fire",fire_weapon)
 
 func _on_energy_production_timer_timeout():
 	if energy<energy_max:
@@ -51,7 +58,7 @@ func process_clamping():
 	var screen_size = GlobalSettings.virtual_resolution
 	position = position.clamp(Vector2.ZERO, screen_size)
 
-func health_change():
+func health_changed():
 	EventBus.emit("health_changed", [health,max_health])
 
 func process_move(delta: float):
@@ -74,12 +81,12 @@ func process_move(delta: float):
 
 func _input(event: InputEvent) -> void:
 	if event.is_action("game_fire"):
-		print(event)
-		if energy >= weapon.consumption:
-			weapon.fire()
-			energy -= weapon.consumption 
-			EventBus.emit("energy_changed", [energy,energy_max])
-		
+		fire_weapon()
+
+func fire_weapon():
+	if energy >= weapon.consumption:
+		weapon.fire()
+		energy -= weapon.consumption 
+		EventBus.emit("energy_changed", [energy,energy_max])
 func died():
-	#EventBus.emit("game_over",[false,0])
-	pass
+	EventBus.emit("game_over",[false,0])

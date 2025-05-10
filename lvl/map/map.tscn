@@ -1,0 +1,95 @@
+[gd_scene load_steps=12 format=4 uid="uid://bh5o0r5ut5y0d"]
+
+[ext_resource type="Texture2D" uid="uid://c2dt2jr24n77q" path="res://lvl/map/img/basic.png" id="1_ywyak"]
+[ext_resource type="Texture2D" uid="uid://cerg7u1qsjtgq" path="res://lvl/map/img/black.png" id="2_aemh6"]
+[ext_resource type="Texture2D" uid="uid://cjr6me1gol8wb" path="res://lvl/map/img/highlighted.png" id="3_fvr80"]
+[ext_resource type="Script" uid="uid://dg0ek50bdovs0" path="res://lvl/map/hex_tile_map.gd" id="4_aemh6"]
+[ext_resource type="Shader" uid="uid://bpypf5ohe3reh" path="res://ui/space.gdshader" id="5_fvr80"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xsbyp"]
+texture = ExtResource("1_ywyak")
+texture_region_size = Vector2i(96, 110)
+0:0/next_alternative_id = 3
+0:0/0 = 0
+0:0/1 = 1
+0:0/1/modulate = Color(0.435192, 0.435192, 0.435192, 1)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3qakr"]
+texture = ExtResource("2_aemh6")
+texture_region_size = Vector2i(96, 110)
+0:0/next_alternative_id = 6
+0:0/0 = 0
+0:0/0/modulate = Color(0, 0, 0, 1)
+0:0/1 = 1
+0:0/1/modulate = Color(0, 0.2, 0, 1)
+0:0/2 = 2
+0:0/2/modulate = Color(0, 0.4, 0, 1)
+0:0/3 = 3
+0:0/3/modulate = Color(0, 0.6, 0, 1)
+0:0/4 = 4
+0:0/4/modulate = Color(0, 0.8, 0, 1)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_n1f8j"]
+texture = ExtResource("3_fvr80")
+texture_region_size = Vector2i(96, 110)
+use_texture_padding = false
+0:0/next_alternative_id = 5
+0:0/0 = 0
+0:0/1 = 1
+0:0/1/modulate = Color(0.560955, 0.560955, 0.560955, 1)
+0:0/2 = 2
+0:0/2/modulate = Color(0.498039, 1, 0.498039, 1)
+
+[sub_resource type="TileSet" id="TileSet_i3yce"]
+tile_shape = 3
+tile_size = Vector2i(96, 110)
+uv_clipping = true
+sources/0 = SubResource("TileSetAtlasSource_xsbyp")
+sources/2 = SubResource("TileSetAtlasSource_3qakr")
+sources/3 = SubResource("TileSetAtlasSource_n1f8j")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xsbyp"]
+shader = ExtResource("5_fvr80")
+shader_parameter/bg_color = Color(0, 0, 0, 1)
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/bigStarSlow = 2.0
+shader_parameter/mediumStarSlow = 6.0
+shader_parameter/smallStarSlow = 8.0
+shader_parameter/smallStarAmount = 0.002
+shader_parameter/mediumStarAmount = 0.01
+shader_parameter/bigStarAmount = 0.02
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3qakr"]
+
+[node name="HexTileController" type="SubViewportContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+mouse_target = true
+
+[node name="SubViewport" type="SubViewport" parent="."]
+handle_input_locally = false
+size = Vector2i(1080, 1080)
+render_target_update_mode = 4
+
+[node name="HexTileMap" type="TileMapLayer" parent="SubViewport" groups=["MAP"]]
+tile_map_data = PackedByteArray("AAAAAAEAAAAAAAAAAAABAAAAAAAAAAAAAAABAAIAAAAAAAAAAAABAAEAAAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAAAAAAAAAACAAIAAAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAAEAAIAAAAAAAAAAAAFAAAAAAAAAAAAAAAFAAEAAAAAAAAAAAAFAAIAAAAAAAAAAAABAAMAAAAAAAAAAAACAAMAAAAAAAAAAAADAAMAAAAAAAAAAAADAAQAAAAAAAAAAAACAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAEAAMAAAAAAAAAAAAFAAQAAAAAAAAAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAUAAAAAAAAAAAADAAUAAAAAAAAAAAAGAAIAAAAAAAAAAAAGAAMAAAAAAAAAAAAGAAQAAAAAAAAAAAAEAAUAAAAAAAAAAAAGAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAAIAAEAAAAAAAAAAAAEAAkAAAAAAAAAAAAFAAkAAAAAAAAAAAAHAAQAAAAAAAAAAAAHAAIAAAAAAAAAAAAGAAEAAAAAAAAAAAAHAAEAAAAAAAAAAAAIAAIAAAAAAAAAAAAHAAMAAAAAAAAAAAAGAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAADAAYAAAAAAAAAAAAEAAYAAAAAAAAAAAAFAAYAAAAAAAAAAAAGAAYAAAAAAAAAAAAFAAcAAAAAAAAAAAAEAAcAAAAAAAAAAAADAAcAAAAAAAAAAAAEAAgAAAAAAAAAAAAFAAgAAAAAAAAAAAAFAAoAAAAAAAAAAAAGAAgAAAAAAAAAAAAGAAcAAAAAAAAAAAAHAAYAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAQAAAAAAAAAAAAJAAIAAAAAAAAAAAAIAAMAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAAoAAAAAAAAAAAABAAoAAAAAAAAAAAACAAoAAAAAAAAAAAADAAoAAAAAAAAAAAAEAAoAAAAAAAAAAAABAAQAAAAAAAAAAAABAAUAAAAAAAAAAAACAAYAAAAAAAAAAAACAAcAAAAAAAAAAAADAAgAAAAAAAAAAAACAAkAAAAAAAAAAAADAAkAAAAAAAAAAAABAAkAAAAAAAAAAAABAAgAAAAAAAAAAAABAAYAAAAAAAAAAAABAAcAAAAAAAAAAAACAAgAAAAAAAAAAAAGAAoAAAAAAAAAAAAHAAoAAAAAAAAAAAAIAAoAAAAAAAAAAAAJAAoAAAAAAAAAAAAKAAoAAAAAAAAAAAAKAAAAAAAAAAAAAAAJAAEAAAAAAAAAAAAKAAIAAAAAAAAAAAAJAAMAAAAAAAAAAAAKAAQAAAAAAAAAAAAJAAUAAAAAAAAAAAAKAAYAAAAAAAAAAAAJAAcAAAAAAAAAAAAKAAgAAAAAAAAAAAAJAAkAAAAAAAAAAAAIAAkAAAAAAAAAAAAHAAkAAAAAAAAAAAAGAAkAAAAAAAAAAAAIAAgAAAAAAAAAAAAJAAgAAAAAAAAAAAAHAAgAAAAAAAAAAAAIAAcAAAAAAAAAAAAHAAcAAAAAAAAAAAAIAAYAAAAAAAAAAAAJAAYAAAAAAAAAAAAIAAUAAAAAAAAAAAAJAAQAAAAAAAAAAAAJAP//AAAAAAAAAAA=")
+tile_set = SubResource("TileSet_i3yce")
+script = ExtResource("4_aemh6")
+
+[node name="ParallaxBg" type="ParallaxBackground" parent="SubViewport"]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="SubViewport/ParallaxBg"]
+
+[node name="Sprite2D" type="Sprite2D" parent="SubViewport/ParallaxBg/ParallaxLayer"]
+material = SubResource("ShaderMaterial_xsbyp")
+position = Vector2(540, 540)
+scale = Vector2(2.10938, 2.10938)
+texture = SubResource("NoiseTexture2D_3qakr")
+
+[node name="Camera2D" type="Camera2D" parent="SubViewport"]
+unique_name_in_owner = true
+zoom = Vector2(0.3, 0.3)

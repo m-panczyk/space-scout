@@ -1,7 +1,0 @@
-[gd_resource type="SystemFont" load_steps=2 format=3 uid="uid://dv8av6pa0414w"]
-
-[ext_resource type="FontFile" uid="uid://b80d0psro36df" path="res://theme/NotoColorEmoji.ttf" id="1_qqhyj"]
-
-[resource]
-fallbacks = Array[Font]([ExtResource("1_qqhyj")])
-font_names = PackedStringArray("Noto Sans")

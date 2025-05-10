@@ -8,14 +8,17 @@ class_name LevelBackground
 var screen_size
 
 func _ready() -> void:
-	texture = load("res://lvl/background/img/"+lvl+".tres")
-	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+	set_lvl(lvl)
 	
 	material = preload("res://lvl/background/shaders/rollup.tres")
 	material.set_shader_parameter("direction",direction)
 	material.set_shader_parameter("speed", speed)
 	get_parent().item_rect_changed.connect(update_size)
 	update_size()
+func set_lvl(lvl_name:String):
+	lvl = lvl_name
+	texture = load("res://lvl/background/img/"+lvl+".png")
+	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	
 func update_size() -> void:
 	screen_size = GlobalSettings.virtual_resolution

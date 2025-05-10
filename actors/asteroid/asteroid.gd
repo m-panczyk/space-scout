@@ -10,6 +10,7 @@ func _init() -> void:
 func _alt_ready() -> void:
 	collision_layer = 2
 	collision_mask = 5
+	damage = 1
 	add_to_group("items")
 
 func process_clamping() -> void:
@@ -19,5 +20,5 @@ func accelerate(acceleration:float):
 	speed += acceleration
 
 func died():
-	EventBus.emit_signal("add_point",max_health)
+	EventBus.emit("add_point",max_health)
 	queue_free()

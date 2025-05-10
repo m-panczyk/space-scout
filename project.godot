@@ -27,9 +27,8 @@ SaveData="*res://save_data.gd"
 
 window/size/viewport_width=1080
 window/size/viewport_height=1080
-window/size/mode=4
 window/size/initial_position_type=3
-window/size/resizable=false
+window/size/initial_screen=1
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=1
@@ -43,9 +42,20 @@ version_control/autoload_on_startup=true
 
 enabled=PackedStringArray("res://addons/event_bus_plugin/plugin.cfg")
 
+[global_group]
+
+PLAYER=""
+MAP=""
+
 [gui]
 
 theme/custom_font="uid://dv8av6pa0414w"
+
+[importer_defaults]
+
+texture={
+&"process/fix_alpha_border": false
+}
 
 [input]
 

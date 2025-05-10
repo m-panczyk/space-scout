@@ -16,7 +16,6 @@ func _enter_tree() -> void:
 		var skin_instance = load(skin_path).instantiate()
 		add_child(skin_instance)
 		skin_instance.name = "Skin"
-	print(get_children())
 
 func _ready() -> void:
 	area_entered.connect(_on_area_entered)
@@ -48,6 +47,7 @@ func process_clamping() -> void:
 
 func _on_area_entered(other_area) -> void:
 	if other_area.has_method("get_damage"):
+		print(other_area.name, " fucks ", name)
 		health = health - other_area.get_damage()
 		health_changed()
 	if health <= 0 :

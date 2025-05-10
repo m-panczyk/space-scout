@@ -1,59 +1,36 @@
-[gd_scene load_steps=5 format=3 uid="uid://ch47nd3iei8k7"]
+[gd_scene load_steps=7 format=3 uid="uid://ch47nd3iei8k7"]
 
 [ext_resource type="Script" uid="uid://beaf3hr6264to" path="res://game.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://dulhmwxqskfm" path="res://lvl/lvl.gd" id="2_e2o6t"]
 [ext_resource type="Script" uid="uid://b8aclcm6ewxmq" path="res://ui/HUD/heath_bar.gd" id="3_fc0e3"]
+[ext_resource type="PackedScene" uid="uid://bh5o0r5ut5y0d" path="res://lvl/map/map.tscn" id="3_ryrav"]
+[ext_resource type="Texture2D" uid="uid://dbcbprxmyl5ik" path="res://ui/img/frame.png" id="4_7jktm"]
 [ext_resource type="Texture2D" uid="uid://c1ni8e1fd815l" path="res://ui/img/metal.png" id="5_7jktm"]
 
-[node name="Game" type="Control"]
-layout_mode = 3
+[node name="Game" type="ColorRect"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0, 0, 0, 1)
 script = ExtResource("1_80nbo")
 
 [node name="Center" type="SubViewportContainer" parent="."]
-z_index = -1
 layout_mode = 1
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = -161.0
+offset_right = 536.0
 grow_horizontal = 2
 grow_vertical = 2
 stretch = true
 
-[node name="HUD" type="VBoxContainer" parent="Center"]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="HealthBar2" type="ProgressBar" parent="Center/HUD"]
-clip_contents = true
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-value = 60.0
-show_percentage = false
-script = ExtResource("3_fc0e3")
-
-[node name="EnergyBar2" type="ProgressBar" parent="Center/HUD"]
-clip_contents = true
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-value = 60.0
-show_percentage = false
-script = ExtResource("3_fc0e3")
-data_type = "energy"
-
-[node name="PauseSide" type="Button" parent="Center/HUD"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "<<<"
-
 [node name="SubViewport" type="SubViewport" parent="Center"]
 handle_input_locally = false
-size = Vector2i(2, 1080)
+size = Vector2i(697, 1080)
 size_2d_override_stretch = true
 render_target_update_mode = 4
 
@@ -62,50 +39,122 @@ unique_name_in_owner = true
 script = ExtResource("2_e2o6t")
 metadata/_custom_type_script = "uid://dulhmwxqskfm"
 
+[node name="LeftSide" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 375.0
+grow_vertical = 2
+texture = ExtResource("5_7jktm")
+expand_mode = 1
+stretch_mode = 1
+flip_h = true
+
 [node name="RightSide" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 360.0
 grow_horizontal = 0
 grow_vertical = 2
-scale = Vector2(1.01105, 1)
 texture = ExtResource("5_7jktm")
 expand_mode = 1
+stretch_mode = 1
 
-[node name="LeftSide" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="RightSide"]
 layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-grow_vertical = 2
-scale = Vector2(1.01105, 1)
-texture = ExtResource("5_7jktm")
-expand_mode = 1
-flip_h = true
-
-[node name="VBox" type="VBoxContainer" parent="LeftSide"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 1
-anchors_preset = 15
+anchors_preset = 1
+anchor_left = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = -340.0
+offset_top = 17.0
+offset_right = -24.0
+offset_bottom = 349.0
+grow_horizontal = 0
+texture = ExtResource("4_7jktm")
+expand_mode = 1
 
-[node name="HealthBar" type="ProgressBar" parent="LeftSide/VBox"]
-custom_minimum_size = Vector2(0, 100)
+[node name="HexTileController" parent="RightSide/TextureRect" instance=ExtResource("3_ryrav")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.111
+anchor_top = 0.166
+anchor_right = 0.896
+anchor_bottom = 0.831
+offset_left = -0.076004
+offset_top = -0.112003
+offset_right = -0.136017
+offset_bottom = 0.108002
+
+[node name="StartLevelButton" type="Button" parent="RightSide/TextureRect"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 1
-value = 60.0
+anchor_left = 0.864
+anchor_top = 1.024
+anchor_right = 0.991
+anchor_bottom = 1.117
+offset_left = 2.97598
+offset_top = 0.0319824
+offset_right = -0.156006
+offset_bottom = 0.155975
+text = "GO!"
+
+[node name="HUD" type="TextureRect" parent="."]
+unique_name_in_owner = true
+clip_children = 2
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.333
+anchor_bottom = 0.169
+offset_right = 0.359985
+offset_bottom = 0.47998
+texture = ExtResource("4_7jktm")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD"]
+modulate = Color(1, 1, 1, 0.878431)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.117
+anchor_top = 0.158
+anchor_right = 0.896
+anchor_bottom = 0.825
+offset_left = -0.142002
+offset_top = 0.0859985
+offset_right = -0.0960083
+offset_bottom = 0.0249939
+alignment = 1
+
+[node name="HealthBar2" type="ProgressBar" parent="HUD/VBoxContainer"]
+self_modulate = Color(0, 0.643305, 0.0462931, 1)
+layout_mode = 2
+size_flags_vertical = 3
+step = 1.0
+rounded = true
 show_percentage = false
 script = ExtResource("3_fc0e3")
 
-[node name="EnergyBar2" type="ProgressBar" parent="LeftSide/VBox"]
+[node name="EnergyBar2" type="ProgressBar" parent="HUD/VBoxContainer"]
+self_modulate = Color(0, 0.254902, 0.909804, 1)
 clip_contents = true
-custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
-value = 60.0
+size_flags_vertical = 3
 show_percentage = false
 script = ExtResource("3_fc0e3")
 data_type = "energy"
+
+[node name="Label" type="Label" parent="HUD/VBoxContainer"]
+layout_mode = 2
+text = "0 pts"
+horizontal_alignment = 2
+
+[node name="PauseSide" type="Button" parent="HUD/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "<<<"
+
+[connection signal="pressed" from="RightSide/TextureRect/StartLevelButton" to="." method="_on_start_level_button_pressed"]
+[connection signal="pressed" from="HUD/VBoxContainer/PauseSide" to="." method="_on_pause_side_pressed"]
