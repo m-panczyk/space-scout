@@ -48,6 +48,7 @@ enabled=PackedStringArray("res://addons/event_bus_plugin/plugin.cfg")
 
 PLAYER=""
 MAP=""
+PORTALS=""
 
 [gui]
 

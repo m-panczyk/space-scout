@@ -51,42 +51,47 @@ shader_parameter/edge_softness = 0.3
 [node name="lvl" type="Node2D"]
 script = ExtResource("1_ox0hx")
 
-[node name="portal1" type="Area2D" parent="." groups=["portals"]]
+[node name="portal0" type="Area2D" parent="." groups=["PORTALS"]]
+visible = false
 z_index = 1
 position = Vector2(180, 180)
 script = ExtResource("2_lqf52")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="portal0"]
+shape = SubResource("RectangleShape2D_lqf52")
+
+[node name="Sprite" type="Sprite2D" parent="portal0"]
+material = SubResource("ShaderMaterial_lqf52")
+scale = Vector2(3, 3)
+texture = ExtResource("5_rbhs8")
+
+[node name="portal1" type="Area2D" parent="." groups=["PORTALS"]]
+visible = false
+z_index = 1
+position = Vector2(540, 180)
+script = ExtResource("2_lqf52")
+answer = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="portal1"]
 shape = SubResource("RectangleShape2D_lqf52")
 
 [node name="Sprite" type="Sprite2D" parent="portal1"]
-material = SubResource("ShaderMaterial_lqf52")
-scale = Vector2(3, 3)
-texture = ExtResource("5_rbhs8")
-
-[node name="portal2" type="Area2D" parent="." groups=["portals"]]
-z_index = 1
-position = Vector2(540, 180)
-script = ExtResource("2_lqf52")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="portal2"]
-shape = SubResource("RectangleShape2D_lqf52")
-
-[node name="Sprite" type="Sprite2D" parent="portal2"]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_rbhs8")
 scale = Vector2(3, 3)
 texture = ExtResource("5_rbhs8")
 
-[node name="portal3" type="Area2D" parent="." groups=["portals"]]
+[node name="portal2" type="Area2D" parent="." groups=["PORTALS"]]
+visible = false
 z_index = 1
 position = Vector2(900, 180)
 script = ExtResource("2_lqf52")
+answer = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="portal3"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="portal2"]
 shape = SubResource("RectangleShape2D_lqf52")
 
-[node name="Sprite" type="Sprite2D" parent="portal3"]
+[node name="Sprite" type="Sprite2D" parent="portal2"]
 material = SubResource("ShaderMaterial_5hiuc")
 scale = Vector2(3, 3)
 texture = ExtResource("5_rbhs8")

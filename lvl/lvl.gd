@@ -40,14 +40,15 @@ func _exit_tree() -> void:
 func end_lvl_check(new_points:int):
 	lvl_points += new_points
 	if lvl_points >= max_level_points:
-		env.spawn_question()
-		if $"../../..".portrait_mode:
-			%HUD.hide()
+		get_tree().call_group("PORTALS","show_question")
+		lvl_points = 0
+		env.queue_free()
+		env = null
 func end_lvl(success:bool):
 	EventBus.emit("end_lvl",success)
 	env.queue_free()
 	env = null
-	%HUD.show()
+
 		
 func start_lvl(punished:bool):
 	bg.set_lvl(str(randi_range(1,34)))

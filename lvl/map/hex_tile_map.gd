@@ -26,15 +26,15 @@ func _input(event: InputEvent) -> void:
 		# Convert local position to cell coordinates
 		var clicked_cell = local_to_map(local_pos)
 		# Handle cell selection
-		handle_cell_selection(clicked_cell, event.is_pressed())
+		handle_cell_selection(clicked_cell, event.is_pressed(),false)
 
-func handle_cell_selection(clicked_cell: Vector2i, is_pressed: bool) -> void:
+func handle_cell_selection(clicked_cell: Vector2i, is_pressed: bool, is_synth: bool) -> void:
 	# Initialize last_pressed if it's the first click
 	if last_pressed == null:
 		last_pressed = clicked_cell
 		
 	# Only process clicks on surrounding cells
-	if get_surrounding_cells(ship_position).has(clicked_cell):
+	if get_surrounding_cells(ship_position).has(clicked_cell) || is_synth:
 		# Handle click event for setting target
 		if is_pressed:
 			if target != null:
@@ -48,24 +48,23 @@ func set_ship_position(new_ship_position: Vector2i = Vector2i(5, 5)) -> void:
 	set_cell(ship_position, 3, Vector2i(0, 0))  # Set ship visual
 	
 	# Update surrounding cells
-	for cell in get_surrounding_cells(ship_position):
-		if !explored.has(cell):
-			# Color tile based on distance to endgame
-			var distance = calculate_hex_distance(cell, endgame)
-			var tile_id = get_tile_id_from_distance(distance)
-			set_cell(cell, 2, Vector2i(0, 0), tile_id)
+	#for cell in get_surrounding_cells(ship_position):
+		#if !explored.has(cell):
+			## Color tile based on distance to endgame
+			#var distance = calculate_hex_distance(cell, endgame)
+			#var tile_id = get_tile_id_from_distance(distance)
+			#set_cell(cell, 2, Vector2i(0, 0), tile_id)
 			
 	# Update camera position
 	%Camera2D.position = map_to_local(ship_position)
 
 func reset_cell(cell: Vector2i) -> void:
 	if explored.has(cell):
-		set_cell(cell, -1)  # Clear cell
-	else:
-		# Set default appearance based on distance to endgame
 		var distance = calculate_hex_distance(cell, endgame)
 		var tile_id = get_tile_id_from_distance(distance)
 		set_cell(cell, 2, Vector2i(0, 0), tile_id)
+	else:
+		set_cell(cell,0,Vector2i.ZERO,0)
 
 func screen_to_global(screen_pos: Vector2, _camera: Camera2D) -> Vector2:
 	# Get the viewport and its transformation
@@ -107,13 +106,9 @@ func get_tile_id_from_distance(distance: int) -> int:
 	else:
 		return 0
 
-# Check if a cell is a valid move target
-func is_valid_move_target(cell: Vector2i) -> bool:
-	return get_surrounding_cells(ship_position).has(cell) and !explored.has(cell)
-
 # Move ship to target cell and update game state
 func move_to_target() -> void:
-	if target != null and is_valid_move_target(target):
+	if target != null:
 		# Add current position to explored
 		if !explored.has(ship_position):
 			explored.append(ship_position)
@@ -136,12 +131,16 @@ func _exit_tree() -> void:
 
 func end_lvl(success:bool):
 	if success:
+		lock = false
 		move_to_target()
+		material.set_shader_parameter("enabled",false)
 	else:
-		target = Vector2i(randi_range(0,9),randi_range(0,9))
-		EventBus.emit('next_lvl',true)
-func prepare_lvl(_punished:bool):
+		handle_cell_selection(Vector2i(randi_range(0,9),randi_range(0,9)),true,true)
+		EventBus.emit('start_lvl',true)
+func prepare_lvl(punished:bool):
 	lock = true
+	if punished:
+		material.set_shader_parameter("enabled",true)
 # Handle endgame logic
 func handle_endgame() -> void:
 	# Add your endgame logic here

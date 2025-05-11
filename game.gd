@@ -4,8 +4,11 @@ var portrait_mode = false
 
 func _enter_tree() -> void:
 	$Center/SubViewport.size_2d_override = GlobalSettings.virtual_resolution
+	EventBus.subscribe('end_lvl',end_lvl)
 	if get_tree().paused:
 		get_tree().paused = false
+func _exit_tree() -> void:
+		EventBus.unsubscribe('end_lvl',end_lvl)
 
 func _ready():
 	if DisplayServer.is_touchscreen_available():
@@ -16,7 +19,6 @@ func _ready():
 	# Initial layout check
 	_on_viewport_size_changed()
 	$PausePanel/MenuContainer.current_scene.pause_menu()
-
 	
 func _on_viewport_size_changed():
 	viewport_size = get_viewport_rect().size
@@ -45,8 +47,7 @@ func _on_viewport_size_changed():
 		$LeftSide.show()
 		$RightSide.show()
 		$RightSide.position = Vector2(viewport_size.x*2/3,0)
-	
-		
+
 func set_portrait_mode(is_portrait: bool):
 	portrait_mode = is_portrait
 	if is_portrait:

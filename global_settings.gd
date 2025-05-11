@@ -104,3 +104,42 @@ func adjust_viewport_scale() -> void:
 	print("Applied scale factor: ", scale_factor)
 	
 	get_tree().root.content_scale_factor = scale_factor
+
+var questions = [
+	['Question','GOOD','BAD','BAD'],
+	['1+1=?','2','1','11']
+	]
+
+var current_question_index: int = 0
+var current_correct_answer_index: int = 0
+var shuffled_answers: Array = []
+
+func get_question() -> String:
+	# Select a random question
+	current_question_index = randi() % questions.size()
+	var question_data = questions[current_question_index]
+	
+	# Get the question text (first element)
+	var question_text = question_data[0]
+	
+	# Get all answers and shuffle them
+	shuffled_answers = []
+	for i in range(1, question_data.size()):
+		shuffled_answers.append(question_data[i])
+	
+	# Remember which answer is correct (index 0 is always correct in original array)
+	var correct_answer = question_data[1]
+	
+	# Shuffle the answers array
+	shuffled_answers.shuffle()
+	
+	# Find where the correct answer ended up after shuffling
+	current_correct_answer_index = shuffled_answers.find(correct_answer)
+	
+	return question_text
+
+func get_answers() -> Array:
+	return shuffled_answers
+
+func is_correct_answer(selected_index: int) -> bool:
+	return selected_index == current_correct_answer_index

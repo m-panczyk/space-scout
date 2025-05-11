@@ -103,7 +103,7 @@ void fragment() {
 
     // --- 10. Texture Sampling and Final Color ---
     vec4 texture_color = texture(portal_texture, fract(final_scrolling_uv));
-    
+
     COLOR = texture_color * portal_tint;
     COLOR.a *= alpha;
 

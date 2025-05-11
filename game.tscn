@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ch47nd3iei8k7"]
+[gd_scene load_steps=16 format=3 uid="uid://ch47nd3iei8k7"]
 
 [ext_resource type="Script" uid="uid://beaf3hr6264to" path="res://game.gd" id="1_80nbo"]
 [ext_resource type="PackedScene" uid="uid://bs1hu7lpdivca" path="res://lvl/lvl.tscn" id="2_iotsf"]
@@ -11,7 +11,13 @@
 [ext_resource type="Script" uid="uid://chmfum2qqdak5" path="res://ui/point_count.gd" id="8_hve3p"]
 [ext_resource type="PackedScene" uid="uid://u83wwivbovfd" path="res://ui/menu_container.tscn" id="8_j5wjh"]
 [ext_resource type="Script" uid="uid://orvcs75vjfdf" path="res://ui/pause_panel.gd" id="8_vef74"]
+[ext_resource type="Script" uid="uid://clm5y8mhfbomc" path="res://lvl/question.gd" id="10_lc2xo"]
+[ext_resource type="Shader" uid="uid://drddes5mqly6p" path="res://gauss.gdshader" id="11_215e1"]
 [ext_resource type="Script" uid="uid://cpmgc4pk12uyt" path="res://ui/touch_esc.gd" id="12_iotsf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7sc4i"]
+shader = ExtResource("11_215e1")
+shader_parameter/sigma = 10.0
 
 [node name="Game" type="ColorRect"]
 anchors_preset = 15
@@ -188,16 +194,77 @@ visible = false
 layout_mode = 2
 text = "<<<"
 
-[node name="PausePanel" type="Panel" parent="."]
-unique_name_in_owner = true
-process_mode = 3
+[node name="Question" type="RichTextLabel" parent="HUD" groups=["PORTALS"]]
 visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0972222
+anchor_top = 0.15625
+anchor_right = 0.902778
+anchor_bottom = 0.839286
+grow_horizontal = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "Question
+"
+fit_content = true
+horizontal_alignment = 1
+script = ExtResource("10_lc2xo")
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect" type="ColorRect" parent="HUD/Question"]
+show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/Question"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Answer1" type="Label" parent="HUD/Question/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.0117647, 1, 1)
+text = "GOOD"
+horizontal_alignment = 1
+
+[node name="Answer2" type="Label" parent="HUD/Question/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0.784314, 0, 1)
+text = "BAD"
+horizontal_alignment = 1
+
+[node name="Answer3" type="Label" parent="HUD/Question/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.760784, 1, 0.0509804, 1)
+text = "BAD"
+horizontal_alignment = 1
+
+[node name="PausePanel" type="ColorRect" parent="."]
+unique_name_in_owner = true
+process_mode = 3
+visible = false
+material = SubResource("ShaderMaterial_7sc4i")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
 script = ExtResource("8_vef74")
 
 [node name="MenuContainer" parent="PausePanel" instance=ExtResource("8_j5wjh")]
