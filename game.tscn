@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://ch47nd3iei8k7"]
 
 [ext_resource type="Script" uid="uid://beaf3hr6264to" path="res://game.gd" id="1_80nbo"]
-[ext_resource type="Script" uid="uid://dulhmwxqskfm" path="res://lvl/lvl.gd" id="2_e2o6t"]
+[ext_resource type="PackedScene" uid="uid://bs1hu7lpdivca" path="res://lvl/lvl.tscn" id="2_iotsf"]
 [ext_resource type="Script" uid="uid://b8aclcm6ewxmq" path="res://ui/HUD/heath_bar.gd" id="3_fc0e3"]
 [ext_resource type="PackedScene" uid="uid://bh5o0r5ut5y0d" path="res://lvl/map/map.tscn" id="3_ryrav"]
 [ext_resource type="Texture2D" uid="uid://dbcbprxmyl5ik" path="res://ui/img/frame.png" id="4_7jktm"]
@@ -37,13 +37,12 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="Center"]
 handle_input_locally = false
 size = Vector2i(697, 1080)
+size_2d_override = Vector2i(1080, 1920)
 size_2d_override_stretch = true
 render_target_update_mode = 4
 
-[node name="GameLevel" type="Node2D" parent="Center/SubViewport"]
+[node name="GameLevel" parent="Center/SubViewport" instance=ExtResource("2_iotsf")]
 unique_name_in_owner = true
-script = ExtResource("2_e2o6t")
-metadata/_custom_type_script = "uid://dulhmwxqskfm"
 
 [node name="LeftSide" type="TextureRect" parent="." groups=["columns"]]
 layout_mode = 1

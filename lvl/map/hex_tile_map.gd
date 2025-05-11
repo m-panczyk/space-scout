@@ -127,8 +127,20 @@ func move_to_target() -> void:
 		
 		# Reset target
 		target = null
-func prepare_lvl():
-	move_to_target()
+func _enter_tree() -> void:
+	EventBus.subscribe('end_lvl',end_lvl)
+	EventBus.subscribe('start_lvl',prepare_lvl)
+func _exit_tree() -> void:
+	EventBus.unsubscribe('end_lvl',end_lvl)
+	EventBus.unsubscribe('start_lvl',prepare_lvl)
+
+func end_lvl(success:bool):
+	if success:
+		move_to_target()
+	else:
+		target = Vector2i(randi_range(0,9),randi_range(0,9))
+		EventBus.emit('next_lvl',true)
+func prepare_lvl(_punished:bool):
 	lock = true
 # Handle endgame logic
 func handle_endgame() -> void:

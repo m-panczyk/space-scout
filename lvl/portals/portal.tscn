@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://cwbj25s3lmu2e"]
+
+[ext_resource type="Script" uid="uid://cjji3pg5uwh87" path="res://lvl/portals/portal.gd" id="1_tumww"]
+[ext_resource type="Texture2D" uid="uid://d10q7x2nawxdq" path="res://icon.svg" id="3_8510k"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lqf52"]
+size = Vector2(360, 100)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_op3e4"]
+
+[node name="Area2D2" type="Area2D"]
+z_index = 1
+script = ExtResource("1_tumww")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_lqf52")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_op3e4")
+scale = Vector2(3, 3)
+texture = ExtResource("3_8510k")

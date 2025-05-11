@@ -1,6 +1,92 @@
-[gd_scene load_steps=2 format=3 uid="uid://bs1hu7lpdivca"]
+[gd_scene load_steps=10 format=3 uid="uid://bs1hu7lpdivca"]
 
 [ext_resource type="Script" uid="uid://dulhmwxqskfm" path="res://lvl/lvl.gd" id="1_ox0hx"]
+[ext_resource type="Script" uid="uid://cjji3pg5uwh87" path="res://lvl/portals/portal.gd" id="2_lqf52"]
+[ext_resource type="Shader" uid="uid://wxexdk1wqq44" path="res://lvl/portals/portal.gdshader" id="3_ox0hx"]
+[ext_resource type="Texture2D" uid="uid://bwkrrc3vaqfqx" path="res://lvl/background/img/2.png" id="4_lqf52"]
+[ext_resource type="Texture2D" uid="uid://d10q7x2nawxdq" path="res://icon.svg" id="5_rbhs8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lqf52"]
+size = Vector2(360, 100)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lqf52"]
+shader = ExtResource("3_ox0hx")
+shader_parameter/portal_texture = ExtResource("4_lqf52")
+shader_parameter/portal_tint = Color(1, 0.0117647, 1, 1)
+shader_parameter/vortex_effect_radius = 0.5
+shader_parameter/twist_strength = 20.0
+shader_parameter/pulsation_speed = 1.0
+shader_parameter/breath_magnitude = 0.05
+shader_parameter/overall_rotation_speed = 0.25
+shader_parameter/texture_scroll_speed_x = -2.2352e-08
+shader_parameter/texture_scroll_speed_y = 0.6
+shader_parameter/edge_softness = 0.3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rbhs8"]
+shader = ExtResource("3_ox0hx")
+shader_parameter/portal_texture = ExtResource("4_lqf52")
+shader_parameter/portal_tint = Color(0, 0.784314, 0, 1)
+shader_parameter/vortex_effect_radius = 0.5
+shader_parameter/twist_strength = 20.0
+shader_parameter/pulsation_speed = 1.0
+shader_parameter/breath_magnitude = 0.05
+shader_parameter/overall_rotation_speed = 0.25
+shader_parameter/texture_scroll_speed_x = -2.2352e-08
+shader_parameter/texture_scroll_speed_y = 0.8
+shader_parameter/edge_softness = 0.3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5hiuc"]
+shader = ExtResource("3_ox0hx")
+shader_parameter/portal_texture = ExtResource("4_lqf52")
+shader_parameter/portal_tint = Color(0.7625, 1, 0.05, 1)
+shader_parameter/vortex_effect_radius = 0.5
+shader_parameter/twist_strength = 20.0
+shader_parameter/pulsation_speed = 1.0
+shader_parameter/breath_magnitude = 0.05
+shader_parameter/overall_rotation_speed = 0.25
+shader_parameter/texture_scroll_speed_x = -2.2352e-08
+shader_parameter/texture_scroll_speed_y = 1.0
+shader_parameter/edge_softness = 0.3
 
 [node name="lvl" type="Node2D"]
 script = ExtResource("1_ox0hx")
+
+[node name="portal1" type="Area2D" parent="." groups=["portals"]]
+z_index = 1
+position = Vector2(180, 180)
+script = ExtResource("2_lqf52")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="portal1"]
+shape = SubResource("RectangleShape2D_lqf52")
+
+[node name="Sprite" type="Sprite2D" parent="portal1"]
+material = SubResource("ShaderMaterial_lqf52")
+scale = Vector2(3, 3)
+texture = ExtResource("5_rbhs8")
+
+[node name="portal2" type="Area2D" parent="." groups=["portals"]]
+z_index = 1
+position = Vector2(540, 180)
+script = ExtResource("2_lqf52")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="portal2"]
+shape = SubResource("RectangleShape2D_lqf52")
+
+[node name="Sprite" type="Sprite2D" parent="portal2"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_rbhs8")
+scale = Vector2(3, 3)
+texture = ExtResource("5_rbhs8")
+
+[node name="portal3" type="Area2D" parent="." groups=["portals"]]
+z_index = 1
+position = Vector2(900, 180)
+script = ExtResource("2_lqf52")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="portal3"]
+shape = SubResource("RectangleShape2D_lqf52")
+
+[node name="Sprite" type="Sprite2D" parent="portal3"]
+material = SubResource("ShaderMaterial_5hiuc")
+scale = Vector2(3, 3)
+texture = ExtResource("5_rbhs8")

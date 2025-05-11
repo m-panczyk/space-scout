@@ -67,12 +67,13 @@ func _on_pause_side_pressed() -> void:
 	%HUD.hide()
 	if %GameLevel.env != null:
 		%GameLevel.env.pause()
-
-
+func end_lvl(success:bool):
+	if success:
+		%StartLevelButton.disabled  = false
+		
 func _on_start_level_button_pressed() -> void:
-	get_tree().call_group("MAP","prepare_lvl")
 	if portrait_mode:
 		$RightSide.hide()
 		%HUD.show()
-	%GameLevel.start_lvl()
+	EventBus.emit("start_lvl",false)
 	%StartLevelButton.disabled = true

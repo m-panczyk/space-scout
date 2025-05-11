@@ -5,9 +5,9 @@ class_name GameLevel
 @export var bg_speed = .1
 @export var fall_speed = 100
 
-var env = null
+var env:EnvGenerator = null
 var lvl_points = 0
-var max_level_points = 30
+var max_level_points = 0
 var player:Player
 var bg:LevelBackground
 
@@ -30,19 +30,26 @@ func _ready() -> void:
 	var player_size = player.get_size().x
 	var player_scale = (screen_size.x/5)/player_size
 	player.scale = Vector2(player_scale,player_scale)
+func _enter_tree() -> void:
+	EventBus.subscribe('start_lvl',start_lvl)
 	EventBus.subscribe("add_point",end_lvl_check)
 func _exit_tree() -> void:
 	EventBus.unsubscribe("add_point",end_lvl_check)
+	EventBus.unsubscribe('start_lvl',start_lvl)
 
 func end_lvl_check(new_points:int):
 	lvl_points += new_points
 	if lvl_points >= max_level_points:
-		EventBus.emit('end_lvl',true)
-		remove_child(env)
-		env = null
-	
-
-func start_lvl():
+		env.spawn_question()
+		if $"../../..".portrait_mode:
+			%HUD.hide()
+func end_lvl(success:bool):
+	EventBus.emit("end_lvl",success)
+	env.queue_free()
+	env = null
+	%HUD.show()
+		
+func start_lvl(punished:bool):
 	bg.set_lvl(str(randi_range(1,34)))
 	env = EnvGenerator.new()
 	env.base_speed = fall_speed
