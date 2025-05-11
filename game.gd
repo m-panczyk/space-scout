@@ -5,10 +5,12 @@ var portrait_mode = false
 func _enter_tree() -> void:
 	$Center/SubViewport.size_2d_override = GlobalSettings.virtual_resolution
 	EventBus.subscribe('end_lvl',end_lvl)
+	EventBus.subscribe('game_over',end_game)
 	if get_tree().paused:
 		get_tree().paused = false
 func _exit_tree() -> void:
 		EventBus.unsubscribe('end_lvl',end_lvl)
+		EventBus.subscribe('game_over',end_game)
 
 func _ready():
 	if DisplayServer.is_touchscreen_available():
@@ -71,7 +73,9 @@ func _on_pause_side_pressed() -> void:
 func end_lvl(success:bool):
 	if success:
 		%StartLevelButton.disabled  = false
-		
+func end_game(success:bool):
+	get_tree().change_scene_to_packed(load("res://ui/root_ui.tscn"))
+
 func _on_start_level_button_pressed() -> void:
 	if portrait_mode:
 		$RightSide.hide()

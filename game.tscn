@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://ch47nd3iei8k7"]
+[gd_scene load_steps=14 format=3 uid="uid://ch47nd3iei8k7"]
 
 [ext_resource type="Script" uid="uid://beaf3hr6264to" path="res://game.gd" id="1_80nbo"]
 [ext_resource type="PackedScene" uid="uid://bs1hu7lpdivca" path="res://lvl/lvl.tscn" id="2_iotsf"]
@@ -12,12 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://u83wwivbovfd" path="res://ui/menu_container.tscn" id="8_j5wjh"]
 [ext_resource type="Script" uid="uid://orvcs75vjfdf" path="res://ui/pause_panel.gd" id="8_vef74"]
 [ext_resource type="Script" uid="uid://clm5y8mhfbomc" path="res://lvl/question.gd" id="10_lc2xo"]
-[ext_resource type="Shader" uid="uid://drddes5mqly6p" path="res://gauss.gdshader" id="11_215e1"]
 [ext_resource type="Script" uid="uid://cpmgc4pk12uyt" path="res://ui/touch_esc.gd" id="12_iotsf"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7sc4i"]
-shader = ExtResource("11_215e1")
-shader_parameter/sigma = 10.0
 
 [node name="Game" type="ColorRect"]
 anchors_preset = 15
@@ -257,7 +252,6 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 process_mode = 3
 visible = false
-material = SubResource("ShaderMaterial_7sc4i")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

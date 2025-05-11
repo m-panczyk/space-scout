@@ -143,6 +143,4 @@ func prepare_lvl(punished:bool):
 		material.set_shader_parameter("enabled",true)
 # Handle endgame logic
 func handle_endgame() -> void:
-	# Add your endgame logic here
-	print("Reached the endgame position!")
-	# Could emit a signal, show UI, etc.
+	EventBus.emit('end_game',true)

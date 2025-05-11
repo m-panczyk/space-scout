@@ -33,6 +33,7 @@ stretch_mode = 4
 
 [node name="ContinueGame" type="Button" parent="."]
 layout_mode = 2
+disabled = true
 text = "MENU_LABEL_CONTINUE"
 
 [node name="NewGame" type="Button" parent="."]
@@ -56,9 +57,6 @@ text = "MENU_OPTIONS"
 layout_mode = 2
 text = "MENU_LABEL_QUIT"
 
-[connection signal="button_down" from="ContinueGame" to="." method="new_game"]
 [connection signal="button_down" from="NewGame" to="." method="new_game"]
-[connection signal="button_down" from="SaveGame" to="." method="new_game"]
-[connection signal="button_down" from="LoadGame" to="." method="new_game"]
 [connection signal="button_down" from="Settings" to="." method="_on_settings_button_down"]
 [connection signal="button_down" from="QuitGame" to="." method="_on_exit_button_down"]

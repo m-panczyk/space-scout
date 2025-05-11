@@ -89,4 +89,4 @@ func fire_weapon():
 		energy -= weapon.consumption 
 		EventBus.emit("energy_changed", [energy,energy_max])
 func died():
-	EventBus.emit("game_over",[false,0])
+	EventBus.emit("game_over",false)
