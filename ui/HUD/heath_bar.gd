@@ -11,6 +11,10 @@ func  _ready() -> void:
 	add_child(label)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	value = SaveData.get(data_type)
+	max_value = SaveData.get(str(data_type,"_max"))
+	label.text = tr("GAME_CHARACTER_"+data_type.to_upper())+" "+str(int(value))+"/"+str(int(max_value))
+
 func _on_data_changed(data:Array):
 	value = data[0]
 	max_value = data[1]

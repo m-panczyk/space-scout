@@ -1,22 +1,65 @@
-[gd_scene load_steps=15 format=4 uid="uid://bh5o0r5ut5y0d"]
+[gd_scene load_steps=18 format=4 uid="uid://bh5o0r5ut5y0d"]
 
 [ext_resource type="Script" uid="uid://c1svmg0ms4pti" path="res://lvl/map/hex_tile_controller.gd" id="1_xsbyp"]
 [ext_resource type="Texture2D" uid="uid://c2dt2jr24n77q" path="res://lvl/map/img/basic.png" id="1_ywyak"]
-[ext_resource type="Shader" uid="uid://bc1mou2tmldex" path="res://hyper.gdshader" id="2_3qakr"]
 [ext_resource type="Texture2D" uid="uid://cerg7u1qsjtgq" path="res://lvl/map/img/black.png" id="2_aemh6"]
 [ext_resource type="Texture2D" uid="uid://cjr6me1gol8wb" path="res://lvl/map/img/highlighted.png" id="3_fvr80"]
+[ext_resource type="Shader" uid="uid://e6u1dgm871om" path="res://lvl/map/fog.gdshader" id="3_n1f8j"]
 [ext_resource type="Script" uid="uid://dg0ek50bdovs0" path="res://lvl/map/hex_tile_map.gd" id="4_aemh6"]
 [ext_resource type="Shader" uid="uid://bpypf5ohe3reh" path="res://ui/space.gdshader" id="5_fvr80"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_n1f8j"]
-shader = ExtResource("2_3qakr")
+[sub_resource type="Shader" id="Shader_w47i7"]
+code = "shader_type canvas_item;
+uniform bool enabled = false;
+void vertex() {
+    // Called for every vertex the material is visible on.
+}
+void fragment() {
+    // Called for every pixel the material is visible on.
+    if (enabled){
+        float s = 0.0, v = 0.0;
+    vec2 ires = 1.0 / SCREEN_PIXEL_SIZE;
+    vec2 uv = (FRAGCOORD.xy/ ires) * 2.0 - 1.;
+    float itime = (TIME-2.0)*58.0;
+    vec3 col = vec3(0);
+    vec3 init = vec3(sin(itime * .0032)*.3, .35 - cos(itime * .005)*.3, itime * 0.002);
+    for (int r = 0; r < 100; r++)
+    {
+        vec3 p = init + s * vec3(uv, 0.05);
+        p.z = fract(p.z);
+        // Thanks to Kali's little chaotic loop...
+        for (int i=0; i < 10; i++)    p = abs(p * 2.04) / dot(p, p) - .9;
+        v += pow(dot(p, p), .7) * .06;
+        col +=  vec3(v * 0.2+.4, 12.-s*2., .1 + v * 1.) * v * 0.00003;
+        s += .025;
+    }
+    COLOR = vec4(clamp(col, 0.0, 1.0), 1.0);
+    }
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2bsxl"]
+shader = SubResource("Shader_w47i7")
 shader_parameter/enabled = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n1f8j"]
+shader = SubResource("Shader_w47i7")
+shader_parameter/enabled = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ivkkr"]
+shader = ExtResource("3_n1f8j")
+shader_parameter/stretch = 0.8
+shader_parameter/thing1 = 0.6
+shader_parameter/thing2 = 0.6
+shader_parameter/thing3 = 0.8
+shader_parameter/scale = 1.0
+shader_parameter/blend_amount = 1.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xsbyp"]
 texture = ExtResource("1_ywyak")
 texture_region_size = Vector2i(96, 110)
 0:0/next_alternative_id = 3
 0:0/0 = 0
+0:0/0/material = SubResource("ShaderMaterial_ivkkr")
 0:0/1 = 1
 0:0/1/modulate = Color(0.435192, 0.435192, 0.435192, 1)
 
@@ -68,6 +111,7 @@ shader_parameter/bigStarAmount = 0.02
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3qakr"]
 
 [node name="HexTileController" type="SubViewportContainer"]
+material = SubResource("ShaderMaterial_2bsxl")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

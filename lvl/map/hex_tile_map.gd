@@ -1,14 +1,28 @@
 extends TileMapLayer
 
-var ship_position = Vector2i(5, 5)
+var _ship_position = SaveData.ship_position
+var ship_position:
+	get:
+		return _ship_position
+	set(value):
+		_ship_position = value
+		SaveData.ship_position = value
 var target = null
 var last_pressed = null
 var endgame = Vector2i(0, 0)
-var explored = []
+var _explored = SaveData.explored_tiles
+var explored:
+	get:
+		return _explored
+	set(value):
+		_explored = value
+		SaveData.explored = value
 var max_distance = 10  # Maximum possible distance for color gradient calculation
 var lock = false
 
 func _ready() -> void:
+	for cell in explored:
+		reset_cell(cell)
 	set_ship_position(ship_position)
 	
 func _input(event: InputEvent) -> void:
@@ -43,6 +57,7 @@ func handle_cell_selection(clicked_cell: Vector2i, is_pressed: bool, is_synth: b
 			set_cell(target, 3, Vector2i(0, 0), 2)  # Set target visual
 
 func set_ship_position(new_ship_position: Vector2i = Vector2i(5, 5)) -> void:
+	print(str(SaveData))
 	reset_cell(ship_position)
 	ship_position = new_ship_position
 	set_cell(ship_position, 3, Vector2i(0, 0))  # Set ship visual
@@ -133,14 +148,14 @@ func end_lvl(success:bool):
 	if success:
 		lock = false
 		move_to_target()
-		material.set_shader_parameter("enabled",false)
+		#$"../..".material.set_shader_parameter("enabled",false)
 	else:
 		handle_cell_selection(Vector2i(randi_range(0,9),randi_range(0,9)),true,true)
 		EventBus.emit('start_lvl',true)
 func prepare_lvl(punished:bool):
 	lock = true
-	if punished:
-		material.set_shader_parameter("enabled",true)
+	#if punished:
+		#$"../..".material.set_shader_parameter("enabled",true)
 # Handle endgame logic
 func handle_endgame() -> void:
 	EventBus.emit('end_game',true)

@@ -1,6 +1,7 @@
 extends Label
 
 func _ready() -> void:
+	update(0)
 	EventBus.subscribe("add_point",update)
 	
 func update(new_points:int):

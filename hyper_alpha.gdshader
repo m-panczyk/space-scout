@@ -1,5 +1,5 @@
 shader_type canvas_item;
-uniform bool enabled = false;
+uniform bool enabled = true;
 uniform float alpha = 0.8; // New uniform to control overall transparency
 
 void vertex() {

@@ -1,10 +1,43 @@
 extends Actor
 class_name Player
 
-@export var weapon_name = 'basic'
-@export var energy:int = 1
-@export var energy_max = 10
-@export var energy_production = [1,1]
+# Private backing fields
+var _weapon_name = SaveData.weapon_name
+var _energy:int = SaveData.energy
+var _energy_max = SaveData.energy_max
+var _energy_production = SaveData.energy_production
+
+# Public properties with getters/setters
+var weapon_name:
+	get:
+		return _weapon_name
+	set(value):
+		_weapon_name = value
+		SaveData.weapon_name = value
+
+var energy:int:
+	get:
+		return _energy
+	set(value):
+		_energy = value
+		SaveData.energy = value
+		EventBus.emit("energy_changed", [_energy, energy_max])
+
+var energy_max:
+	get:
+		return _energy_max
+	set(value):
+		_energy_max = value
+		SaveData.energy_max = value
+		EventBus.emit("energy_changed", [energy, _energy_max])
+
+var energy_production:
+	get:
+		return _energy_production
+	set(value):
+		_energy_production = value
+		SaveData.energy_production = value
+
 var energy_production_timer: Timer
 var weapon:Weapon
 
@@ -22,6 +55,8 @@ func _alt_ready() -> void:
 	for rouge_player in get_tree().get_nodes_in_group("PLAYER"):
 		rouge_player.queue_free()
 	add_to_group("PLAYER")
+	health = SaveData.health
+	max_health = SaveData.health_max
 	health_changed()
 	if speed == Actor.DEFAULT_SPEED:
 		speed = 400
@@ -48,36 +83,35 @@ func _exit_tree() -> void:
 	EventBus.unsubscribe("player_fire",fire_weapon)
 
 func _on_energy_production_timer_timeout():
-	if energy<energy_max:
+	if energy < energy_max:
 		energy += energy_production[0]
-		energy = min(energy, energy_max)
-		EventBus.emit("energy_changed", [energy,energy_max])
-
+		# No need to update SaveData.energy here as the setter handles it
 
 func process_clamping():
 	var screen_size = GlobalSettings.virtual_resolution
 	position = position.clamp(Vector2.ZERO, screen_size)
 
 func health_changed():
+	SaveData.health = health
 	EventBus.emit("health_changed", [health,max_health])
 
 func process_move(delta: float):
-		var velocity = Vector2.ZERO
-		if Input.is_action_pressed("ui_left"):
-				get_animation().frame = 1
-				velocity.x -=1
-		if Input.is_action_pressed("ui_right"):
-				get_animation().frame = 2
-				velocity.x +=1
-		if velocity.x == 0:
-				get_animation().frame = 0
-		if Input.is_action_pressed("ui_up"):
-				velocity.y -= 1
-		if Input.is_action_pressed("ui_down"):
-				velocity.y += 1
-		if velocity.length() > 0:
-			velocity = velocity.normalized() * speed
-		position += velocity * delta
+	var velocity = Vector2.ZERO
+	if Input.is_action_pressed("ui_left"):
+		get_animation().frame = 1
+		velocity.x -=1
+	if Input.is_action_pressed("ui_right"):
+		get_animation().frame = 2
+		velocity.x +=1
+	if velocity.x == 0:
+		get_animation().frame = 0
+	if Input.is_action_pressed("ui_up"):
+		velocity.y -= 1
+	if Input.is_action_pressed("ui_down"):
+		velocity.y += 1
+	if velocity.length() > 0:
+		velocity = velocity.normalized() * speed
+	position += velocity * delta
 
 func _input(event: InputEvent) -> void:
 	if event.is_action("game_fire"):
@@ -86,7 +120,8 @@ func _input(event: InputEvent) -> void:
 func fire_weapon():
 	if energy >= weapon.consumption:
 		weapon.fire()
-		energy -= weapon.consumption 
-		EventBus.emit("energy_changed", [energy,energy_max])
+		energy -= weapon.consumption
+		# No need to update SaveData.energy here as the setter handles it
+
 func died():
 	EventBus.emit("game_over",false)

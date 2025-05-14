@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dulhmwxqskfm" path="res://lvl/lvl.gd" id="1_ox0hx"]
 [ext_resource type="Script" uid="uid://cjji3pg5uwh87" path="res://lvl/portals/portal.gd" id="2_lqf52"]
 [ext_resource type="Shader" uid="uid://wxexdk1wqq44" path="res://lvl/portals/portal.gdshader" id="3_ox0hx"]
-[ext_resource type="Texture2D" uid="uid://bwkrrc3vaqfqx" path="res://lvl/background/img/2.png" id="4_lqf52"]
+[ext_resource type="Texture2D" uid="uid://bwkrrc3vaqfqx" path="res://lvl/portals/2.png" id="4_lqf52"]
 [ext_resource type="Texture2D" uid="uid://d10q7x2nawxdq" path="res://icon.svg" id="5_rbhs8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lqf52"]

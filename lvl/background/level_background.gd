@@ -9,12 +9,28 @@ var screen_size
 
 func _ready() -> void:
 	set_lvl(lvl)
-	
-	material = preload("res://lvl/background/shaders/rollup.tres")
+	material = load("res://lvl/background/shaders/rollup.tres")
 	material.set_shader_parameter("direction",direction)
 	material.set_shader_parameter("speed", speed)
 	get_parent().item_rect_changed.connect(update_size)
 	update_size()
+
+func _enter_tree() -> void:
+	EventBus.subscribe('end_lvl',end_lvl)
+	EventBus.subscribe('start_lvl',prepare_lvl)
+
+func _exit_tree() -> void:
+	EventBus.unsubscribe('end_lvl',end_lvl)
+	EventBus.unsubscribe('start_lvl',prepare_lvl)
+
+func prepare_lvl(punished:bool):
+	if punished:
+		material = load("res://hyper_shader_material.tres")
+
+func end_lvl(success:bool):
+	if success:
+		material = load("res://lvl/background/shaders/rollup.tres")
+
 func set_lvl(lvl_name:String):
 	lvl = lvl_name
 	texture = load("res://lvl/background/img/"+lvl+".png")

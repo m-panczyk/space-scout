@@ -1,6 +1,8 @@
 extends Node2D
 class_name GameLevel
 
+
+
 @export var bg_type = "0"
 @export var bg_speed = .1
 @export var fall_speed = 100

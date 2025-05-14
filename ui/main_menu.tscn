@@ -57,6 +57,8 @@ text = "MENU_OPTIONS"
 layout_mode = 2
 text = "MENU_LABEL_QUIT"
 
+[connection signal="pressed" from="ContinueGame" to="." method="_on_continue_game_pressed"]
 [connection signal="button_down" from="NewGame" to="." method="new_game"]
+[connection signal="pressed" from="SaveGame" to="." method="_on_save_game_pressed"]
 [connection signal="button_down" from="Settings" to="." method="_on_settings_button_down"]
 [connection signal="button_down" from="QuitGame" to="." method="_on_exit_button_down"]
