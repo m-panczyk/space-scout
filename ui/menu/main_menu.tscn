@@ -1,11 +1,11 @@
 [gd_scene load_steps=5 format=3 uid="uid://dpo40s8065wkx"]
 
-[ext_resource type="Script" uid="uid://d25k2wqra5wqq" path="res://ui/main_menu.gd" id="1_q23uf"]
-[ext_resource type="Texture2D" uid="uid://nbg0cnufie8x" path="res://icon.png" id="2_0dkrt"]
-[ext_resource type="Shader" uid="uid://fk4wk00lejt3" path="res://ui/highlight.gdshader" id="2_wk0pr"]
+[ext_resource type="Script" uid="uid://d25k2wqra5wqq" path="res://ui/menu/main_menu.gd" id="1_gvx18"]
+[ext_resource type="Shader" uid="uid://fk4wk00lejt3" path="res://ui/highlight.gdshader" id="2_4gkdq"]
+[ext_resource type="Texture2D" uid="uid://nbg0cnufie8x" path="res://icon.png" id="3_yc8k7"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rmr83"]
-shader = ExtResource("2_wk0pr")
+shader = ExtResource("2_4gkdq")
 shader_parameter/size_effect = 0.1
 shader_parameter/speed = 0.88
 shader_parameter/highlight_strength = 0.4
@@ -20,14 +20,14 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 alignment = 1
-script = ExtResource("1_q23uf")
+script = ExtResource("1_gvx18")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_rmr83")
 custom_minimum_size = Vector2(270, 270)
 layout_mode = 2
 size_flags_horizontal = 4
-texture = ExtResource("2_0dkrt")
+texture = ExtResource("3_yc8k7")
 expand_mode = 1
 stretch_mode = 4
 
@@ -60,5 +60,6 @@ text = "MENU_LABEL_QUIT"
 [connection signal="pressed" from="ContinueGame" to="." method="_on_continue_game_pressed"]
 [connection signal="button_down" from="NewGame" to="." method="new_game"]
 [connection signal="pressed" from="SaveGame" to="." method="_on_save_game_pressed"]
+[connection signal="pressed" from="LoadGame" to="." method="_on_load_game_pressed"]
 [connection signal="button_down" from="Settings" to="." method="_on_settings_button_down"]
 [connection signal="button_down" from="QuitGame" to="." method="_on_exit_button_down"]

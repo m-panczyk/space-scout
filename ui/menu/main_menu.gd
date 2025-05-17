@@ -3,7 +3,9 @@ extends VBoxContainer
 var title = ''
 
 var game_scene = "res://game.tscn"
-var settings = preload("res://ui/settings.tscn")
+var settings = preload("res://ui/menu/settings.tscn")
+var load_game = preload("res://ui/menu/load_game.tscn")
+var save_game = preload("res://ui/menu/save_game.tscn")
 
 func _ready() -> void:
 	if SaveData.get_all_save_files():
@@ -33,9 +35,14 @@ func _on_settings_button_down() -> void:
 
 
 func _on_save_game_pressed() -> void:
-	SaveData.show_save_dialog()
+	#SaveData.show_save_dialog()
+	get_parent().get_parent().replace_current_scene(save_game)
 
 
 func _on_continue_game_pressed() -> void:
 	SaveData.load_latest_save()
 	new_game()
+
+
+func _on_load_game_pressed() -> void:
+	get_parent().get_parent().replace_current_scene(load_game)

@@ -1,10 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://bs1hu7lpdivca"]
+[gd_scene load_steps=12 format=3 uid="uid://bs1hu7lpdivca"]
 
 [ext_resource type="Script" uid="uid://dulhmwxqskfm" path="res://lvl/lvl.gd" id="1_ox0hx"]
+[ext_resource type="Script" uid="uid://cphprx48jppou" path="res://lvl/background/level_background.gd" id="2_5hiuc"]
 [ext_resource type="Script" uid="uid://cjji3pg5uwh87" path="res://lvl/portals/portal.gd" id="2_lqf52"]
 [ext_resource type="Shader" uid="uid://wxexdk1wqq44" path="res://lvl/portals/portal.gdshader" id="3_ox0hx"]
 [ext_resource type="Texture2D" uid="uid://bwkrrc3vaqfqx" path="res://lvl/portals/2.png" id="4_lqf52"]
 [ext_resource type="Texture2D" uid="uid://d10q7x2nawxdq" path="res://icon.svg" id="5_rbhs8"]
+[ext_resource type="Script" uid="uid://dinieicrygcfm" path="res://actors/player/player.gd" id="7_li318"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lqf52"]
 size = Vector2(360, 100)
@@ -51,6 +53,10 @@ shader_parameter/edge_softness = 0.3
 [node name="lvl" type="Node2D"]
 script = ExtResource("1_ox0hx")
 
+[node name="LevelBackground" type="Sprite2D" parent="."]
+script = ExtResource("2_5hiuc")
+metadata/_custom_type_script = "uid://cphprx48jppou"
+
 [node name="portal0" type="Area2D" parent="." groups=["PORTALS"]]
 visible = false
 z_index = 1
@@ -95,3 +101,8 @@ shape = SubResource("RectangleShape2D_lqf52")
 material = SubResource("ShaderMaterial_5hiuc")
 scale = Vector2(3, 3)
 texture = ExtResource("5_rbhs8")
+
+[node name="Player" type="Area2D" parent="."]
+position = Vector2(540, 960)
+script = ExtResource("7_li318")
+metadata/_custom_type_script = "uid://dinieicrygcfm"

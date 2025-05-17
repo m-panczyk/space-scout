@@ -9,8 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://c1ni8e1fd815l" path="res://ui/img/metal.png" id="5_7jktm"]
 [ext_resource type="Script" uid="uid://d1pnprmds7e2g" path="res://ui/zoom_slider.gd" id="6_eow3j"]
 [ext_resource type="Script" uid="uid://chmfum2qqdak5" path="res://ui/point_count.gd" id="8_hve3p"]
-[ext_resource type="PackedScene" uid="uid://u83wwivbovfd" path="res://ui/menu_container.tscn" id="8_j5wjh"]
-[ext_resource type="Script" uid="uid://orvcs75vjfdf" path="res://ui/pause_panel.gd" id="8_vef74"]
+[ext_resource type="PackedScene" uid="uid://u83wwivbovfd" path="res://ui/menu/menu_container.tscn" id="8_j5wjh"]
+[ext_resource type="Script" uid="uid://orvcs75vjfdf" path="res://ui/menu/pause_panel.gd" id="8_vef74"]
 [ext_resource type="Script" uid="uid://clm5y8mhfbomc" path="res://lvl/question.gd" id="10_lc2xo"]
 [ext_resource type="Script" uid="uid://cpmgc4pk12uyt" path="res://ui/touch_esc.gd" id="12_iotsf"]
 

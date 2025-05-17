@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://u83wwivbovfd"]
 
-[ext_resource type="Script" uid="uid://bdeivwwoxfq3s" path="res://ui/menu_container.gd" id="1_fd2q0"]
-[ext_resource type="PackedScene" uid="uid://dpo40s8065wkx" path="res://ui/main_menu.tscn" id="2_t42sx"]
+[ext_resource type="Script" uid="uid://bdeivwwoxfq3s" path="res://ui/menu/menu_container.gd" id="1_fd2q0"]
+[ext_resource type="PackedScene" uid="uid://dpo40s8065wkx" path="res://ui/menu/main_menu.tscn" id="2_t42sx"]
 
 [node name="MenuContainer" type="VBoxContainer"]
 anchors_preset = 15

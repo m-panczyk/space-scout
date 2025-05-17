@@ -1,8 +1,6 @@
 extends Node2D
 class_name GameLevel
 
-
-
 @export var bg_type = "0"
 @export var bg_speed = .1
 @export var fall_speed = 100
@@ -10,28 +8,10 @@ class_name GameLevel
 var env:EnvGenerator = null
 var lvl_points = 0
 var max_level_points = 0
-var player:Player
-var bg:LevelBackground
+@onready var player:Player = $Player
+@onready var bg:LevelBackground = $LevelBackground
+@onready var screen_size:Vector2 = GlobalSettings.virtual_resolution
 
-var screen_size:Vector2
-
-func _ready() -> void:
-	screen_size = GlobalSettings.virtual_resolution
-	if SaveData.is_new:
-		player = Player.new()
-		bg = LevelBackground.new()
-		player.position = Vector2(screen_size.x/2,screen_size.y*0.8)
-	else:
-		bg_type = SaveData.bg_type
-		bg_speed = SaveData.bg_speed
-		fall_speed = SaveData.fall_speed
-		player = SaveData.get_player()
-	bg.speed = bg_speed
-	add_child(bg)
-	add_child(player)
-	var player_size = player.get_size().x
-	var player_scale = (screen_size.x/5)/player_size
-	player.scale = Vector2(player_scale,player_scale)
 func _enter_tree() -> void:
 	EventBus.subscribe('start_lvl',start_lvl)
 	EventBus.subscribe("add_point",end_lvl_check)
@@ -53,7 +33,7 @@ func end_lvl(success:bool):
 
 		
 func start_lvl(punished:bool):
-	bg.set_lvl(str(randi_range(1,34)))
+	bg.lvl = (str(randi_range(1,34)))
 	env = EnvGenerator.new()
 	env.base_speed = fall_speed
 	lvl_points = 0
