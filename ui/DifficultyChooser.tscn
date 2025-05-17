@@ -16,13 +16,12 @@ script = ExtResource("1_adeqp")
 [node name="ItemList" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.075
-anchor_top = 0.350926
-anchor_right = 0.925
-anchor_bottom = 0.842593
+anchor_top = 0.383333
+anchor_right = 1.0
+anchor_bottom = 0.616667
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 30
+theme_override_constants/separation = 15
 alignment = 1
 metadata/_edit_use_anchors_ = true
 
@@ -31,18 +30,21 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "10-11 lat"
+autowrap_mode = 3
 
 [node name="Normal" type="Button" parent="ItemList"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "12-13 lat"
+autowrap_mode = 3
 
 [node name="Hard" type="Button" parent="ItemList"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 text = "14-15 lat"
+autowrap_mode = 3
 
 [connection signal="pressed" from="ItemList/Easy" to="." method="_on_easy_pressed"]
 [connection signal="pressed" from="ItemList/Normal" to="." method="_on_normal_pressed"]

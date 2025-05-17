@@ -44,7 +44,7 @@ enum TouchControlType {
 	POINT
 }
 
-var touch_controls = TouchControlType.JOYPAD_TOUCH
+var touch_controls = TouchControlType.POINT
 
 func _enter_tree() -> void:
 	adjust_viewport_scale()

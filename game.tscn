@@ -264,6 +264,7 @@ layout_mode = 1
 
 [node name="TouchEsc" type="Button" parent="."]
 process_mode = 3
+top_level = true
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.944444
