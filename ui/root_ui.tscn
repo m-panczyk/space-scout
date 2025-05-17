@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://w0qjg81gr6vw"]
+[gd_scene load_steps=9 format=3 uid="uid://w0qjg81gr6vw"]
 
 [ext_resource type="Script" uid="uid://cyutugxh7gbh4" path="res://ui/root_ui.gd" id="1_amgmw"]
 [ext_resource type="Shader" uid="uid://bpypf5ohe3reh" path="res://ui/space.gdshader" id="2_pu426"]
 [ext_resource type="PackedScene" uid="uid://u83wwivbovfd" path="res://ui/menu/menu_container.tscn" id="3_pu426"]
+[ext_resource type="VideoStream" uid="uid://2qec5cbo0daq" path="res://intro.ogv" id="4_h0jrn"]
+[ext_resource type="Shader" uid="uid://bkd6iq3ait74m" path="res://vin.gdshader" id="5_sx0ug"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h0jrn"]
 shader = ExtResource("2_pu426")
@@ -14,6 +16,13 @@ shader_parameter/smallStarSlow = 8.0
 shader_parameter/smallStarAmount = 0.002
 shader_parameter/mediumStarAmount = 0.01
 shader_parameter/bigStarAmount = 0.02
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ayauo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v34lu"]
+shader = ExtResource("5_sx0ug")
+shader_parameter/outerRadius = 0.491
+shader_parameter/MainAlpha = 0.509
 
 [node name="RootUi" type="Control"]
 layout_mode = 3
@@ -50,3 +59,27 @@ grow_horizontal = 0
 theme_override_colors/font_color = Color(1, 1, 1, 0.227451)
 text = "alfa_beta"
 horizontal_alignment = 2
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="."]
+material = SubResource("ShaderMaterial_ayauo")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stream = ExtResource("4_h0jrn")
+autoplay = true
+expand = true
+
+[node name="ColorRect" type="ColorRect" parent="VideoStreamPlayer"]
+top_level = true
+material = SubResource("ShaderMaterial_v34lu")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="finished" from="VideoStreamPlayer" to="." method="_on_video_stream_player_finished"]

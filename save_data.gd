@@ -55,9 +55,9 @@ func _to_string() -> String:
 # Helper function to get difficulty name from level
 func get_difficulty_name() -> String:
 	match difficulty_level:
-		0: return "Easy"
-		1: return "Normal"
-		2: return "Hard"
+		0: return "10-11 lat"
+		1: return "12-13 lat"
+		2: return "14-15 lat"
 		_: return "Unknown"
 
 func show_as_detailed_popup():

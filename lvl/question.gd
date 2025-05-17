@@ -6,7 +6,9 @@ func show_question():
 	var answers = GlobalSettings.get_answers()
 	for i in range(min(children.size(), answers.size())):
 		children[i].text = answers[i]
+	$"../VBoxContainer".hide()
 	show()
 
 func hide_question():
+	$"../VBoxContainer".show()
 	hide()

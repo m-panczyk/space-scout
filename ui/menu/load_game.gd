@@ -48,7 +48,7 @@ func format_datetime(datetime_str: String) -> String:
 func _on_saves_container_item_selected(index: int) -> void:
 	$Button.disabled = false
 	if save_menu:
-		$SaveDetails/DelSave.disabled = false
+		$DelSave.disabled = false
 	var save = saves[index]
 	
 	# Format the date and time in the requested format
@@ -96,7 +96,7 @@ func _on_new_save_pressed() -> void:
 	$NewSavePopup.show()
 	$SaveDetails/NewSave.disabled = true
 	$Button.disabled = true
-	$SaveDetails/DelSave.disabled = true
+	$DelSave.disabled = true
 
 func refresh():
 	# Refresh the saves list to show the new save
@@ -104,8 +104,9 @@ func refresh():
 	$SavesContainer.clear()
 	for save in saves:
 		$SavesContainer.add_item(save["save_name"])
-	$SavesContainer.select(0,true)
-	_on_saves_container_item_selected(0)
+	if $SavesContainer.item_count > 0:
+		$SavesContainer.select(0,true)
+		_on_saves_container_item_selected(0)
 
 
 func _on_new_save_button_pressed() -> void:
@@ -165,7 +166,7 @@ func _on_del_save_pressed() -> void:
 				if saves.size() == 0:
 					$SaveDetails.text = ""
 					$Button.disabled = true
-					$SaveDetails/DelSave.disabled = true
+					$DelSave.disabled = true
 				elif index < saves.size():
 					# Select the save at the same index if available
 					$SavesContainer.select(index)

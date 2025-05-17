@@ -20,3 +20,7 @@ func _on_resized() -> void:
 	#$TextureRect.get_child(0).size = Vector2(new_size, new_size)
 	#$MenuContainer.size = screen_size - Vector2(100,100)
 	#$MenuContainer.position = Vector2((size.x - $MenuContainer.size.x) / 2, (size.y - $MenuContainer.size.y) / 2)
+
+
+func _on_video_stream_player_finished() -> void:
+	$VideoStreamPlayer.hide()

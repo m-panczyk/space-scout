@@ -1,12 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://ch47nd3iei8k7"]
+[gd_scene load_steps=13 format=3 uid="uid://ch47nd3iei8k7"]
 
 [ext_resource type="Script" uid="uid://beaf3hr6264to" path="res://game.gd" id="1_80nbo"]
 [ext_resource type="PackedScene" uid="uid://bs1hu7lpdivca" path="res://lvl/lvl.tscn" id="2_iotsf"]
 [ext_resource type="Script" uid="uid://b8aclcm6ewxmq" path="res://ui/HUD/heath_bar.gd" id="3_fc0e3"]
 [ext_resource type="PackedScene" uid="uid://bh5o0r5ut5y0d" path="res://lvl/map/map.tscn" id="3_ryrav"]
-[ext_resource type="Texture2D" uid="uid://dbcbprxmyl5ik" path="res://ui/img/frame.png" id="4_7jktm"]
 [ext_resource type="Script" uid="uid://bhda77d0hjhi2" path="res://ui/right_side.gd" id="4_mfdv2"]
-[ext_resource type="Texture2D" uid="uid://c1ni8e1fd815l" path="res://ui/img/metal.png" id="5_7jktm"]
+[ext_resource type="Texture2D" uid="uid://ca4ax3by7oabn" path="res://ui/img/metal.png" id="5_7jktm"]
 [ext_resource type="Script" uid="uid://d1pnprmds7e2g" path="res://ui/zoom_slider.gd" id="6_eow3j"]
 [ext_resource type="Script" uid="uid://chmfum2qqdak5" path="res://ui/point_count.gd" id="8_hve3p"]
 [ext_resource type="PackedScene" uid="uid://u83wwivbovfd" path="res://ui/menu/menu_container.tscn" id="8_j5wjh"]
@@ -47,14 +46,13 @@ unique_name_in_owner = true
 
 [node name="LeftSide" type="TextureRect" parent="." groups=["columns"]]
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = -1
+anchor_right = 0.347222
 anchor_bottom = 1.0
-offset_right = 375.0
 grow_vertical = 2
 texture = ExtResource("5_7jktm")
-expand_mode = 1
-stretch_mode = 1
-flip_h = true
+expand_mode = 4
+metadata/_edit_use_anchors_ = true
 
 [node name="RightSide" type="TextureRect" parent="." groups=["columns"]]
 layout_mode = 1
@@ -66,44 +64,41 @@ offset_right = 360.0
 grow_horizontal = 0
 grow_vertical = 2
 texture = ExtResource("5_7jktm")
-expand_mode = 1
-stretch_mode = 1
+expand_mode = 4
+flip_h = true
 script = ExtResource("4_mfdv2")
 
 [node name="TextureRect" type="TextureRect" parent="RightSide"]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.056
-anchor_top = 0.016
-anchor_right = 0.933
-anchor_bottom = 0.323
-offset_left = -0.16
-offset_top = -0.280001
-offset_right = 0.119995
-offset_bottom = 0.159973
-grow_horizontal = 0
-texture = ExtResource("4_7jktm")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 expand_mode = 1
 
 [node name="HexTileController" parent="RightSide/TextureRect" instance=ExtResource("3_ryrav")]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.111
-anchor_top = 0.166
-anchor_right = 0.896
-anchor_bottom = 0.831
-offset_left = -0.076004
-offset_top = -0.112003
-offset_right = -0.136017
-offset_bottom = 0.108002
+anchor_left = 0.158333
+anchor_top = 0.133333
+anchor_right = 0.733333
+anchor_bottom = 0.814815
+metadata/_edit_use_anchors_ = true
 
 [node name="HSlider" type="HSlider" parent="RightSide/TextureRect"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.123418
-anchor_top = 0.885542
-anchor_right = 0.89557
-anchor_bottom = 0.933735
+anchor_left = 0.0416718
+anchor_top = 0.328704
+anchor_right = 0.0416718
+anchor_bottom = 1.11204
+offset_left = 15.9981
+offset_right = 852.998
+offset_bottom = -821.0
+grow_horizontal = 2
+grow_vertical = 0
+rotation = 1.57079
 focus_mode = 1
 min_value = 0.1
 max_value = 1.0
@@ -115,21 +110,18 @@ metadata/_edit_use_anchors_ = true
 [node name="StartLevelButton" type="Button" parent="RightSide/TextureRect"]
 unique_name_in_owner = true
 layout_mode = 2
-anchor_left = 0.864
-anchor_top = 1.024
-anchor_right = 0.991
-anchor_bottom = 1.117
-offset_left = 2.97598
-offset_top = 0.0319824
-offset_right = -0.156006
-offset_bottom = 0.155975
+anchor_left = 0.638889
+anchor_top = 0.834259
+anchor_right = 0.755556
+anchor_bottom = 0.862963
 text = "GO!"
+metadata/_edit_use_anchors_ = true
 
 [node name="RightHide" type="Button" parent="RightSide"]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 8.0
+offset_right = 18.0
 grow_vertical = 2
 text = ">"
 
@@ -138,12 +130,12 @@ unique_name_in_owner = true
 clip_children = 2
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 0.333
-anchor_bottom = 0.207
-offset_right = 0.359985
-offset_bottom = 0.439987
-texture = ExtResource("4_7jktm")
+anchor_left = 0.0509259
+anchor_top = 0.0527778
+anchor_right = 0.294444
+anchor_bottom = 0.246296
 expand_mode = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HUD"]
 modulate = Color(1, 1, 1, 0.878431)
@@ -198,7 +190,12 @@ anchor_left = 0.0972222
 anchor_top = 0.15625
 anchor_right = 0.902778
 anchor_bottom = 0.839286
+offset_left = 2.43056
+offset_top = 0.34375
+offset_right = 29.5694
+offset_bottom = 0.589218
 grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 bbcode_enabled = true
 text = "Question
@@ -206,7 +203,6 @@ text = "Question
 fit_content = true
 horizontal_alignment = 1
 script = ExtResource("10_lc2xo")
-metadata/_edit_use_anchors_ = true
 
 [node name="ColorRect" type="ColorRect" parent="HUD/Question"]
 show_behind_parent = true
@@ -252,13 +248,15 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 process_mode = 3
 visible = false
+top_level = true
+z_index = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 1)
+color = Color(0, 0, 0, 0.784314)
 script = ExtResource("8_vef74")
 
 [node name="MenuContainer" parent="PausePanel" instance=ExtResource("8_j5wjh")]

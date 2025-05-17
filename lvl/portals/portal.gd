@@ -16,10 +16,11 @@ func show_question():
 	fall = true
 
 func hide_question():
+	fall = false
 	hide()
 	$CollisionShape2D.disabled = true
 	position.y = 0
-	fall = false
+	
 
 func _ready() -> void:
 	area_entered.connect(got_answer)

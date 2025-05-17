@@ -34,6 +34,7 @@ func _on_viewport_size_changed():
 		for child in get_children():
 			if child.is_in_group("columns"):
 				child.size = viewport_size
+				child.position = Vector2.ZERO
 		%HUD.position.y = 0
 		%HUD.size.y = viewport_size.y*0.2
 		%HUD.size.x = viewport_size.x
@@ -43,8 +44,11 @@ func _on_viewport_size_changed():
 		for child in get_children():
 			if child.is_in_group("columns"):
 				child.size = Vector2(viewport_size.x/3,viewport_size.y)
-		%HUD.size.y = viewport_size.y*0.2
-
+		#%HUD.size.y = viewport_size.y*0.2
+		%HUD.anchor_bottom = 0.25
+		%HUD.anchor_left = 0.06
+		%HUD.anchor_right = 0.3
+		%HUD.anchor_top = 0.06
 		%PauseSide.hide()
 		$LeftSide.show()
 		$RightSide.show()
@@ -54,7 +58,6 @@ func set_portrait_mode(is_portrait: bool):
 	portrait_mode = is_portrait
 	if is_portrait:
 		$Center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		$Center.position = Vector2.ZERO
 		$Center.size = viewport_size
 		$RightSide.visible = false
 		$RightSide.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

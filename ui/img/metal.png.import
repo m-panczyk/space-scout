@@ -2,7 +2,7 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c1ni8e1fd815l"
+uid="uid://ca4ax3by7oabn"
 path="res://.godot/imported/metal.png-2dd232456c178178c47d0d2d693707d1.ctex"
 metadata={
 "vram_texture": false
@@ -25,7 +25,7 @@ mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
-process/fix_alpha_border=true
+process/fix_alpha_border=false
 process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
