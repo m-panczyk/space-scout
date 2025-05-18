@@ -22,6 +22,7 @@ config/icon="uid://nbg0cnufie8x"
 EventBus="*res://addons/event_bus_plugin/EventBus.gd"
 GlobalSettings="*res://global_settings.gd"
 SaveData="*res://save_data.gd"
+QGen="*res://lvl/q_gen.gd"
 
 [display]
 

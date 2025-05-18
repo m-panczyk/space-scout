@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://w0qjg81gr6vw"]
+[gd_scene load_steps=8 format=3 uid="uid://w0qjg81gr6vw"]
 
 [ext_resource type="Script" uid="uid://cyutugxh7gbh4" path="res://ui/root_ui.gd" id="1_amgmw"]
 [ext_resource type="Shader" uid="uid://bpypf5ohe3reh" path="res://ui/space.gdshader" id="2_pu426"]
@@ -17,12 +17,10 @@ shader_parameter/smallStarAmount = 0.002
 shader_parameter/mediumStarAmount = 0.01
 shader_parameter/bigStarAmount = 0.02
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ayauo"]
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v34lu"]
 shader = ExtResource("5_sx0ug")
-shader_parameter/outerRadius = 0.491
-shader_parameter/MainAlpha = 0.509
+shader_parameter/outerRadius = 2.0
+shader_parameter/MainAlpha = 1.0
 
 [node name="RootUi" type="Control"]
 layout_mode = 3
@@ -61,7 +59,6 @@ text = "alfa_beta"
 horizontal_alignment = 2
 
 [node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="."]
-material = SubResource("ShaderMaterial_ayauo")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

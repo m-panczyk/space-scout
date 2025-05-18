@@ -288,9 +288,9 @@ func get_all_save_files() -> Array:
 					
 					# Convert difficulty level to readable name
 					match difficulty:
-						0: difficulty_name = "Easy"
-						1: difficulty_name = "Normal"
-						2: difficulty_name = "Hard"
+						0: difficulty_name = "10-11 lat"
+						1: difficulty_name = "12-13 lat"
+						2: difficulty_name = "14-15 lat"
 					
 					save_list.append({
 						"path": file_path,
@@ -310,92 +310,92 @@ func get_all_save_files() -> Array:
 
 # Show a save dialog that prompts the user for a save name
 # This dialog works when the game is paused
-func show_save_dialog() -> void:
-	var dialog = AcceptDialog.new()
-	dialog.title = "Save Game"
-	
-	# Make the dialog process even when game is paused
-	dialog.process_mode = Node.PROCESS_MODE_ALWAYS
-	
-	var vbox = VBoxContainer.new()
-	vbox.custom_minimum_size = Vector2(300, 150)
-	
-	var name_label = Label.new()
-	name_label.text = "Enter a name for your save:"
-	
-	var line_edit = LineEdit.new()
-	line_edit.placeholder_text = "My Save Game"
-	line_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	
-	var difficulty_label = Label.new()
-	difficulty_label.text = "Select difficulty level:"
-	difficulty_label.position.y += 10
-	
-	var difficulty_option = OptionButton.new()
-	difficulty_option.add_item("Easy", 0)
-	difficulty_option.add_item("Normal", 1)
-	difficulty_option.add_item("Hard", 2)
-	difficulty_option.selected = difficulty_level
-	difficulty_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	
-	vbox.add_child(name_label)
-	vbox.add_child(line_edit)
-	vbox.add_child(difficulty_label)
-	vbox.add_child(difficulty_option)
-	
-	dialog.add_child(vbox)
-	dialog.add_button("Save", true, "save")
-	dialog.add_button("Cancel", false, "cancel")
-	
-	# Store current pause state to restore it later if needed
-	var was_paused = get_tree().paused
-	
-	# Add dialog to the scene
-	var root = get_tree().root
-	root.add_child(dialog)
-	
-	# Make sure the dialog stays on top
-	dialog.exclusive = true
-	
-	# Center the dialog
-	dialog.popup_centered()
-	
-	# Focus the line edit for immediate typing
-	line_edit.call_deferred("grab_focus")
-	
-	# Common cleanup function for all exit paths
-	var cleanup_func = func():
-		dialog.queue_free()
-		# Only restore pause state if it was previously paused
-		# This prevents unpausing a game that was intentionally paused
-		if was_paused:
-			get_tree().paused = was_paused
-	
-	# Connect signals
-	dialog.connect("confirmed", func():
-		var save_name = line_edit.text
-		if save_name.strip_edges() == "":
-			save_name = "My Save Game"
-		difficulty_level = difficulty_option.get_selected_id()
-		save_game(save_name)
-		cleanup_func.call()
-	)
-	
-	dialog.connect("custom_action", func(action):
-		if action == "save":
-			var save_name = line_edit.text
-			if save_name.strip_edges() == "":
-				save_name = "My Save Game"
-			difficulty_level = difficulty_option.get_selected_id()
-			save_game(save_name)
-		cleanup_func.call()
-	)
-	
-	dialog.connect("canceled", func():
-		cleanup_func.call()
-	)
-	
-	# Connect close requested signal to handle Escape key or close button
-	dialog.connect("close_requested", func():
-		cleanup_func.call()
-	)
+#func show_save_dialog() -> void:
+	#var dialog = AcceptDialog.new()
+	#dialog.title = "Save Game"
+	#
+	## Make the dialog process even when game is paused
+	#dialog.process_mode = Node.PROCESS_MODE_ALWAYS
+	#
+	#var vbox = VBoxContainer.new()
+	#vbox.custom_minimum_size = Vector2(300, 150)
+	#
+	#var name_label = Label.new()
+	#name_label.text = "Enter a name for your save:"
+	#
+	#var line_edit = LineEdit.new()
+	#line_edit.placeholder_text = "My Save Game"
+	#line_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	#
+	#var difficulty_label = Label.new()
+	#difficulty_label.text = "Select difficulty level:"
+	#difficulty_label.position.y += 10
+	#
+	#var difficulty_option = OptionButton.new()
+	#difficulty_option.add_item("Easy", 0)
+	#difficulty_option.add_item("Normal", 1)
+	#difficulty_option.add_item("Hard", 2)
+	#difficulty_option.selected = difficulty_level
+	#difficulty_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	#
+	#vbox.add_child(name_label)
+	#vbox.add_child(line_edit)
+	#vbox.add_child(difficulty_label)
+	#vbox.add_child(difficulty_option)
+	#
+	#dialog.add_child(vbox)
+	#dialog.add_button("Save", true, "save")
+	#dialog.add_button("Cancel", false, "cancel")
+	#
+	## Store current pause state to restore it later if needed
+	#var was_paused = get_tree().paused
+	#
+	## Add dialog to the scene
+	#var root = get_tree().root
+	#root.add_child(dialog)
+	#
+	## Make sure the dialog stays on top
+	#dialog.exclusive = true
+	#
+	## Center the dialog
+	#dialog.popup_centered()
+	#
+	## Focus the line edit for immediate typing
+	#line_edit.call_deferred("grab_focus")
+	#
+	## Common cleanup function for all exit paths
+	#var cleanup_func = func():
+		#dialog.queue_free()
+		## Only restore pause state if it was previously paused
+		## This prevents unpausing a game that was intentionally paused
+		#if was_paused:
+			#get_tree().paused = was_paused
+	#
+	## Connect signals
+	#dialog.connect("confirmed", func():
+		#var save_name = line_edit.text
+		#if save_name.strip_edges() == "":
+			#save_name = "My Save Game"
+		#difficulty_level = difficulty_option.get_selected_id()
+		#save_game(save_name)
+		#cleanup_func.call()
+	#)
+	#
+	#dialog.connect("custom_action", func(action):
+		#if action == "save":
+			#var save_name = line_edit.text
+			#if save_name.strip_edges() == "":
+				#save_name = "My Save Game"
+			#difficulty_level = difficulty_option.get_selected_id()
+			#save_game(save_name)
+		#cleanup_func.call()
+	#)
+	#
+	#dialog.connect("canceled", func():
+		#cleanup_func.call()
+	#)
+	#
+	## Connect close requested signal to handle Escape key or close button
+	#dialog.connect("close_requested", func():
+		#cleanup_func.call()
+	#)

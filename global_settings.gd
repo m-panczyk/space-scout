@@ -116,8 +116,9 @@ var shuffled_answers: Array = []
 
 func get_question() -> String:
 	# Select a random question
-	current_question_index = randi() % questions.size()
-	var question_data = questions[current_question_index]
+	#current_question_index = randi() % questions.size()
+	#var question_data = questions[current_question_index]
+	var question_data = QGen.generate_question(SaveData.difficulty_level)
 	
 	# Get the question text (first element)
 	var question_text = question_data[0]
