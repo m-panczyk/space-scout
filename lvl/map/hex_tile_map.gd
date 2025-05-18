@@ -158,4 +158,4 @@ func prepare_lvl(punished:bool):
 		#$"../..".material.set_shader_parameter("enabled",true)
 # Handle endgame logic
 func handle_endgame() -> void:
-	EventBus.emit('end_game',true)
+	get_tree().change_scene_to_file("res://lvl/endgame.tscn")

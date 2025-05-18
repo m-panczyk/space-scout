@@ -27,4 +27,5 @@ func _ready() -> void:
 func got_answer(other_area):
 	if other_area is Player:
 		EventBus.emit("end_lvl",GlobalSettings.is_correct_answer(answer))
-		get_tree().call_group('PORTALS','hide_question')
+		if is_inside_tree():
+			get_tree().call_group('PORTALS','hide_question')

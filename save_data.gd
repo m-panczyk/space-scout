@@ -34,6 +34,24 @@ func _ready():
 	var dir = DirAccess.open("user://")
 	if not dir.dir_exists("saves"):
 		dir.make_dir("saves")
+# Resets all game state variables to their default values
+func reset_to_defaults() -> void:
+	is_new = true
+	difficulty_level = 1
+	bg_type = null
+	bg_speed = null
+	fall_speed = null
+	points = 0
+	explored_tiles = []
+	ship_position = Vector2i(5, 5)
+	weapon_name = 'basic'
+	energy = 0
+	energy_max = 10
+	energy_production = [1, 1]
+	health = 1
+	health_max = 1
+	creation_date = ""
+	save_date = ""
 
 func _to_string() -> String:
 	var output = ""
@@ -59,7 +77,14 @@ func get_difficulty_name() -> String:
 		1: return "12-13 lat"
 		2: return "14-15 lat"
 		_: return "Unknown"
+func get_pretty_stats() -> String:
+	var bbtext = "\n\n"
 
+	bbtext += "[color=#ffff00]poziom_trudności:[/color] [b]" + get_difficulty_name() + "[/b]\n"
+	bbtext += "[color=#ffff00]punkty:[/color] [b]" + str(points) + "[/b]\n"
+	bbtext += "[color=#ffff00]odkryte_kafelki:[/color] [b]" + str(explored_tiles.size()) + "[/b] kafelki\n"
+
+	return bbtext
 func show_as_detailed_popup():
 	# Create a custom popup
 	var popup = AcceptDialog.new()
