@@ -35,7 +35,7 @@ func _on_viewport_size_changed():
 			if child.is_in_group("columns"):
 				child.size = viewport_size
 				child.position = Vector2.ZERO
-		%HUD.position.y = 0
+		%HUD.position = Vector2.ZERO
 		%HUD.size.y = viewport_size.y*0.2
 		%HUD.size.x = viewport_size.x
 	else:
@@ -44,11 +44,12 @@ func _on_viewport_size_changed():
 		for child in get_children():
 			if child.is_in_group("columns"):
 				child.size = Vector2(viewport_size.x/3,viewport_size.y)
-		#%HUD.size.y = viewport_size.y*0.2
+		%HUD.size.y = viewport_size.y*0.2
+		%HUD.size.x = viewport_size.x*0.25
 		%HUD.anchor_bottom = 0.25
 		%HUD.anchor_left = 0.06
 		%HUD.anchor_right = 0.3
-		%HUD.anchor_top = 0.06
+		%HUD.anchor_top = 0.12
 		%PauseSide.hide()
 		$LeftSide.show()
 		$RightSide.show()

@@ -9,4 +9,5 @@ func _on_right_hide_pressed() -> void:
 
 
 func _on_resized() -> void:
-	$RightHide.disabled = !($"..".portrait_mode)
+	if !($"..".portrait_mode):
+		$RightHide.hide()

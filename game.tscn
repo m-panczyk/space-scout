@@ -81,24 +81,20 @@ expand_mode = 1
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.158333
-anchor_top = 0.133333
+anchor_top = 0.087963
 anchor_right = 0.733333
-anchor_bottom = 0.814815
-metadata/_edit_use_anchors_ = true
+anchor_bottom = 0.473148
+offset_bottom = 3.05176e-05
 
 [node name="HSlider" type="HSlider" parent="RightSide/TextureRect"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.0416718
-anchor_top = 0.328704
-anchor_right = 0.0416718
-anchor_bottom = 1.11204
-offset_left = 15.9981
-offset_right = 852.998
-offset_bottom = -821.0
+anchor_left = 0.158333
+anchor_top = 0.473148
+anchor_right = 0.733333
+anchor_bottom = 0.487963
 grow_horizontal = 2
 grow_vertical = 0
-rotation = 1.57079
 focus_mode = 1
 min_value = 0.1
 max_value = 1.0
@@ -114,16 +110,20 @@ anchor_left = 0.638889
 anchor_top = 0.834259
 anchor_right = 0.755556
 anchor_bottom = 0.862963
+focus_mode = 1
 text = "GO!"
 metadata/_edit_use_anchors_ = true
 
 [node name="RightHide" type="Button" parent="RightSide"]
+visible = false
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = -1
+anchor_right = 0.0944444
 anchor_bottom = 1.0
-offset_right = 18.0
 grow_vertical = 2
+focus_mode = 1
 text = ">"
+metadata/_edit_use_anchors_ = true
 
 [node name="HUD" type="TextureRect" parent="."]
 unique_name_in_owner = true
@@ -205,6 +205,7 @@ horizontal_alignment = 1
 script = ExtResource("10_lc2xo")
 
 [node name="ColorRect" type="ColorRect" parent="HUD/Question"]
+visible = false
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15

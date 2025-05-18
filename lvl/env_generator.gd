@@ -8,8 +8,8 @@ signal difficulty_increased(level, speed)
 @export var pace_level_start: float = 2.0
 @export var pace_level_min: float = 0.5
 @export var pace_level_decrement: float = 0.1
-@export var base_speed: int = 100
-@export var speed_increment: int = 1
+@export var base_speed: int = 1000
+@export var speed_increment: int = 0
 @export var item_scale: float = 0.2  
 
 # Player collision properties
@@ -28,16 +28,6 @@ var last_lane_index: int = -1
 
 var item_list = [] 
 
-# Quiz system properties
-var correct_answers = [0, 0, 1]
-var question = "Wybierz dobrą odpowiedź"
-var answers = [
-	"Zła",
-	"Zła",
-	"Dobra"
-]
-
-# This is included for compatibility with original code
 var added_item_speed: int = 0
 
 # Emergency spawn control
@@ -50,7 +40,8 @@ var player: Player
 func _ready() -> void:
 	screen_size = GlobalSettings.virtual_resolution
 	item_size = screen_size.x * item_scale
-	pace_level = pace_level_start
+	pace_level = pace_level_start/(1+(SaveData.game_progress/10))
+	base_speed = base_speed/(1+(SaveData.game_progress/10))
 	current_speed = base_speed
 	
 	# Initialize spawn lanes
@@ -210,7 +201,7 @@ func is_spawn_safe(position: Vector2, is_good_item: bool) -> bool:
 	
 	# Get all harmful items within relevant distance
 	var nearby_items = []
-	var vertical_check_distance = 300.0  # Increased from overly restrictive value
+	var vertical_check_distance = 300.0  * (current_speed/base_speed)
 	
 	for item in all_items:
 		# Skip good items when checking path blocking

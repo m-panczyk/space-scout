@@ -4,6 +4,7 @@ var is_new:bool = true
 
 # Difficulty level (0 = Easy, 1 = Normal, 2 = Hard)
 var difficulty_level:int = 1
+var game_progress
 
 var bg_type 
 var bg_speed
@@ -18,8 +19,8 @@ var energy = 0
 var energy_max = 10
 var energy_production = [1,1]
 
-var health = 1
-var health_max = 1
+var health = 10
+var health_max = 10
 
 # Date when the save was created
 var creation_date:String = ""

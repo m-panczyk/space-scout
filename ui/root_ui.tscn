@@ -67,7 +67,6 @@ grow_horizontal = 2
 grow_vertical = 2
 stream = ExtResource("4_h0jrn")
 autoplay = true
-expand = true
 
 [node name="ColorRect" type="ColorRect" parent="VideoStreamPlayer"]
 top_level = true

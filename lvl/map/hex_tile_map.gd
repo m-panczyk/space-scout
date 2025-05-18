@@ -54,6 +54,7 @@ func handle_cell_selection(clicked_cell: Vector2i, is_pressed: bool, is_synth: b
 			if target != null:
 				reset_cell(target)
 			target = clicked_cell
+			SaveData.game_progress = calculate_hex_distance(target,endgame)
 			set_cell(target, 3, Vector2i(0, 0), 2)  # Set target visual
 
 func set_ship_position(new_ship_position: Vector2i = Vector2i(5, 5)) -> void:

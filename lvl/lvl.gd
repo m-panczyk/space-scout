@@ -7,7 +7,7 @@ class_name GameLevel
 
 var env:EnvGenerator = null
 var lvl_points = 0
-var max_level_points = 0
+var max_level_points = 100
 @onready var player:Player = $Player
 @onready var bg:LevelBackground = $LevelBackground
 @onready var screen_size:Vector2 = GlobalSettings.virtual_resolution
@@ -33,6 +33,7 @@ func end_lvl(success:bool):
 
 		
 func start_lvl(punished:bool):
+	max_level_points = 100/SaveData.game_progress
 	bg.lvl = (str(randi_range(1,34)))
 	env = EnvGenerator.new()
 	env.base_speed = fall_speed

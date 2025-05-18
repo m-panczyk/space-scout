@@ -24,6 +24,7 @@ func pause_menu():
 	$ContinueGame.hide()
 
 func new_game() -> void:
+	SaveData.reset_to_defaults()
 	get_parent().get_parent().replace_current_scene(load("res://ui/DifficultyChooser.tscn"))
 
 func _on_exit_button_down() -> void:
