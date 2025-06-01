@@ -1,0 +1,322 @@
+{
+  "przyroda": {
+    "10-11lat": {
+      "zwierzeta": [
+        {
+          "pytanie": "Które zwierzę jest największe na świecie?",
+          "poprawna": "Płetwal błękitny",
+          "bledne": ["Słoń", "Żyrafa"]
+        },
+        {
+          "pytanie": "Ile nóg ma pająk?",
+          "poprawna": "8",
+          "bledne": ["6", "10"]
+        },
+        {
+          "pytanie": "Które zwierzę to ssakokształtny?",
+          "poprawna": "Nietoperz",
+          "bledne": ["Ptak", "Ryba"]
+        },
+        {
+          "pytanie": "Co jedzą zwierzęta roślinożerne?",
+          "poprawna": "Rośliny",
+          "bledne": ["Mięso", "Wszystko"]
+        },
+        {
+          "pytanie": "Gdzie żyją pingwiny?",
+          "poprawna": "Antarktyka",
+          "bledne": ["Arktyka", "Afryka"]
+        },
+        {
+          "pytanie": "Które zwierzę ma grzywy?",
+          "poprawna": "Lew",
+          "bledne": ["Tygrys", "Gepard"]
+        },
+        {
+          "pytanie": "Ile serc ma ośmiornica?",
+          "poprawna": "3",
+          "bledne": ["1", "2"]
+        },
+        {
+          "pytanie": "Które zwierzę może zmieniać kolor?",
+          "poprawna": "Kameleon",
+          "bledne": ["Żaba", "Wąż"]
+        },
+        {
+          "pytanie": "Co oznacza, że zwierzę jest nocne?",
+          "poprawna": "Jest aktywne w nocy",
+          "bledne": ["Śpi w nocy", "Jest czarne"]
+        },
+        {
+          "pytanie": "Które zwierzę buduje tamy?",
+          "poprawna": "Bóbr",
+          "bledne": ["Wydra", "Szczur"]
+        }
+      ],
+      "rosliny": [
+        {
+          "pytanie": "Co potrzebuje roślina do fotosyntezy oprócz światła?",
+          "poprawna": "Dwutlenek węgla i woda",
+          "bledne": ["Tlen i azot", "Wapń i fosfor"]
+        },
+        {
+          "pytanie": "Która część rośliny pobiera wodę z ziemi?",
+          "poprawna": "Korzenie",
+          "bledne": ["Liście", "Łodyga"]
+        },
+        {
+          "pytanie": "Jak nazywa się proces, w którym rośliny produkują pokarm?",
+          "poprawna": "Fotosynteza",
+          "bledne": ["Oddychanie", "Transpiracja"]
+        },
+        {
+          "pytanie": "Co powstaje podczas fotosyntezy oprócz glukozy?",
+          "poprawna": "Tlen",
+          "bledne": ["Dwutlenek węgla", "Woda"]
+        },
+        {
+          "pytanie": "Które drzewo zrzuca igły na zimę?",
+          "poprawna": "Modrzew",
+          "bledne": ["Sosna", "Świerk"]
+        },
+        {
+          "pytanie": "Jak nazywają się rośliny jędące owady?",
+          "poprawna": "Rośliny mięsożerne",
+          "bledne": ["Rośliny wodne", "Rośliny pustynne"]
+        },
+        {
+          "pytanie": "W jakiej części kwiatu znajdują się nasiona?",
+          "poprawna": "W słupku",
+          "bledne": ["W płatkach", "W pręcikach"]
+        },
+        {
+          "pytanie": "Który owoc rośnie pod ziemią?",
+          "poprawna": "Orzeszki ziemne",
+          "bledne": ["Marchewka", "Ziemniaki"]
+        },
+        {
+          "pytanie": "Co chroni pąki przed zimnem?",
+          "poprawna": "Łuski pąkowe",
+          "bledne": ["Liście", "Kora"]
+        },
+        {
+          "pytanie": "Które rośliny nie mają kwiatów?",
+          "poprawna": "Mchy i paprocie",
+          "bledne": ["Trawy", "Krzewy"]
+        }
+      ]
+    },
+    "12-13lat": {
+      "cialo_czlowieka": [
+        {
+          "pytanie": "Ile kości ma dorosły człowiek?",
+          "poprawna": "206",
+          "bledne": ["186", "226"]
+        },
+        {
+          "pytanie": "Które narząd pompuje krew w organizmie?",
+          "poprawna": "Serce",
+          "bledne": ["Płuca", "Wątroba"]
+        },
+        {
+          "pytanie": "W której części ciała odbywa się trawienie?",
+          "poprawna": "Przewód pokarmowy",
+          "bledne": ["Płuca", "Nerki"]
+        },
+        {
+          "pytanie": "Jak nazywa się główna arteria w organizmie?",
+          "poprawna": "Aorta",
+          "bledne": ["Żyła główna", "Tętnica szyjna"]
+        },
+        {
+          "pytanie": "Który narząd produkuje insulinę?",
+          "poprawna": "Trzustka",
+          "bledne": ["Wątroba", "Nerki"]
+        },
+        {
+          "pytanie": "Ile komór ma serce człowieka?",
+          "poprawna": "4",
+          "bledne": ["2", "3"]
+        },
+        {
+          "pytanie": "W którym narządzie powstaje mocz?",
+          "poprawna": "Nerki",
+          "bledne": ["Pęcherz", "Wątroba"]
+        },
+        {
+          "pytanie": "Która część mózgu odpowiada za równowagę?",
+          "poprawna": "Móżdżek",
+          "bledne": ["Pień mózgu", "Kora mózgowa"]
+        },
+        {
+          "pytanie": "Ile płatów ma każde płuco?",
+          "poprawna": "Prawe 3, lewe 2",
+          "bledne": ["Każde po 2", "Każde po 3"]
+        },
+        {
+          "pytanie": "Który hormon reguluje poziom cukru we krwi?",
+          "poprawna": "Insulina",
+          "bledne": ["Adrenalina", "Testosteron"]
+        }
+      ],
+      "fizyka_podstawy": [
+        {
+          "pytanie": "Co jest podstawową jednostką siły?",
+          "poprawna": "Niuton",
+          "bledne": ["Watt", "Joule"]
+        },
+        {
+          "pytanie": "Przy jakiej temperaturze woda zamarza?",
+          "poprawna": "0°C",
+          "bledne": ["1°C", "-1°C"]
+        },
+        {
+          "pytanie": "Jak nazywa się przejście materii ze stanu stałego w gazowy?",
+          "poprawna": "Sublimacja",
+          "bledne": ["Parowanie", "Topnienie"]
+        },
+        {
+          "pytanie": "Która siła przyciąga przedmioty do Ziemi?",
+          "poprawna": "Grawitacja",
+          "bledne": ["Magnetyzm", "Tarcie"]
+        },
+        {
+          "pytanie": "Z jaką prędkością rozchodzi się światło w próżni?",
+          "poprawna": "300 000 km/s",
+          "bledne": ["150 000 km/s", "600 000 km/s"]
+        },
+        {
+          "pytanie": "Co mierzy woltomierz?",
+          "poprawna": "Napięcie",
+          "bledne": ["Prąd", "Opór"]
+        },
+        {
+          "pytanie": "Które ze stwierdzeń opisuje I zasadę Newtona?",
+          "poprawna": "Ciało w spoczynku pozostaje w spoczynku",
+          "bledne": ["F=ma", "Akcja równa reakcji"]
+        },
+        {
+          "pytanie": "Jak nazywa się jednostka mocy?",
+          "poprawna": "Watt",
+          "bledne": ["Joule", "Niuton"]
+        },
+        {
+          "pytanie": "Który rodzaj energii ma kamień na szczycie góry?",
+          "poprawna": "Potencjalna",
+          "bledne": ["Kinetyczna", "Cieplna"]
+        },
+        {
+          "pytanie": "Co powoduje echo?",
+          "poprawna": "Odbicie dźwięku",
+          "bledne": ["Załamanie dźwięku", "Absorpcja dźwięku"]
+        }
+      ]
+    },
+    "14-15lat": {
+      "chemia_podstawy": [
+        {
+          "pytanie": "Jaki jest symbol chemiczny złota?",
+          "poprawna": "Au",
+          "bledne": ["Go", "Gl"]
+        },
+        {
+          "pytanie": "Ile elektronów ma atom węgla?",
+          "poprawna": "6",
+          "bledne": ["4", "12"]
+        },
+        {
+          "pytanie": "Jak nazywa się związek H2O?",
+          "poprawna": "Woda",
+          "bledne": ["Wodór", "Tlen"]
+        },
+        {
+          "pytanie": "Który gaz stanowi najwięcej w atmosferze?",
+          "poprawna": "Azot",
+          "bledne": ["Tlen", "Dwutlenek węgla"]
+        },
+        {
+          "pytanie": "Co pokazuje liczba atomowa pierwiastka?",
+          "poprawna": "Liczbę protonów",
+          "bledne": ["Liczbę neutronów", "Masę atomową"]
+        },
+        {
+          "pytanie": "Jaki jest wzór kwasu siarkowego?",
+          "poprawna": "H2SO4",
+          "bledne": ["H2SO3", "HSO4"]
+        },
+        {
+          "pytanie": "Która cząstka ma ładunek ujemny?",
+          "poprawna": "Elektron",
+          "bledne": ["Proton", "Neutron"]
+        },
+        {
+          "pytanie": "Co powstaje podczas spalania węgla?",
+          "poprawna": "Dwutlenek węgla",
+          "bledne": ["Tlenek węgla", "Węglan"]
+        },
+        {
+          "pytanie": "Która reakcja pochłania energię?",
+          "poprawna": "Endotermiczna",
+          "bledne": ["Egzotermiczna", "Katalityczna"]
+        },
+        {
+          "pytanie": "Jaki jest symbol chemiczny sodu?",
+          "poprawna": "Na",
+          "bledne": ["So", "S"]
+        }
+      ],
+      "ekologia": [
+        {
+          "pytanie": "Co to jest efekt cieplarniany?",
+          "poprawna": "Zatrzymywanie ciepła w atmosferze przez gazy",
+          "bledne": ["Ochładzanie planety", "Niszczenie warstwy ozonowej"]
+        },
+        {
+          "pytanie": "Który gaz jest główną przyczyną globalnego ocieplenia?",
+          "poprawna": "Dwutlenek węgla",
+          "bledne": ["Tlen", "Azot"]
+        },
+        {
+          "pytanie": "Co oznacza skrót WWF?",
+          "poprawna": "World Wildlife Fund",
+          "bledne": ["Water Wildlife Foundation", "World Weather Fund"]
+        },
+        {
+          "pytanie": "Która warstwa atmosfery chroni przed promieniowaniem UV?",
+          "poprawna": "Warstwa ozonowa",
+          "bledne": ["Troposfera", "Stratosfera"]
+        },
+        {
+          "pytanie": "Co to jest biodegradacja?",
+          "poprawna": "Rozkład substancji przez organizmy żywe",
+          "bledne": ["Powstawanie nowych gatunków", "Migracja zwierząt"]
+        },
+        {
+          "pytanie": "Które źródło energii jest odnawialne?",
+          "poprawna": "Energia słoneczna",
+          "bledne": ["Węgiel", "Ropa naftowa"]
+        },
+        {
+          "pytanie": "Co to jest recykling?",
+          "poprawna": "Przetwarzanie odpadów na nowe produkty",
+          "bledne": ["Spalanie śmieci", "Zakopywanie odpadów"]
+        },
+        {
+          "pytanie": "Który las nazywany jest 'płucami Ziemi'?",
+          "poprawna": "Amazonia",
+          "bledne": ["Tajga", "Las tropikalny Afryki"]
+        },
+        {
+          "pytanie": "Co powoduje kwaśne deszcze?",
+          "poprawna": "Związki siarki i azotu w atmosferze",
+          "bledne": ["Dwutlenek węgla", "Pary wodne"]
+        },
+        {
+          "pytanie": "Ile procent powierzchni Ziemi pokrywają oceany?",
+          "poprawna": "71%",
+          "bledne": ["65%", "80%"]
+        }
+      ]
+    }
+  }
+}

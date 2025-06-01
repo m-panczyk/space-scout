@@ -1,0 +1,322 @@
+{
+  "historia": {
+    "10-11lat": {
+      "historia_starozytna": [
+        {
+          "pytanie": "Które państwo starożytne zbudowało piramidy?",
+          "poprawna": "Egipt",
+          "bledne": ["Grecja", "Rzym"]
+        },
+        {
+          "pytanie": "Jak nazywa się najsłynniejsza piramida w Egipcie?",
+          "poprawna": "Piramida Cheopsa",
+          "bledne": ["Piramida Sfinksa", "Piramida Faraona"]
+        },
+        {
+          "pytanie": "Który starożytny lud wynalazł pismo klinowe?",
+          "poprawna": "Sumerowie",
+          "bledne": ["Egipcjanie", "Grecy"]
+        },
+        {
+          "pytanie": "W którym kraju znajdowała się starożytna Troja?",
+          "poprawna": "Turcja",
+          "bledne": ["Grecja", "Włochy"]
+        },
+        {
+          "pytanie": "Kto był królem bogów w mitologii greckiej?",
+          "poprawna": "Zeus",
+          "bledne": ["Apollo", "Posejdon"]
+        },
+        {
+          "pytanie": "Które miasto było stolicą starożytnego Egiptu?",
+          "poprawna": "Memfis",
+          "bledne": ["Aleksandria", "Teby"]
+        },
+        {
+          "pytanie": "Jak nazywali się żołnierze spartan?",
+          "poprawna": "Hoplici",
+          "bledne": ["Gladiatorzy", "Legionisci"]
+        },
+        {
+          "pytanie": "Który starożytny władca podbił większość znanego świata?",
+          "poprawna": "Aleksander Wielki",
+          "bledne": ["Juliusz Cezar", "Napoleon"]
+        },
+        {
+          "pytanie": "W którym mieście odbywały się pierwsze igrzyska olimpijskie?",
+          "poprawna": "Olimpia",
+          "bledne": ["Ateny", "Sparta"]
+        },
+        {
+          "pytanie": "Jak nazywa się starożytny poemat Homera o wojnie trojańskiej?",
+          "poprawna": "Iliada",
+          "bledne": ["Odyseja", "Eneida"]
+        }
+      ],
+      "historia_sredniowiecza": [
+        {
+          "pytanie": "W którym wieku rozpoczęło się średniowiecze?",
+          "poprawna": "V wiek",
+          "bledne": ["IV wiek", "VI wiek"]
+        },
+        {
+          "pytanie": "Jak nazywano wojowników na koniach w średniowieczu?",
+          "poprawna": "Rycerze",
+          "bledne": ["Żołnierze", "Gladiatorzy"]
+        },
+        {
+          "pytanie": "Gdzie mieszkał król ze swoją rodziną?",
+          "poprawna": "W zamku",
+          "bledne": ["W chacie", "W pałacu"]
+        },
+        {
+          "pytanie": "Kto koronował królów w średniowieczu?",
+          "poprawna": "Papież lub biskup",
+          "bledne": ["Inny król", "Lud"]
+        },
+        {
+          "pytanie": "Jak nazywa się największa wojna religijna średniowiecza?",
+          "poprawna": "Krucjaty",
+          "bledne": ["Wojna stuletnia", "Wojna róż"]
+        },
+        {
+          "pytanie": "Który zawód był bardzo ważny w średniowiecznych miastach?",
+          "poprawna": "Rzemieślnik",
+          "bledne": ["Lekarz", "Nauczyciel"]
+        },
+        {
+          "pytanie": "Jak nazywano chłopów w średniowieczu?",
+          "poprawna": "Kmieciami",
+          "bledne": ["Rolnikami", "Sługami"]
+        },
+        {
+          "pytanie": "Co budowano w centrach średniowiecznych miast?",
+          "poprawna": "Katedry",
+          "bledne": ["Zamki", "Teatry"]
+        },
+        {
+          "pytanie": "Kto uczył dzieci w średniowieczu?",
+          "poprawna": "Duchowni",
+          "bledne": ["Rodzice", "Rycerze"]
+        },
+        {
+          "pytanie": "Jak nazywa się system społeczny średniowiecza?",
+          "poprawna": "Feudalizm",
+          "bledne": ["Kapitalizm", "Socjalizm"]
+        }
+      ]
+    },
+    "12-13lat": {
+      "historia_polski": [
+        {
+          "pytanie": "Kto był pierwszym królem Polski?",
+          "poprawna": "Bolesław Chrobry",
+          "bledne": ["Mieszko I", "Kazimierz Wielki"]
+        },
+        {
+          "pytanie": "W którym roku Mieszko I przyjął chrzest?",
+          "poprawna": "966",
+          "bledne": ["965", "967"]
+        },
+        {
+          "pytanie": "Która bitwa zakończyła najazdy krzyżackie na Polskę?",
+          "poprawna": "Bitwa pod Grunwaldem",
+          "bledne": ["Bitwa pod Warszawa", "Bitwa pod Wiedniem"]
+        },
+        {
+          "pytanie": "Kto był królem Polski podczas bitwy pod Grunwaldem?",
+          "poprawna": "Władysław Jagiełło",
+          "bledne": ["Kazimierz Wielki", "Bolesław Chrobry"]
+        },
+        {
+          "pytanie": "W którym roku odbyła się bitwa pod Grunwaldem?",
+          "poprawna": "1410",
+          "bledne": ["1400", "1420"]
+        },
+        {
+          "pytanie": "Która dynastia rządziła Polską najdłużej?",
+          "poprawna": "Piastowie",
+          "bledne": ["Jagiellonowie", "Wazowie"]
+        },
+        {
+          "pytanie": "Który król Polski nazywany był Wielkim?",
+          "poprawna": "Kazimierz",
+          "bledne": ["Bolesław", "Władysław"]
+        },
+        {
+          "pytanie": "Która królowa była żoną Władysława Jagiełły?",
+          "poprawna": "Jadwiga",
+          "bledne": ["Barbara", "Anna"]
+        },
+        {
+          "pytanie": "W którym mieście koronowano królów Polski?",
+          "poprawna": "Kraków",
+          "bledne": ["Warszawa", "Gniezno"]
+        },
+        {
+          "pytanie": "Kto założył Uniwersytet Krakowski?",
+          "poprawna": "Kazimierz Wielki",
+          "bledne": ["Władysław Jagiełło", "Bolesław Chrobry"]
+        }
+      ],
+      "historia_nowozytna": [
+        {
+          "pytanie": "W którym roku Kolumb odkrył Amerykę?",
+          "poprawna": "1492",
+          "bledne": ["1490", "1494"]
+        },
+        {
+          "pytanie": "Kto wynalazł druk?",
+          "poprawna": "Johannes Gutenberg",
+          "bledne": ["Leonardo da Vinci", "Galileusz"]
+        },
+        {
+          "pytanie": "Która epoka poprzedzała renesans?",
+          "poprawna": "Średniowiecze",
+          "bledne": ["Barok", "Starożytność"]
+        },
+        {
+          "pytanie": "W którym kraju narodził się renesans?",
+          "poprawna": "Włochy",
+          "bledne": ["Francja", "Hiszpania"]
+        },
+        {
+          "pytanie": "Kto namalował Mona Lisę?",
+          "poprawna": "Leonardo da Vinci",
+          "bledne": ["Michał Anioł", "Rafael"]
+        },
+        {
+          "pytanie": "Które morze przekroczył Kolumb płynąc do Ameryki?",
+          "poprawna": "Atlantycki",
+          "bledne": ["Pacyfik", "Indyjski"]
+        },
+        {
+          "pytanie": "Kto był królem Francji podczas rewolucji francuskiej?",
+          "poprawna": "Ludwik XVI",
+          "bledne": ["Ludwik XIV", "Ludwik XV"]
+        },
+        {
+          "pytanie": "W którym roku rozpoczęła się rewolucja francuska?",
+          "poprawna": "1789",
+          "bledne": ["1788", "1790"]
+        },
+        {
+          "pytanie": "Który odkrywca jako pierwszy opłynął Ziemię?",
+          "poprawna": "Ferdynand Magellan",
+          "bledne": ["Krzysztof Kolumb", "Vasco da Gama"]
+        },
+        {
+          "pytanie": "Kto sformułował teorię heliocentryczną?",
+          "poprawna": "Mikołaj Kopernik",
+          "bledne": ["Galileusz", "Kepler"]
+        }
+      ]
+    },
+    "14-15lat": {
+      "historia_wspolczesna": [
+        {
+          "pytanie": "W którym roku rozpoczęła się I wojna światowa?",
+          "poprawna": "1914",
+          "bledne": ["1913", "1915"]
+        },
+        {
+          "pytanie": "Które wydarzenie zapoczątkowało I wojnę światową?",
+          "poprawna": "Zamach w Sarajewie",
+          "bledne": ["Atak na Pearl Harbor", "Inwazja na Polskę"]
+        },
+        {
+          "pytanie": "W którym roku zakończyła się II wojna światowa?",
+          "poprawna": "1945",
+          "bledne": ["1944", "1946"]
+        },
+        {
+          "pytanie": "Kto był przywódcą nazistowskich Niemiec?",
+          "poprawna": "Adolf Hitler",
+          "bledne": ["Benito Mussolini", "Joseph Stalin"]
+        },
+        {
+          "pytanie": "Na które miasto zrzucono pierwszą bombę atomową?",
+          "poprawna": "Hiroshima",
+          "bledne": ["Nagasaki", "Tokio"]
+        },
+        {
+          "pytanie": "Jak nazywa się okres napięć między USA a ZSRR po II wojnie?",
+          "poprawna": "Zimna wojna",
+          "bledne": ["Gorąca wojna", "Wielka wojna"]
+        },
+        {
+          "pytanie": "W którym roku runął Mur Berliński?",
+          "poprawna": "1989",
+          "bledne": ["1988", "1990"]
+        },
+        {
+          "pytanie": "Która organizacja została utworzona po II wojnie światowej?",
+          "poprawna": "ONZ",
+          "bledne": ["NATO", "Liga Narodów"]
+        },
+        {
+          "pytanie": "W którym roku Polska odzyskała niepodległość po I wojnie?",
+          "poprawna": "1918",
+          "bledne": ["1917", "1919"]
+        },
+        {
+          "pytanie": "Kto był pierwszym prezydentem odrodzonej Polski?",
+          "poprawna": "Gabriel Narutowicz",
+          "bledne": ["Józef Piłsudski", "Ignacy Mościcki"]
+        }
+      ],
+      "historia_powszechna": [
+        {
+          "pytanie": "Która rewolucja doprowadziła do obalenia caratu w Rosji?",
+          "poprawna": "Rewolucja październikowa",
+          "bledne": ["Rewolucja francuska", "Rewolucja amerykańska"]
+        },
+        {
+          "pytanie": "W którym roku rozpoczęła się rewolucja rosyjska?",
+          "poprawna": "1917",
+          "bledne": ["1916", "1918"]
+        },
+        {
+          "pytanie": "Kto był przywódcą rewolucji bolszewickiej?",
+          "poprawna": "Włodzimierz Lenin",
+          "bledne": ["Józef Stalin", "Lew Trocki"]
+        },
+        {
+          "pytanie": "Które państwo jako pierwsze wysłało człowieka w kosmos?",
+          "poprawna": "ZSRR",
+          "bledne": ["USA", "Chiny"]
+        },
+        {
+          "pytanie": "Jak nazywał się pierwszy człowiek w kosmosie?",
+          "poprawna": "Jurij Gagarin",
+          "bledne": ["Neil Armstrong", "Walentina Tierieszkowa"]
+        },
+        {
+          "pytanie": "W którym roku człowiek po raz pierwszy wylądował na Księżycu?",
+          "poprawna": "1969",
+          "bledne": ["1968", "1970"]
+        },
+        {
+          "pytanie": "Która wojna była nazywana 'pierwszą wojną telewizyjną'?",
+          "poprawna": "Wojna w Wietnamie",
+          "bledne": ["Wojna koreańska", "Wojna w Zatoce"]
+        },
+        {
+          "pytanie": "W którym roku powstała Unia Europejska?",
+          "poprawna": "1993",
+          "bledne": ["1992", "1994"]
+        },
+        {
+          "pytanie": "Które wydarzenie spowodowało kryzys gospodarczy w latach 30. XX w.?",
+          "poprawna": "Krach na giełdzie w 1929",
+          "bledne": ["I wojna światowa", "Wielka depresja"]
+        },
+        {
+          "pytanie": "Kto był twórcą teorii względności?",
+          "poprawna": "Albert Einstein",
+          "bledne": ["Isaac Newton", "Stephen Hawking"]
+        }
+      ]
+    }
+  }
+}

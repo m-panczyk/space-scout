@@ -1,22 +1,534 @@
 extends Node
 
-#func _run() -> void:
-	#print(generate_question())
+# Stałe dla przedmiotów i kategorii
+enum Przedmiot {
+	MATEMATYKA,
+	GEOGRAFIA,
+	HISTORIA,
+	PRZYRODA,
+	POLSKI,
+	ANGIELSKI
+}
 
-############################################
-var lvl = [
-	[generuj_pytanie_dodawanie_odejmowanie,generuj_pytanie_tabliczka_mnozenia],
-	[generuj_pytanie_podzielnosc,generuj_pytanie_procent],
-	[generuj_pytanie_zaokraglanie,generuj_pytanie_potegi]
+enum Kategoria {
+	# Matematyka
+	DODAWANIE_ODEJMOWANIE,
+	TABLICZKA_MNOZENIA,
+	PODZIELNOSC,
+	PROCENT,
+	ZAOKRAGLANIE,
+	POTEGI,
+	
+	# Geografia
+	MAPA_SWIATA,
+	UKSZTALTOWANIE_TERENU,
+	KLIMAT,
+	GEOGRAFIA_POLSKI,
+	GEOLOGIA,
+	GEOGRAFIA_GOSPODARKI,
+	
+	# Historia
+	HISTORIA_STAROŻYTNA,
+	HISTORIA_ŚREDNIOWIECZA,
+	HISTORIA_POLSKI,
+	HISTORIA_NOWOŻYTNA,
+	HISTORIA_WSPÓŁCZESNA,
+	HISTORIA_POWSZECHNA,
+	
+	# Przyroda
+	ZWIERZĘTA,
+	ROŚLINY,
+	CIAŁO_CZŁOWIEKA,
+	FIZYKA_PODSTAWY,
+	CHEMIA_PODSTAWY,
+	EKOLOGIA,
+	
+	# Polski
+	ORTOGRAFIA,
+	GRAMATYKA,
+	LITERATURA,
+	CZĘŚCI_MOWY,
+	
+	# Angielski
+	VOCABULARY,
+	GRAMMAR,
+	SIMPLE_SENTENCES,
+	COLORS_NUMBERS
+}
+
+# Pytania załadowane z plików JSON
+var pytania_json = {}
+
+# Istniejący system matematyczny
+var lvl_matematyka = [
+	[generuj_pytanie_dodawanie_odejmowanie, generuj_pytanie_tabliczka_mnozenia],
+	[generuj_pytanie_podzielnosc, generuj_pytanie_procent],
+	[generuj_pytanie_zaokraglanie, generuj_pytanie_potegi]
 ]
 
-func generate_question(difficulty:int = 2) -> Array:
-	var function_reference = lvl[difficulty][randi() % lvl[difficulty].size()]
-	return function_reference.call()
-############################################
+# Nowy system rozszerzony
+var przedmioty_kategorie = {
+	Przedmiot.MATEMATYKA: {
+		0: [Kategoria.DODAWANIE_ODEJMOWANIE, Kategoria.TABLICZKA_MNOZENIA],
+		1: [Kategoria.PODZIELNOSC, Kategoria.PROCENT],
+		2: [Kategoria.ZAOKRAGLANIE, Kategoria.POTEGI]
+	},
+	Przedmiot.GEOGRAFIA: {
+		0: [Kategoria.MAPA_SWIATA, Kategoria.UKSZTALTOWANIE_TERENU],
+		1: [Kategoria.KLIMAT, Kategoria.GEOGRAFIA_POLSKI],
+		2: [Kategoria.GEOLOGIA, Kategoria.GEOGRAFIA_GOSPODARKI]
+	},
+	Przedmiot.HISTORIA: {
+		0: [Kategoria.HISTORIA_STAROŻYTNA, Kategoria.HISTORIA_ŚREDNIOWIECZA],
+		1: [Kategoria.HISTORIA_POLSKI, Kategoria.HISTORIA_NOWOŻYTNA],
+		2: [Kategoria.HISTORIA_WSPÓŁCZESNA, Kategoria.HISTORIA_POWSZECHNA]
+	},
+	Przedmiot.PRZYRODA: {
+		0: [Kategoria.ZWIERZĘTA, Kategoria.ROŚLINY],
+		1: [Kategoria.CIAŁO_CZŁOWIEKA, Kategoria.FIZYKA_PODSTAWY],
+		2: [Kategoria.CHEMIA_PODSTAWY, Kategoria.EKOLOGIA]
+	},
+	Przedmiot.POLSKI: {
+		0: [Kategoria.ORTOGRAFIA, Kategoria.CZĘŚCI_MOWY],
+		1: [Kategoria.GRAMATYKA, Kategoria.LITERATURA],
+		2: [Kategoria.LITERATURA, Kategoria.GRAMATYKA] # Powtórzenie na wyższym poziomie
+	},
+	Przedmiot.ANGIELSKI: {
+		0: [Kategoria.COLORS_NUMBERS, Kategoria.SIMPLE_SENTENCES],
+		1: [Kategoria.VOCABULARY, Kategoria.GRAMMAR],
+		2: [Kategoria.GRAMMAR, Kategoria.VOCABULARY] # Zaawansowane gramatyka i słownictwo
+	}
+}
+
+# Mapowanie kategorii na nazwy plików/ścieżek
+var kategoria_do_json_sciezki = {
+	# Geografia
+	Kategoria.MAPA_SWIATA: ["geografia", "10-11lat", "mapa_swiata"],
+	Kategoria.UKSZTALTOWANIE_TERENU: ["geografia", "10-11lat", "uksztaltowanie_terenu"],
+	Kategoria.KLIMAT: ["geografia", "12-13lat", "klimat"],
+	Kategoria.GEOGRAFIA_POLSKI: ["geografia", "12-13lat", "geografia_polski"],
+	Kategoria.GEOLOGIA: ["geografia", "14-15lat", "geologia"],
+	Kategoria.GEOGRAFIA_GOSPODARKI: ["geografia", "14-15lat", "geografia_gospodarki"],
+	
+	# Historia
+	Kategoria.HISTORIA_STAROŻYTNA: ["historia", "10-11lat", "historia_starozytna"],
+	Kategoria.HISTORIA_ŚREDNIOWIECZA: ["historia", "10-11lat", "historia_sredniowiecza"],
+	Kategoria.HISTORIA_POLSKI: ["historia", "12-13lat", "historia_polski"],
+	Kategoria.HISTORIA_NOWOŻYTNA: ["historia", "12-13lat", "historia_nowozytna"],
+	Kategoria.HISTORIA_WSPÓŁCZESNA: ["historia", "14-15lat", "historia_wspolczesna"],
+	Kategoria.HISTORIA_POWSZECHNA: ["historia", "14-15lat", "historia_powszechna"],
+	
+	# Przyroda
+	Kategoria.ZWIERZĘTA: ["przyroda", "10-11lat", "zwierzeta"],
+	Kategoria.ROŚLINY: ["przyroda", "10-11lat", "rosliny"],
+	Kategoria.CIAŁO_CZŁOWIEKA: ["przyroda", "12-13lat", "cialo_czlowieka"],
+	Kategoria.FIZYKA_PODSTAWY: ["przyroda", "12-13lat", "fizyka_podstawy"],
+	Kategoria.CHEMIA_PODSTAWY: ["przyroda", "14-15lat", "chemia_podstawy"],
+	Kategoria.EKOLOGIA: ["przyroda", "14-15lat", "ekologia"],
+	
+	# Polski
+	Kategoria.ORTOGRAFIA: ["polski", "10-11lat", "ortografia"],
+	Kategoria.CZĘŚCI_MOWY: ["polski", "10-11lat", "czesci_mowy"],
+	Kategoria.GRAMATYKA: ["polski", "12-13lat", "gramatyka"],
+	Kategoria.LITERATURA: ["polski", "12-13lat", "literatura"],
+	
+	# Angielski
+	Kategoria.COLORS_NUMBERS: ["angielski", "10-11lat", "colors_numbers"],
+	Kategoria.SIMPLE_SENTENCES: ["angielski", "10-11lat", "simple_sentences"],
+	Kategoria.VOCABULARY: ["angielski", "12-13lat", "vocabulary"],
+	Kategoria.GRAMMAR: ["angielski", "12-13lat", "grammar"]
+}
+
+func _ready():
+	# Inicjalizuj pusty słownik pytań
+	pytania_json = {}
+	wczytaj_wszystkie_pytania()
+
+# Funkcja wczytująca pytania z pliku JSON i przekształcająca je do wymaganego formatu
+func wczytaj_pytania_json(sciezka_pliku):
+	print("Próba wczytania pliku: ", sciezka_pliku)
+	
+	if not FileAccess.file_exists(sciezka_pliku):
+		print("Plik nie istnieje: ", sciezka_pliku)
+		return null
+	
+	var plik = FileAccess.open(sciezka_pliku, FileAccess.READ)
+	if not plik:
+		print("Nie można otworzyć pliku: ", sciezka_pliku)
+		return null
+	
+	var pytania_sformatowane = {}
+	
+	var tekst_json = plik.get_as_text()
+	plik.close()
+	
+	if tekst_json.strip_edges() == "":
+		print("Plik jest pusty: ", sciezka_pliku)
+		return null
+	
+	var json = JSON.new()
+	var error = json.parse(tekst_json)
+	if error == OK:
+		var dane = json.get_data()
+		
+		if dane == null:
+			print("Dane JSON są null w pliku: ", sciezka_pliku)
+			return null
+		
+		# Przekształć wszystkie pytania do formatu ['Question','GOOD','BAD','BAD']
+		for przedmiot in dane:
+			pytania_sformatowane[przedmiot] = {}
+			
+			var przedmiot_data = dane.get(przedmiot)
+			if przedmiot_data == null:
+				continue
+				
+			for grupa_wiekowa in przedmiot_data:
+				pytania_sformatowane[przedmiot][grupa_wiekowa] = {}
+				
+				var grupa_data = przedmiot_data.get(grupa_wiekowa)
+				if grupa_data == null:
+					continue
+				
+				for kategoria in grupa_data:
+					var lista_pytan = []
+					
+					var kategoria_data = grupa_data.get(kategoria)
+					if kategoria_data == null:
+						continue
+					
+					for pytanie in kategoria_data:
+						if pytanie == null:
+							continue
+							
+						# Sprawdź czy pytanie ma wymagane pola
+						if not pytanie.has("pytanie") or not pytanie.has("poprawna") or not pytanie.has("bledne"):
+							print("Pytanie ma brakujące pola w: ", sciezka_pliku)
+							continue
+						
+						var bledne_odpowiedzi = pytanie.get("bledne")
+						if bledne_odpowiedzi == null or bledne_odpowiedzi.size() < 2:
+							print("Brak wystarczającej liczby błędnych odpowiedzi w: ", sciezka_pliku)
+							continue
+						
+						# Tworzymy pytanie w formacie ['Question','GOOD','BAD','BAD']
+						var sformatowane_pytanie = [
+							str(pytanie.get("pytanie", "")),
+							str(pytanie.get("poprawna", "")),
+							str(bledne_odpowiedzi[0] if bledne_odpowiedzi.size() > 0 else ""),
+							str(bledne_odpowiedzi[1] if bledne_odpowiedzi.size() > 1 else "")
+						]
+						lista_pytan.append(sformatowane_pytanie)
+					
+					pytania_sformatowane[przedmiot][grupa_wiekowa][kategoria] = lista_pytan
+		
+		return pytania_sformatowane
+	else:
+		print("Błąd parsowania JSON: ", json.get_error_message(), " w linii ", json.get_error_line(), " w pliku: ", sciezka_pliku)
+	
+	return null
+
+# Funkcja wczytująca wszystkie pliki z pytaniami
+func wczytaj_wszystkie_pytania():
+	var pliki_pytan = [
+		"res://data/pytania_geografia.json",
+		"res://data/pytania_historia.json",
+		"res://data/pytania_przyroda.json",
+		"res://data/pytania_polski.json",
+		"res://data/pytania_angielski.json"
+	]
+	
+	print("Rozpoczynam wczytywanie pytań...")
+	
+	for plik in pliki_pytan:
+		print("Wczytywanie: ", plik)
+		var dane = wczytaj_pytania_json(plik)
+		if dane != null:
+			print("Pomyślnie wczytano: ", plik)
+			# Scalamy dane z różnych plików
+			for przedmiot in dane:
+				if not pytania_json.has(przedmiot):
+					pytania_json[przedmiot] = {}
+				
+				var przedmiot_data = dane.get(przedmiot)
+				if przedmiot_data == null:
+					continue
+				
+				for grupa_wiekowa in przedmiot_data:
+					if not pytania_json[przedmiot].has(grupa_wiekowa):
+						pytania_json[przedmiot][grupa_wiekowa] = {}
+					
+					var grupa_data = przedmiot_data.get(grupa_wiekowa)
+					if grupa_data == null:
+						continue
+					
+					for kategoria in grupa_data:
+						var pytania_kategorii = grupa_data.get(kategoria)
+						if pytania_kategorii != null:
+							pytania_json[przedmiot][grupa_wiekowa][kategoria] = pytania_kategorii
+		else:
+			print("Nie udało się wczytać: ", plik, " - kontynuuję bez tego pliku")
+	
+	print("Zakończono wczytywanie pytań. Wczytane przedmioty: ", pytania_json.keys())
+
+# Główna funkcja generująca pytanie - zachowuje kompatybilność z istniejącym kodem
+func generate_question(difficulty: int = 2, przedmiot: Przedmiot = Przedmiot.MATEMATYKA) -> Array:
+	if przedmiot == Przedmiot.MATEMATYKA:
+		# Stary system matematyczny
+		if difficulty >= 0 and difficulty < lvl_matematyka.size():
+			var dostepne_funkcje = lvl_matematyka[difficulty]
+			if dostepne_funkcje.size() > 0:
+				var function_reference = dostepne_funkcje[randi() % dostepne_funkcje.size()]
+				return function_reference.call()
+	
+	# Nowy system dla innych przedmiotów
+	var pytanie = generate_question_from_subject(difficulty, przedmiot)
+	
+	# Fallback do matematyki jeśli coś poszło nie tak
+	if pytanie == null or pytanie.size() < 4 or pytanie[0] == "Błąd":
+		print("Fallback do matematyki z powodu błędu")
+		return generuj_pytanie_dodawanie_odejmowanie()
+	
+	return pytanie
+
+# Nowa funkcja do generowania pytań z określonego przedmiotu
+func generate_question_from_subject(difficulty: int, przedmiot: Przedmiot) -> Array:
+	if not przedmioty_kategorie.has(przedmiot):
+		print("Nieznany przedmiot: ", przedmiot)
+		return generuj_pytanie_dodawanie_odejmowanie()
+	
+	var przedmiot_data = przedmioty_kategorie.get(przedmiot)
+	if przedmiot_data == null or not przedmiot_data.has(difficulty):
+		print("Nieznany poziom trudności dla przedmiotu: ", difficulty, ", przedmiot: ", przedmiot)
+		return generuj_pytanie_dodawanie_odejmowanie()
+	
+	# Wybieramy losową kategorię z danego poziomu trudności
+	var dostepne_kategorie = przedmiot_data.get(difficulty)
+	if dostepne_kategorie == null or dostepne_kategorie.size() == 0:
+		print("Brak dostępnych kategorii dla przedmiotu: ", przedmiot, ", poziom: ", difficulty)
+		return generuj_pytanie_dodawanie_odejmowanie()
+	
+	var wybrana_kategoria = dostepne_kategorie[randi() % dostepne_kategorie.size()]
+	
+	var pytanie = pobierz_pytanie_z_kategorii(difficulty, wybrana_kategoria)
+	
+	# Sprawdź czy pytanie jest prawidłowe
+	if pytanie == null or pytanie.size() < 4 or pytanie[0] == "Błąd":
+		print("Błąd pytania z kategorii: ", wybrana_kategoria, " - używam fallback")
+		return generuj_pytanie_dodawanie_odejmowanie()
+	
+	return pytanie
+
+# Funkcja pobierająca pytanie z określonej kategorii
+func pobierz_pytanie_z_kategorii(difficulty: int, kategoria: Kategoria) -> Array:
+	# Sprawdź czy to kategoria matematyczna
+	var kategorie_matematyczne = [
+		Kategoria.DODAWANIE_ODEJMOWANIE, Kategoria.TABLICZKA_MNOZENIA,
+		Kategoria.PODZIELNOSC, Kategoria.PROCENT,
+		Kategoria.ZAOKRAGLANIE, Kategoria.POTEGI
+	]
+	
+	if kategoria in kategorie_matematyczne:
+		return pobierz_pytanie_matematyczne(kategoria)
+	else:
+		var pytanie = pobierz_pytanie_z_json(kategoria)
+		# Fallback do matematyki jeśli pytanie z JSON jest błędne
+		if pytanie == null or pytanie.size() < 4 or pytanie[0] == "Błąd":
+			print("Fallback do matematyki z kategorii: ", kategoria)
+			return generuj_pytanie_dodawanie_odejmowanie()
+		return pytanie
+
+# Funkcja pobierająca pytanie matematyczne (stary system)
+func pobierz_pytanie_matematyczne(kategoria: Kategoria) -> Array:
+	match kategoria:
+		Kategoria.DODAWANIE_ODEJMOWANIE:
+			return generuj_pytanie_dodawanie_odejmowanie()
+		Kategoria.TABLICZKA_MNOZENIA:
+			return generuj_pytanie_tabliczka_mnozenia()
+		Kategoria.PODZIELNOSC:
+			return generuj_pytanie_podzielnosc()
+		Kategoria.PROCENT:
+			return generuj_pytanie_procent()
+		Kategoria.ZAOKRAGLANIE:
+			return generuj_pytanie_zaokraglanie()
+		Kategoria.POTEGI:
+			return generuj_pytanie_potegi()
+		_:
+			print("Nieznana kategoria matematyczna: ", kategoria, " - używam dodawania/odejmowania")
+			return generuj_pytanie_dodawanie_odejmowanie()
+
+# Funkcja pobierająca pytanie z JSON
+func pobierz_pytanie_z_json(kategoria: Kategoria) -> Array:
+	if not kategoria_do_json_sciezki.has(kategoria):
+		print("Brak mapowania dla kategorii: ", kategoria)
+		return ["Błąd", "Brak pytania", "Błąd", "Błąd"]
+	
+	var sciezka = kategoria_do_json_sciezki.get(kategoria)
+	if sciezka == null or sciezka.size() < 3:
+		print("Nieprawidłowa ścieżka dla kategorii: ", kategoria)
+		return ["Błąd", "Nieprawidłowa ścieżka", "Błąd", "Błąd"]
+	
+	var przedmiot = sciezka[0]
+	var grupa_wiekowa = sciezka[1]
+	var nazwa_kategorii = sciezka[2]
+	
+	if not pytania_json.has(przedmiot):
+		print("Brak danych dla przedmiotu: ", przedmiot)
+		return ["Błąd", "Brak pytania", "Błąd", "Błąd"]
+	
+	var przedmiot_data = pytania_json.get(przedmiot)
+	if przedmiot_data == null:
+		print("Dane przedmiotu są null: ", przedmiot)
+		return ["Błąd", "Brak danych przedmiotu", "Błąd", "Błąd"]
+	
+	if not przedmiot_data.has(grupa_wiekowa):
+		print("Brak danych dla grupy wiekowej: ", grupa_wiekowa)
+		return ["Błąd", "Brak pytania", "Błąd", "Błąd"]
+	
+	var grupa_data = przedmiot_data.get(grupa_wiekowa)
+	if grupa_data == null:
+		print("Dane grupy wiekowej są null: ", grupa_wiekowa)
+		return ["Błąd", "Brak danych grupy", "Błąd", "Błąd"]
+	
+	if not grupa_data.has(nazwa_kategorii):
+		print("Brak danych dla kategorii: ", nazwa_kategorii)
+		return ["Błąd", "Brak pytania", "Błąd", "Błąd"]
+	
+	var lista_pytan = grupa_data.get(nazwa_kategorii)
+	if lista_pytan == null or lista_pytan.size() == 0:
+		print("Brak pytań w kategorii: ", nazwa_kategorii)
+		return ["Błąd", "Brak pytań w kategorii", "Błąd", "Błąd"]
+	
+	var indeks = randi() % lista_pytan.size()
+	return lista_pytan[indeks]
+
+# Funkcja do pobierania dostępnych przedmiotów
+func get_available_subjects() -> Array:
+	return [
+		Przedmiot.MATEMATYKA,
+		Przedmiot.GEOGRAFIA,
+		Przedmiot.HISTORIA,
+		Przedmiot.PRZYRODA,
+		Przedmiot.POLSKI,
+		Przedmiot.ANGIELSKI
+	]
+
+# Funkcja do pobierania nazw przedmiotów
+func get_subject_name(przedmiot: Przedmiot) -> String:
+	match przedmiot:
+		Przedmiot.MATEMATYKA: return "Matematyka"
+		Przedmiot.GEOGRAFIA: return "Geografia"
+		Przedmiot.HISTORIA: return "Historia"
+		Przedmiot.PRZYRODA: return "Przyroda"
+		Przedmiot.POLSKI: return "Język Polski"
+		Przedmiot.ANGIELSKI: return "Język Angielski"
+		_: return "Nieznany"
+
+# Funkcja do pobierania dostępnych kategorii dla danego przedmiotu i poziomu
+func get_available_categories(przedmiot: Przedmiot, difficulty: int) -> Array:
+	if przedmioty_kategorie.has(przedmiot) and przedmioty_kategorie[przedmiot].has(difficulty):
+		return przedmioty_kategorie[przedmiot][difficulty]
+	return []
+
+# Funkcja do pobierania nazwy kategorii
+func get_category_name(kategoria: Kategoria) -> String:
+	match kategoria:
+		# Matematyka
+		Kategoria.DODAWANIE_ODEJMOWANIE: return "Dodawanie i odejmowanie"
+		Kategoria.TABLICZKA_MNOZENIA: return "Tabliczka mnożenia"
+		Kategoria.PODZIELNOSC: return "Podzielność"
+		Kategoria.PROCENT: return "Procenty"
+		Kategoria.ZAOKRAGLANIE: return "Zaokrąglanie"
+		Kategoria.POTEGI: return "Potęgi"
+		
+		# Geografia
+		Kategoria.MAPA_SWIATA: return "Mapa świata"
+		Kategoria.UKSZTALTOWANIE_TERENU: return "Ukształtowanie terenu"
+		Kategoria.KLIMAT: return "Klimat"
+		Kategoria.GEOGRAFIA_POLSKI: return "Geografia Polski"
+		Kategoria.GEOLOGIA: return "Geologia"
+		Kategoria.GEOGRAFIA_GOSPODARKI: return "Geografia gospodarki"
+		
+		# Historia
+		Kategoria.HISTORIA_STAROŻYTNA: return "Historia starożytna"
+		Kategoria.HISTORIA_ŚREDNIOWIECZA: return "Historia średniowiecza"
+		Kategoria.HISTORIA_POLSKI: return "Historia Polski"
+		Kategoria.HISTORIA_NOWOŻYTNA: return "Historia nowożytna"
+		Kategoria.HISTORIA_WSPÓŁCZESNA: return "Historia współczesna"
+		Kategoria.HISTORIA_POWSZECHNA: return "Historia powszechna"
+		
+		# Przyroda
+		Kategoria.ZWIERZĘTA: return "Zwierzęta"
+		Kategoria.ROŚLINY: return "Rośliny"
+		Kategoria.CIAŁO_CZŁOWIEKA: return "Ciało człowieka"
+		Kategoria.FIZYKA_PODSTAWY: return "Podstawy fizyki"
+		Kategoria.CHEMIA_PODSTAWY: return "Podstawy chemii"
+		Kategoria.EKOLOGIA: return "Ekologia"
+		
+		# Polski
+		Kategoria.ORTOGRAFIA: return "Ortografia"
+		Kategoria.GRAMATYKA: return "Gramatyka"
+		Kategoria.LITERATURA: return "Literatura"
+		Kategoria.CZĘŚCI_MOWY: return "Części mowy"
+		
+		# Angielski
+		Kategoria.VOCABULARY: return "Vocabulary"
+		Kategoria.GRAMMAR: return "Grammar"
+		Kategoria.SIMPLE_SENTENCES: return "Simple sentences"
+		Kategoria.COLORS_NUMBERS: return "Colors & Numbers"
+		
+		_: return "Nieznana kategoria"
+
+# Funkcja sprawdzająca ile pytań jest dostępnych w danej kategorii
+func get_questions_count_in_category(kategoria: Kategoria) -> int:
+	if kategoria_do_json_sciezki.has(kategoria):
+		var sciezka = kategoria_do_json_sciezki.get(kategoria)
+		if sciezka == null or sciezka.size() < 3:
+			return 0
+			
+		var przedmiot = sciezka[0]
+		var grupa_wiekowa = sciezka[1]
+		var nazwa_kategorii = sciezka[2]
+		
+		var przedmiot_data = pytania_json.get(przedmiot)
+		if przedmiot_data == null:
+			return 0
+			
+		var grupa_data = przedmiot_data.get(grupa_wiekowa)
+		if grupa_data == null:
+			return 0
+			
+		var kategoria_data = grupa_data.get(nazwa_kategorii)
+		if kategoria_data == null:
+			return 0
+			
+		return kategoria_data.size()
+	
+	# Dla kategorii matematycznych zwracamy przybliżoną liczbę
+	var kategorie_matematyczne = [
+		Kategoria.DODAWANIE_ODEJMOWANIE, Kategoria.TABLICZKA_MNOZENIA,
+		Kategoria.PODZIELNOSC, Kategoria.PROCENT,
+		Kategoria.ZAOKRAGLANIE, Kategoria.POTEGI
+	]
+	
+	if kategoria in kategorie_matematyczne:
+		match kategoria:
+			Kategoria.TABLICZKA_MNOZENIA: return 100
+			Kategoria.DODAWANIE_ODEJMOWANIE: return 2000
+			Kategoria.PODZIELNOSC: return 1200
+			Kategoria.PROCENT: return 48
+			Kategoria.ZAOKRAGLANIE: return 500
+			Kategoria.POTEGI: return 60
+	
+	return 0
+
+# Istniejące funkcje matematyczne (pozostają bez zmian)
+
+# [Tutaj wstawione wszystkie istniejące funkcje matematyczne bez zmian]
+
 # Funkcja generująca pytanie o dodawanie i odejmowanie w zakresie 50
 func generuj_pytanie_dodawanie_odejmowanie():
-	# Decydujemy, czy pytanie będzie o dodawanie czy odejmowanie
+	# [Kod funkcji pozostaje bez zmian - jest już w oryginalnym pliku]
 	var czy_dodawanie = randi() % 2 == 0
 	
 	var liczba1
@@ -24,161 +536,123 @@ func generuj_pytanie_dodawanie_odejmowanie():
 	var poprawna_odpowiedz
 	
 	if czy_dodawanie:
-		# Dla dodawania wybieramy liczby tak, aby suma była ≤ 50
-		liczba1 = randi() % 30 + 1  # Liczba od 1 do 30
-		liczba2 = randi() % (50 - liczba1 + 1) + 1  # Liczba od 1 do (50-liczba1)
+		liczba1 = randi() % 30 + 1
+		liczba2 = randi() % (50 - liczba1 + 1) + 1
 		poprawna_odpowiedz = liczba1 + liczba2
 		
 	else:
-		# Dla odejmowania wybieramy pierwszą liczbę ≤ 50, a drugą mniejszą od pierwszej
-		liczba1 = randi() % 50 + 1  # Liczba od 1 do 50
-		liczba2 = randi() % liczba1 + 1  # Liczba od 1 do liczba1
+		liczba1 = randi() % 50 + 1
+		liczba2 = randi() % liczba1 + 1
 		poprawna_odpowiedz = liczba1 - liczba2
 	
-	# Tworzymy pytanie
 	var pytanie = str(liczba1) + (" + " if czy_dodawanie else " - ") + str(liczba2) + " = ?"
 	
-	# Generujemy błędne odpowiedzi
 	var bledna_odpowiedz1
 	var bledna_odpowiedz2
 	
-	# Losowo wybieramy rodzaj pierwszego błędu
 	var typ_bledu1 = randi() % 3
 	
 	if typ_bledu1 == 0:
-		# Błąd o +/- 1 (typowy błąd o jeden)
 		bledna_odpowiedz1 = poprawna_odpowiedz + 1
 	elif typ_bledu1 == 1:
-		# Błąd o +/- 1 (typowy błąd o jeden w drugą stronę)
 		bledna_odpowiedz1 = poprawna_odpowiedz - 1
 	else:
-		# Odwrotna operacja (dodawanie zamiast odejmowania lub odwrotnie)
 		if czy_dodawanie:
 			bledna_odpowiedz1 = liczba1 - liczba2
-			if bledna_odpowiedz1 <= 0:  # Unikamy ujemnych odpowiedzi
+			if bledna_odpowiedz1 <= 0:
 				bledna_odpowiedz1 = poprawna_odpowiedz + 2
 		else:
 			bledna_odpowiedz1 = liczba1 + liczba2
 	
-	# Upewniamy się, że pierwsza błędna odpowiedź jest różna od poprawnej
 	if bledna_odpowiedz1 == poprawna_odpowiedz:
 		bledna_odpowiedz1 = poprawna_odpowiedz + 2
 	
-	# Losowo wybieramy rodzaj drugiego błędu, upewniając się, że jest inny niż pierwszy
 	var typ_bledu2 = randi() % 4
 	
-	# Upewnijmy się, że drugi typ błędu jest inny niż pierwszy (jeśli pierwszy jest < 3)
 	while typ_bledu2 == typ_bledu1 and typ_bledu1 < 3:
 		typ_bledu2 = randi() % 4
 	
 	if typ_bledu2 == 0:
-		# Błąd o +/- 1 (typowy błąd o jeden)
 		bledna_odpowiedz2 = poprawna_odpowiedz + 1
 	elif typ_bledu2 == 1:
-		# Błąd o +/- 1 (typowy błąd o jeden w drugą stronę)
 		bledna_odpowiedz2 = poprawna_odpowiedz - 1
 	elif typ_bledu2 == 2:
-		# Odwrotna operacja (dodawanie zamiast odejmowania lub odwrotnie)
 		if czy_dodawanie:
 			bledna_odpowiedz2 = liczba1 - liczba2
-			if bledna_odpowiedz2 <= 0:  # Unikamy ujemnych odpowiedzi
+			if bledna_odpowiedz2 <= 0:
 				bledna_odpowiedz2 = poprawna_odpowiedz + 3
 		else:
 			bledna_odpowiedz2 = liczba1 + liczba2
 	else:
-		# Inny typowy błąd: zamiana liczb przy odejmowaniu lub błąd o +/- 2
 		if czy_dodawanie:
 			bledna_odpowiedz2 = poprawna_odpowiedz + 2
 		else:
-			# Zamiana liczb przy odejmowaniu (typowy błąd: 7-3=4, ale uczeń liczy 3-7=-4)
 			bledna_odpowiedz2 = liczba2 - liczba1
-			if bledna_odpowiedz2 <= 0:  # Unikamy ujemnych odpowiedzi dla początkujących uczniów
+			if bledna_odpowiedz2 <= 0:
 				bledna_odpowiedz2 = poprawna_odpowiedz + 3
 	
-	# Upewniamy się, że druga błędna odpowiedź jest różna od poprawnej i pierwszej błędnej
 	if bledna_odpowiedz2 == poprawna_odpowiedz:
 		bledna_odpowiedz2 = poprawna_odpowiedz + 3
 	
 	if bledna_odpowiedz2 == bledna_odpowiedz1:
 		bledna_odpowiedz2 = bledna_odpowiedz1 + 1
 		
-		# Dodatkowe sprawdzenie, czy po dodaniu 1 nie jest równa poprawnej
 		if bledna_odpowiedz2 == poprawna_odpowiedz:
 			bledna_odpowiedz2 = bledna_odpowiedz1 + 2
 	
-	# Konwertujemy odpowiedzi na stringi
 	poprawna_odpowiedz = str(poprawna_odpowiedz)
 	bledna_odpowiedz1 = str(bledna_odpowiedz1)
 	bledna_odpowiedz2 = str(bledna_odpowiedz2)
 	
-	# Zwracanie pytania w formacie ['Question','GOOD','BAD','BAD']
 	return [pytanie, poprawna_odpowiedz, bledna_odpowiedz1, bledna_odpowiedz2]
 
-
 func generuj_pytanie_tabliczka_mnozenia(min_liczba = 1, max_liczba = 10):
-	# Generowanie dwóch losowych liczb z określonego zakresu
 	var liczba1 = randi() % (max_liczba - min_liczba + 1) + min_liczba
 	var liczba2 = randi() % (max_liczba - min_liczba + 1) + min_liczba
 	
-	# Obliczenie poprawnej odpowiedzi
 	var poprawna_odpowiedz = liczba1 * liczba2
 	
-	# Tworzenie pytania
 	var pytanie = "Ile wynosi " + str(liczba1) + " × " + str(liczba2) + "?"
 	
-	# Generowanie błędnych odpowiedzi
 	var bledna_odpowiedz1
 	var bledna_odpowiedz2
 	
-	# Generujemy pierwszą błędną odpowiedź
 	while true:
-		var odchylenie = randi() % 5 + 1  # Odchylenie od 1 do 5
+		var odchylenie = randi() % 5 + 1
 		if randi() % 2 == 0:
 			bledna_odpowiedz1 = poprawna_odpowiedz + odchylenie
 		else:
 			bledna_odpowiedz1 = max(1, poprawna_odpowiedz - odchylenie)
 		
-		# Upewniamy się, że błędna odpowiedź różni się od poprawnej
 		if bledna_odpowiedz1 != poprawna_odpowiedz:
 			break
 	
-	# Generujemy drugą błędną odpowiedź
 	while true:
-		var odchylenie = randi() % 5 + 1  # Odchylenie od 1 do 5
+		var odchylenie = randi() % 5 + 1
 		if randi() % 2 == 0:
 			bledna_odpowiedz2 = poprawna_odpowiedz + odchylenie
 		else:
 			bledna_odpowiedz2 = max(1, poprawna_odpowiedz - odchylenie)
 		
-		# Upewniamy się, że druga błędna odpowiedź różni się od poprawnej i pierwszej błędnej
 		if bledna_odpowiedz2 != poprawna_odpowiedz and bledna_odpowiedz2 != bledna_odpowiedz1:
 			break
 	
-	# Zwracanie pytania w formacie ['Question','GOOD','BAD','BAD']
 	return [pytanie, str(poprawna_odpowiedz), str(bledna_odpowiedz1), str(bledna_odpowiedz2)]
 
-# Funkcja generująca pytanie o podzielność liczb
 func generuj_pytanie_podzielnosc(min_liczba = 10, max_liczba = 1000):
-	# Lista dzielników
 	var dzielniki = [2, 3, 4, 5, 9, 10]
 	
-	# Wybieramy losowy dzielnik
 	var dzielnik = dzielniki[randi() % dzielniki.size()]
 	
-	# Pytanie
 	var pytanie = "Która z liczb jest podzielna przez " + str(dzielnik) + "?"
 	
-	# Generujemy liczbę podzielną przez wybrany dzielnik (poprawna odpowiedź)
 	var poprawna_liczba
 	
-	# Generujemy liczbę podzielną przez wybrany dzielnik
 	match dzielnik:
 		2:
 			poprawna_liczba = (randi() % ((max_liczba - min_liczba) / 2) + min_liczba / 2) * 2
 		3:
-			# Generujemy losową liczbę
 			poprawna_liczba = randi() % (max_liczba - min_liczba) + min_liczba
-			# Dostosowujemy ją, aby była podzielna przez 3
 			while poprawna_liczba % 3 != 0:
 				poprawna_liczba += 1
 				if poprawna_liczba > max_liczba:
@@ -188,9 +662,7 @@ func generuj_pytanie_podzielnosc(min_liczba = 10, max_liczba = 1000):
 		5:
 			poprawna_liczba = (randi() % ((max_liczba - min_liczba) / 5) + min_liczba / 5) * 5
 		9:
-			# Generujemy losową liczbę
 			poprawna_liczba = randi() % (max_liczba - min_liczba) + min_liczba
-			# Dostosowujemy ją, aby była podzielna przez 9
 			while poprawna_liczba % 9 != 0:
 				poprawna_liczba += 1
 				if poprawna_liczba > max_liczba:
@@ -198,34 +670,27 @@ func generuj_pytanie_podzielnosc(min_liczba = 10, max_liczba = 1000):
 		10:
 			poprawna_liczba = (randi() % ((max_liczba - min_liczba) / 10) + min_liczba / 10) * 10
 	
-	# Generujemy dwie niepodzielne liczby (błędne odpowiedzi)
 	var bledna_liczba1 = generuj_niepodzielna_liczbe(dzielnik, min_liczba, max_liczba, [poprawna_liczba])
 	var bledna_liczba2 = generuj_niepodzielna_liczbe(dzielnik, min_liczba, max_liczba, [poprawna_liczba, bledna_liczba1])
 	
-	# Zwracanie pytania w formacie ['Question','GOOD','BAD','BAD']
 	return [pytanie, str(poprawna_liczba), str(bledna_liczba1), str(bledna_liczba2)]
 
-# Funkcja pomocnicza do generowania liczby niepodzielnej przez dzielnik
 func generuj_niepodzielna_liczbe(dzielnik, min_liczba, max_liczba, wykluczone_liczby = []):
 	var liczba
-	var max_prob = 100  # Zabezpieczenie przed nieskończoną pętlą
+	var max_prob = 100
 	var prob = 0
 	
 	while prob < max_prob:
 		prob += 1
 		
-		# Generujemy losową liczbę z zakresu
 		liczba = randi() % (max_liczba - min_liczba) + min_liczba
 		
-		# Sprawdzamy, czy liczba nie jest na liście wykluczonych
 		if liczba in wykluczone_liczby:
 			continue
 		
-		# Sprawdzamy, czy liczba NIE jest podzielna przez dzielnik
 		if liczba % dzielnik != 0:
 			return liczba
 	
-	# Jeśli nie uda się znaleźć losowo, generujemy deterministycznie
 	liczba = min_liczba
 	while true:
 		if not (liczba in wykluczone_liczby) and liczba % dzielnik != 0:
@@ -234,60 +699,46 @@ func generuj_niepodzielna_liczbe(dzielnik, min_liczba, max_liczba, wykluczone_li
 		if liczba > max_liczba:
 			liczba = min_liczba
 
-# Funkcja generująca pytanie o procent z liczby dla szkoły podstawowej
 func generuj_pytanie_procent():
-	# Tablica z łatwymi do obliczenia procentami dla dzieci
 	var procenty = [1, 10, 20, 25, 50, 75, 100]
 	
-	# Wybieramy losowy procent
 	var procent = procenty[randi() % procenty.size()]
 	
-	# Generujemy liczbę, która będzie łatwa do obliczenia
 	var liczby_bazowe = [20, 40, 50, 100, 200, 400, 500, 1000]
 	var liczba = liczby_bazowe[randi() % liczby_bazowe.size()]
 	
-	# Obliczamy poprawną odpowiedź (procent z liczby)
 	var poprawna_odpowiedz = (liczba * procent) / 100
 	
-	# Tworzymy pytanie
 	var pytanie = "Ile to jest " + str(procent) + "% z " + str(liczba) + "?"
 	
-	# Generujemy błędne odpowiedzi
 	var bledna_odpowiedz1
 	var bledna_odpowiedz2
 	
-	# Pierwsza błędna odpowiedź - zamiana procentu z liczbą (np. 200% z 10 zamiast 10% z 200)
-	# lub inna typowa pomyłka
 	var typ_bledu = randi() % 3
 	
-	if typ_bledu == 0 && liczba < 100:  # Zamiana miejscami, ale tylko gdy liczba jest sensowna jako procent
+	if typ_bledu == 0 && liczba < 100:
 		bledna_odpowiedz1 = (procent * liczba) / 100
-	elif typ_bledu == 1:  # Dodanie procentu do liczby zamiast obliczenia procentu
+	elif typ_bledu == 1:
 		bledna_odpowiedz1 = liczba + procent
-	else:  # Pomnożenie liczby przez procent bez dzielenia przez 100
+	else:
 		bledna_odpowiedz1 = liczba * procent
 	
-	# Druga błędna odpowiedź - niewielka modyfikacja poprawnej odpowiedzi
 	if poprawna_odpowiedz >= 10:
-		bledna_odpowiedz2 = poprawna_odpowiedz + (randi() % 5 + 1)  # Dodajemy 1-5
+		bledna_odpowiedz2 = poprawna_odpowiedz + (randi() % 5 + 1)
 	else:
-		bledna_odpowiedz2 = poprawna_odpowiedz + (randi() % 3 + 1)  # Dodajemy 1-3
+		bledna_odpowiedz2 = poprawna_odpowiedz + (randi() % 3 + 1)
 	
-	# Upewniamy się, że błędne odpowiedzi nie są takie same jak poprawna
 	if bledna_odpowiedz1 == poprawna_odpowiedz:
 		bledna_odpowiedz1 = poprawna_odpowiedz + 10
 	
 	if bledna_odpowiedz2 == poprawna_odpowiedz || bledna_odpowiedz2 == bledna_odpowiedz1:
 		bledna_odpowiedz2 = poprawna_odpowiedz - 5
-		if bledna_odpowiedz2 <= 0:  # Nie chcemy ujemnych odpowiedzi
+		if bledna_odpowiedz2 <= 0:
 			bledna_odpowiedz2 = poprawna_odpowiedz * 2
 	
-	# Zwracanie pytania w formacie ['Question','GOOD','BAD','BAD']
 	return [pytanie, str(poprawna_odpowiedz), str(bledna_odpowiedz1), str(bledna_odpowiedz2)]
-# Funkcja generująca pytanie o zaokrąglanie liczb
-# Funkcja generująca pytanie o zaokrąglanie liczb
+
 func generuj_pytanie_zaokraglanie():
-	# Definiujemy typy zaokrąglania
 	var typy_zaokraglania = [
 		"do setek",
 		"do dziesiątek",
@@ -296,164 +747,132 @@ func generuj_pytanie_zaokraglanie():
 		"do części setnych"
 	]
 	
-	# Wybieramy losowy typ zaokrąglania
 	var indeks_typu = randi() % typy_zaokraglania.size()
 	var typ_zaokraglania = typy_zaokraglania[indeks_typu]
 	
-	# Generujemy odpowiednią liczbę do zaokrąglenia
 	var liczba
 	var poprawna_odpowiedz
 	
 	match indeks_typu:
-		0: # do setek
-			# Generujemy liczbę z przedziału 100-999
+		0:
 			liczba = randi() % 900 + 100
-			# Obliczamy poprawne zaokrąglenie
 			poprawna_odpowiedz = int(round(liczba / 100.0)) * 100
 		
-		1: # do dziesiątek
-			# Generujemy liczbę z przedziału 10-99
+		1:
 			liczba = randi() % 90 + 10
-			# Obliczamy poprawne zaokrąglenie
 			poprawna_odpowiedz = int(round(liczba / 10.0)) * 10
 		
-		2: # do jedności (całości)
-			# Generujemy liczbę z częścią ułamkową
+		2:
 			var calosc = randi() % 100 + 1
 			var ulamek = randi() % 99 + 1
 			liczba = calosc + (ulamek / 100.0)
-			liczba = snapped(liczba, 0.01) # Zaokrąglamy do 2 miejsc po przecinku dla czytelności
-			# Obliczamy poprawne zaokrąglenie
+			liczba = snapped(liczba, 0.01)
 			poprawna_odpowiedz = round(liczba)
 		
-		3: # do części dziesiętnych
-			# Generujemy liczbę z 2 miejscami po przecinku
+		3:
 			var calosc = randi() % 100 + 1
 			var ulamek = randi() % 99 + 1
 			liczba = calosc + (ulamek / 100.0)
-			liczba = snapped(liczba, 0.01) # Zaokrąglamy do 2 miejsc po przecinku dla czytelności
-			# Obliczamy poprawne zaokrąglenie
+			liczba = snapped(liczba, 0.01)
 			poprawna_odpowiedz = snapped(round(liczba * 10) / 10.0, 0.1)
 		
-		4: # do części setnych
-			# Generujemy liczbę z 3 miejscami po przecinku
+		4:
 			var calosc = randi() % 100 + 1
 			var ulamek = randi() % 999 + 1
 			liczba = calosc + (ulamek / 1000.0)
-			liczba = snapped(liczba, 0.001) # Zaokrąglamy do 3 miejsc po przecinku dla czytelności
-			# Obliczamy poprawne zaokrąglenie
+			liczba = snapped(liczba, 0.001)
 			poprawna_odpowiedz = snapped(round(liczba * 100) / 100.0, 0.01)
 	
-	# Formatujemy liczbę do wyświetlenia w pytaniu (zamieniamy kropkę na przecinek)
 	var liczba_tekst = str(liczba).replace(".", ",")
 	
-	# Tworzymy pytanie
 	var pytanie = "Zaokrąglij liczbę " + liczba_tekst + " " + typ_zaokraglania + "."
 	
-	# Generujemy błędne odpowiedzi
 	var bledna_odpowiedz1
 	var bledna_odpowiedz2
 	
 	match indeks_typu:
-		0, 1: # do setek lub do dziesiątek
-			# Pierwsza błędna odpowiedź - zaokrąglenie w dół
+		0, 1:
 			bledna_odpowiedz1 = poprawna_odpowiedz - (100 if indeks_typu == 0 else 10)
-			# Druga błędna odpowiedź - zaokrąglenie w górę
 			bledna_odpowiedz2 = poprawna_odpowiedz + (100 if indeks_typu == 0 else 10)
 			
-			# Jeśli zaokrąglenie w dół jest już poprawne, zmieniamy błędną odpowiedź
 			if bledna_odpowiedz1 == poprawna_odpowiedz:
 				bledna_odpowiedz1 = poprawna_odpowiedz + 50 if indeks_typu == 0 else poprawna_odpowiedz + 5
 			
-			# Jeśli zaokrąglenie w górę jest już poprawne, zmieniamy błędną odpowiedź
 			if bledna_odpowiedz2 == poprawna_odpowiedz:
 				bledna_odpowiedz2 = poprawna_odpowiedz - 50 if indeks_typu == 0 else poprawna_odpowiedz - 5
 		
-		2: # do jedności (całości)
-			# Typowe błędy: zaokrąglenie w złą stronę lub obcięcie części ułamkowej
-			bledna_odpowiedz1 = floor(liczba) # Obcięcie części ułamkowej
+		2:
+			bledna_odpowiedz1 = floor(liczba)
 			if bledna_odpowiedz1 == poprawna_odpowiedz:
 				bledna_odpowiedz1 = poprawna_odpowiedz + 1
 			
-			bledna_odpowiedz2 = ceil(liczba) # Zaokrąglenie w górę
+			bledna_odpowiedz2 = ceil(liczba)
 			if bledna_odpowiedz2 == poprawna_odpowiedz:
 				bledna_odpowiedz2 = poprawna_odpowiedz - 1
 		
-		3, 4: # do części dziesiętnych lub setnych
-			# Typowe błędy: zaokrąglenie w złą stronę lub o jedno miejsce za mało/dużo
+		3, 4:
 			var blad_kierunku = 0.1 if indeks_typu == 3 else 0.01
 			
-			# Pierwsza błędna odpowiedź - zaokrąglenie w dół lub o jedno miejsce za dużo
 			if randi() % 2 == 0:
 				bledna_odpowiedz1 = snapped(floor(liczba * (10 if indeks_typu == 3 else 100)) / (10.0 if indeks_typu == 3 else 100.0), blad_kierunku)
 			else:
 				bledna_odpowiedz1 = snapped(round(liczba * (100 if indeks_typu == 3 else 1000)) / (100.0 if indeks_typu == 3 else 1000.0), blad_kierunku / 10)
 			
-			# Upewniamy się, że odpowiedź jest błędna
 			if bledna_odpowiedz1 == poprawna_odpowiedz:
 				bledna_odpowiedz1 = poprawna_odpowiedz + blad_kierunku
 			
-			# Druga błędna odpowiedź - zaokrąglenie w górę lub o jedno miejsce za mało
 			if randi() % 2 == 0:
 				bledna_odpowiedz2 = snapped(ceil(liczba * (10 if indeks_typu == 3 else 100)) / (10.0 if indeks_typu == 3 else 100.0), blad_kierunku)
 			else:
 				bledna_odpowiedz2 = snapped(round(liczba * (1 if indeks_typu == 3 else 10)) / (1.0 if indeks_typu == 3 else 10.0), blad_kierunku * 10)
 			
-			# Upewniamy się, że odpowiedź jest błędna i różna od pierwszej błędnej
 			if bledna_odpowiedz2 == poprawna_odpowiedz or bledna_odpowiedz2 == bledna_odpowiedz1:
 				bledna_odpowiedz2 = poprawna_odpowiedz - blad_kierunku
 	
-	# Formatujemy odpowiedzi z części ułamkowej (zamieniamy kropkę na przecinek)
 	if indeks_typu == 3 or indeks_typu == 4:
 		poprawna_odpowiedz = str(poprawna_odpowiedz).replace(".", ",")
 		bledna_odpowiedz1 = str(bledna_odpowiedz1).replace(".", ",")
 		bledna_odpowiedz2 = str(bledna_odpowiedz2).replace(".", ",")
 	else:
-		# Konwertujemy na string dla porównania
 		poprawna_odpowiedz = str(poprawna_odpowiedz)
 		bledna_odpowiedz1 = str(bledna_odpowiedz1)
 		bledna_odpowiedz2 = str(bledna_odpowiedz2)
 	
-	# Ostateczne sprawdzenie, czy obie błędne odpowiedzi różnią się od siebie
 	if bledna_odpowiedz1 == bledna_odpowiedz2:
-		# Jeśli odpowiedzi są takie same, modyfikujemy jedną z nich
-		if indeks_typu <= 1:  # dla setek lub dziesiątek
+		if indeks_typu <= 1:
 			var mnoznik = 100 if indeks_typu == 0 else 10
 			bledna_odpowiedz2 = str(int(bledna_odpowiedz2) + mnoznik * 2)
-		elif indeks_typu == 2:  # dla jedności
+		elif indeks_typu == 2:
 			bledna_odpowiedz2 = str(int(bledna_odpowiedz2) + 2)
-		else:  # dla części dziesiętnych lub setnych
+		else:
 			var wartosc = float(bledna_odpowiedz2.replace(",", "."))
 			var nowa_wartosc = wartosc + (0.2 if indeks_typu == 3 else 0.02)
 			bledna_odpowiedz2 = str(nowa_wartosc).replace(".", ",")
 	
-	# Upewniamy się, że żadna z błędnych odpowiedzi nie jest równa poprawnej
 	if bledna_odpowiedz1 == poprawna_odpowiedz:
-		if indeks_typu <= 1:  # dla setek lub dziesiątek
+		if indeks_typu <= 1:
 			var mnoznik = 100 if indeks_typu == 0 else 10
 			bledna_odpowiedz1 = str(int(poprawna_odpowiedz) + mnoznik)
-		elif indeks_typu == 2:  # dla jedności
+		elif indeks_typu == 2:
 			bledna_odpowiedz1 = str(int(poprawna_odpowiedz) + 1)
-		else:  # dla części dziesiętnych lub setnych
+		else:
 			var wartosc = float(poprawna_odpowiedz.replace(",", "."))
 			var nowa_wartosc = wartosc + (0.1 if indeks_typu == 3 else 0.01)
 			bledna_odpowiedz1 = str(nowa_wartosc).replace(".", ",")
 	
 	if bledna_odpowiedz2 == poprawna_odpowiedz:
-		if indeks_typu <= 1:  # dla setek lub dziesiątek
+		if indeks_typu <= 1:
 			var mnoznik = 100 if indeks_typu == 0 else 10
 			bledna_odpowiedz2 = str(int(poprawna_odpowiedz) - mnoznik)
-		elif indeks_typu == 2:  # dla jedności
+		elif indeks_typu == 2:
 			bledna_odpowiedz2 = str(int(poprawna_odpowiedz) - 1)
-		else:  # dla części dziesiętnych lub setnych
+		else:
 			var wartosc = float(poprawna_odpowiedz.replace(",", "."))
 			var nowa_wartosc = wartosc - (0.1 if indeks_typu == 3 else 0.01)
 			bledna_odpowiedz2 = str(nowa_wartosc).replace(".", ",")
 	
-	# Zwracanie pytania w formacie ['Question','GOOD','BAD','BAD']
 	return [pytanie, poprawna_odpowiedz, bledna_odpowiedz1, bledna_odpowiedz2]
 
-# Funkcja pomocnicza do konwersji liczby na znaki Unicode dla wykładnika
 func liczba_na_wykladnik_unicode(liczba):
 	var cyfry_unicode = {
 		"0": "⁰",
@@ -481,78 +900,57 @@ func liczba_na_wykladnik_unicode(liczba):
 	
 	return wynik
 
-# Funkcja generująca pytanie o potęgi z wykładnikiem naturalnym
 func generuj_pytanie_potegi():
-	# Określamy zakres podstawy i wykładnika
 	var min_podstawa = -10
 	var max_podstawa = 10
-	var min_wykladnik = 2  # Startujemy od wykładnika 2, bo potęga pierwsza jest trywialna
-	var max_wykladnik = 4  # Ograniczamy do 4, żeby wyniki nie były zbyt duże
+	var min_wykladnik = 2
+	var max_wykladnik = 4
 	
-	# Generujemy podstawę i wykładnik
 	var podstawa = randi() % (max_podstawa - min_podstawa + 1) + min_podstawa
 	var wykladnik = randi() % (max_wykladnik - min_wykladnik + 1) + min_wykladnik
 	
-	# Specjalne przypadki: unikamy 0⁰ (jest to wartość umowna 1, ale może być myląca)
 	if podstawa == 0:
-		podstawa = randi() % 10 + 1  # Losujemy liczbę od 1 do 10 zamiast 0
+		podstawa = randi() % 10 + 1
 	
-	# Obliczamy poprawną odpowiedź
 	var poprawna_odpowiedz = pow(podstawa, wykladnik)
 	
-	# Konstruujemy pytanie
 	var pytanie
 	var wykladnik_unicode = liczba_na_wykladnik_unicode(wykladnik)
 	
-	# Szczególne przypadki formatowania
 	if podstawa < 0:
 		pytanie = "Ile wynosi (" + str(podstawa) + ")" + wykladnik_unicode + "?"
 	else:
 		pytanie = "Ile wynosi " + str(podstawa) + wykladnik_unicode + "?"
 	
-	# Generujemy błędne odpowiedzi
 	var bledna_odpowiedz1
 	var bledna_odpowiedz2
 	
-	# Typowe błędy przy potęgach:
-	
-	# 1. Mnożenie podstawy przez wykładnik zamiast potęgowania
 	bledna_odpowiedz1 = podstawa * wykladnik
 	
-	# 2. Niewłaściwe zastosowanie reguł potęgowania dla liczb ujemnych
-	# lub pomylenie znaku przy parzystym/nieparzystym wykładniku
 	if podstawa < 0 and wykladnik % 2 == 0:
-		# Dla ujemnej podstawy i parzystego wykładnika, typowy błąd to wynik ujemny
 		bledna_odpowiedz2 = -poprawna_odpowiedz
 	elif podstawa < 0 and wykladnik % 2 == 1:
-		# Dla ujemnej podstawy i nieparzystego wykładnika, typowy błąd to wynik dodatni
 		bledna_odpowiedz2 = -poprawna_odpowiedz
 	else:
-		# Inny typowy błąd: obliczenie potęgi o jeden mniejszej lub większej
 		if randi() % 2 == 0:
 			bledna_odpowiedz2 = pow(podstawa, wykladnik - 1)
 		else:
 			bledna_odpowiedz2 = pow(podstawa, wykladnik + 1)
 	
-	# Sprawdzamy, czy błędne odpowiedzi nie są takie same jak poprawna
 	if bledna_odpowiedz1 == poprawna_odpowiedz:
 		bledna_odpowiedz1 = poprawna_odpowiedz + (1 if poprawna_odpowiedz >= 0 else -1)
 	
 	if bledna_odpowiedz2 == poprawna_odpowiedz:
 		bledna_odpowiedz2 = poprawna_odpowiedz + (2 if poprawna_odpowiedz >= 0 else -2)
 	
-	# Sprawdzamy, czy błędne odpowiedzi nie są takie same
 	if bledna_odpowiedz1 == bledna_odpowiedz2:
 		bledna_odpowiedz2 = bledna_odpowiedz1 + (3 if bledna_odpowiedz1 >= 0 else -3)
 	
-	# Jeśli któraś z błędnych odpowiedzi po modyfikacji stałaby się równa poprawnej
 	if bledna_odpowiedz2 == poprawna_odpowiedz:
 		bledna_odpowiedz2 = poprawna_odpowiedz * 2
 	
-	# Konwertujemy odpowiedzi na stringi
 	poprawna_odpowiedz = str(poprawna_odpowiedz)
 	bledna_odpowiedz1 = str(bledna_odpowiedz1)
 	bledna_odpowiedz2 = str(bledna_odpowiedz2)
 	
-	# Zwracanie pytania w formacie ['Question','GOOD','BAD','BAD']
 	return [pytanie, poprawna_odpowiedz, bledna_odpowiedz1, bledna_odpowiedz2]

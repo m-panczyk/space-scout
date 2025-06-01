@@ -1,0 +1,216 @@
+{
+  "angielski": {
+    "10-11lat": {
+      "colors_numbers": [
+        {
+          "pytanie": "What color is the sun?",
+          "poprawna": "Yellow",
+          "bledne": ["Blue", "Green"]
+        },
+        {
+          "pytanie": "How do you say '5' in English?",
+          "poprawna": "Five",
+          "bledne": ["Four", "Six"]
+        },
+        {
+          "pytanie": "What color is grass?",
+          "poprawna": "Green",
+          "bledne": ["Red", "Purple"]
+        },
+        {
+          "pytanie": "How do you write '10' in words?",
+          "poprawna": "Ten",
+          "bledne": ["Eleven", "Nine"]
+        },
+        {
+          "pytanie": "What color is snow?",
+          "poprawna": "White",
+          "bledne": ["Black", "Gray"]
+        },
+        {
+          "pytanie": "What comes after seven?",
+          "poprawna": "Eight",
+          "bledne": ["Six", "Nine"]
+        },
+        {
+          "pytanie": "What color is the sky?",
+          "poprawna": "Blue",
+          "bledne": ["Yellow", "Red"]
+        },
+        {
+          "pytanie": "How many fingers do you have?",
+          "poprawna": "Ten",
+          "bledne": ["Eight", "Twelve"]
+        },
+        {
+          "pytanie": "What color do you get when you mix red and yellow?",
+          "poprawna": "Orange",
+          "bledne": ["Purple", "Green"]
+        },
+        {
+          "pytanie": "What number comes before twenty?",
+          "poprawna": "Nineteen",
+          "bledne": ["Eighteen", "Twenty-one"]
+        }
+      ],
+      "simple_sentences": [
+        {
+          "pytanie": "How do you say 'Cześć' in English?",
+          "poprawna": "Hello",
+          "bledne": ["Goodbye", "Thank you"]
+        },
+        {
+          "pytanie": "What does 'cat' mean?",
+          "poprawna": "Kot",
+          "bledne": ["Pies", "Ptak"]
+        },
+        {
+          "pytanie": "How do you say 'Dziękuję' in English?",
+          "poprawna": "Thank you",
+          "bledne": ["Please", "Sorry"]
+        },
+        {
+          "pytanie": "What does 'dog' mean?",
+          "poprawna": "Pies",
+          "bledne": ["Kot", "Koń"]
+        },
+        {
+          "pytanie": "How do you ask for someone's name?",
+          "poprawna": "What's your name?",
+          "bledne": ["How are you?", "Where are you?"]
+        },
+        {
+          "pytanie": "What does 'book' mean?",
+          "poprawna": "Książka",
+          "bledne": ["Długopis", "Zeszyt"]
+        },
+        {
+          "pytanie": "How do you say 'Tak' in English?",
+          "poprawna": "Yes",
+          "bledne": ["No", "Maybe"]
+        },
+        {
+          "pytanie": "What does 'water' mean?",
+          "poprawna": "Woda",
+          "bledne": ["Mleko", "Sok"]
+        },
+        {
+          "pytanie": "How do you say goodbye?",
+          "poprawna": "Goodbye",
+          "bledne": ["Hello", "Please"]
+        },
+        {
+          "pytanie": "What does 'apple' mean?",
+          "poprawna": "Jabłko",
+          "bledne": ["Pomarańcza", "Banan"]
+        }
+      ]
+    },
+    "12-13lat": {
+      "vocabulary": [
+        {
+          "pytanie": "What does 'beautiful' mean?",
+          "poprawna": "Piękny",
+          "bledne": ["Brzydki", "Duży"]
+        },
+        {
+          "pytanie": "How do you say 'szkoła' in English?",
+          "poprawna": "School",
+          "bledne": ["Hospital", "Library"]
+        },
+        {
+          "pytanie": "What does 'dangerous' mean?",
+          "poprawna": "Niebezpieczny",
+          "bledne": ["Bezpieczny", "Śmieszny"]
+        },
+        {
+          "pytanie": "How do you say 'lekarz' in English?",
+          "poprawna": "Doctor",
+          "bledne": ["Teacher", "Nurse"]
+        },
+        {
+          "pytanie": "What does 'expensive' mean?",
+          "poprawna": "Drogi",
+          "bledne": ["Tani", "Nowy"]
+        },
+        {
+          "pytanie": "How do you say 'podróż' in English?",
+          "poprawna": "Journey",
+          "bledne": ["Work", "Study"]
+        },
+        {
+          "pytanie": "What does 'excited' mean?",
+          "poprawna": "Podekscytowany",
+          "bledne": ["Zmęczony", "Smutny"]
+        },
+        {
+          "pytanie": "How do you say 'środowisko' in English?",
+          "poprawna": "Environment",
+          "bledne": ["Weather", "Climate"]
+        },
+        {
+          "pytanie": "What does 'ancient' mean?",
+          "poprawna": "Starożytny",
+          "bledne": ["Nowoczesny", "Średni"]
+        },
+        {
+          "pytanie": "How do you say 'wynalazek' in English?",
+          "poprawna": "Invention",
+          "bledne": ["Discovery", "Creation"]
+        }
+      ],
+      "grammar": [
+        {
+          "pytanie": "What is the past tense of 'go'?",
+          "poprawna": "Went",
+          "bledne": ["Goed", "Gone"]
+        },
+        {
+          "pytanie": "Which article goes before vowel sounds?",
+          "poprawna": "An",
+          "bledne": ["A", "The"]
+        },
+        {
+          "pytanie": "What is the plural of 'child'?",
+          "poprawna": "Children",
+          "bledne": ["Childs", "Childrens"]
+        },
+        {
+          "pytanie": "Which is correct: 'I am' or 'I is'?",
+          "poprawna": "I am",
+          "bledne": ["I is", "I are"]
+        },
+        {
+          "pytanie": "What is the past tense of 'eat'?",
+          "poprawna": "Ate",
+          "bledne": ["Eated", "Eaten"]
+        },
+        {
+          "pytanie": "Which pronoun replaces 'the book'?",
+          "poprawna": "It",
+          "bledne": ["He", "She"]
+        },
+        {
+          "pytanie": "What is the comparative form of 'good'?",
+          "poprawna": "Better",
+          "bledne": ["Gooder", "Best"]
+        },
+        {
+          "pytanie": "Which is correct: 'There is' or 'There are' for one thing?",
+          "poprawna": "There is",
+          "bledne": ["There are", "There be"]
+        },
+        {
+          "pytanie": "What is the past tense of 'run'?",
+          "poprawna": "Ran",
+          "bledne": ["Runned", "Run"]
+        },
+        {
+          "pytanie": "Which preposition do we use with time: 'at', 'in', or 'on'?",
+          "poprawna": "All depend on context",
+          "bledne": ["Only at", "Only in"]
+        }
+      ]
+    }
+  }
+}

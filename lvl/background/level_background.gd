@@ -27,7 +27,6 @@ var lvl:
 		set_texture_for_lvl()
 
 func _ready() -> void:
-	# Initialize from SaveData if available
 	if SaveData.bg_speed != null:
 		_speed = SaveData.bg_speed
 	if SaveData.bg_type != null:
@@ -64,8 +63,6 @@ func set_texture_for_lvl() -> void:
 	
 func update_size() -> void:
 	screen_size = GlobalSettings.virtual_resolution
-	print(screen_size)
-	print(texture.get_size())
 
 	position.x = screen_size.x/2
 	position.y = screen_size.y/2
