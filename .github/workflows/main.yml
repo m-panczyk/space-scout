@@ -278,7 +278,7 @@ jobs:
               <ul class="build-list">
                   <li>🐧 <a href="linux/$EXPORT_NAME.x86_64">Linux Build</a><span class="file-size">(.x86_64)</span></li>
                   <li>🪟 <a href="windows/$EXPORT_NAME.exe">Windows Build</a><span class="file-size">(.exe)</span></li>
-                  <li>🍎 <a href="mac/$EXPORT_NAME.zip">macOS Build</a><span class="file-size">(.zip)</span></li>
+                  <li>🍎 <a href="mac/$EXPORT_NAME.app">macOS Build</a><span class="file-size">(.app)</span></li>
                   <li>📱 <a href="android/$EXPORT_NAME.apk">Android Build</a><span class="file-size">(.apk)</span></li>
               </ul>
               <a href="../" class="back-link">← Back to Web Game</a>
