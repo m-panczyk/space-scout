@@ -110,18 +110,48 @@ jobs:
         run: |
           godot --headless --verbose --export-release "macOS" "./build/mac/$EXPORT_NAME.app"
 
-      - name: Debug - List generated files
+      - name: Debug - Verify .app bundle
         run: |
           echo "Contents of build/mac:"
           ls -la build/mac/ || echo "Directory doesn't exist"
-          echo "All build contents:"
-          find build/ -type f || echo "No build directory"
+          if [ -d "build/mac/$EXPORT_NAME.app" ]; then
+            echo "✅ .app bundle created successfully!"
+            ls -la "build/mac/$EXPORT_NAME.app/"
+          else
+            echo "❌ No .app bundle found"
+            exit 1
+          fi
+
+      - name: Create DMG Package
+        run: |
+          # Create a temporary directory for DMG contents
+          mkdir -p dmg_temp
+          
+          # Copy the .app bundle to temp directory
+          cp -R "build/mac/$EXPORT_NAME.app" dmg_temp/
+          
+          # Create Applications symlink for easy installation
+          ln -s /Applications dmg_temp/Applications
+          
+          # Create the DMG
+          hdiutil create -volname "Space Scout" \
+                         -srcfolder dmg_temp \
+                         -ov \
+                         -format UDZO \
+                         "build/mac/$EXPORT_NAME.dmg"
+          
+          # Clean up temp directory
+          rm -rf dmg_temp
+          
+          # Verify DMG was created
+          echo "DMG created:"
+          ls -la "build/mac/$EXPORT_NAME.dmg"
 
       - name: Upload Mac Artifact
         uses: actions/upload-artifact@v4
         with:
           name: mac-build
-          path: build/mac/
+          path: build/mac/*.dmg
           retention-days: 5
 
   export-android:
@@ -285,7 +315,7 @@ jobs:
               <ul class="build-list">
                   <li>🐧 <a href="linux/$EXPORT_NAME.x86_64">Linux Build</a><span class="file-size">(.x86_64)</span></li>
                   <li>🪟 <a href="windows/$EXPORT_NAME.exe">Windows Build</a><span class="file-size">(.exe)</span></li>
-                  <li>🍎 <a href="mac/$EXPORT_NAME.app">macOS Build</a><span class="file-size">(.app)</span></li>
+                  <li>🍎 <a href="mac/$EXPORT_NAME.dmg">macOS Build</a><span class="file-size">(.dmg)</span></li>
                   <li>📱 <a href="android/$EXPORT_NAME.apk">Android Build</a><span class="file-size">(.apk)</span></li>
               </ul>
               <a href="../" class="back-link">← Back to Web Game</a>
