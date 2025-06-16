@@ -3,7 +3,7 @@ class_name GameLevel
 
 @export var bg_type = "0"
 @export var bg_speed = .1
-@export var fall_speed = 100
+@export var fall_speed = 1000
 
 var env:EnvGenerator = null
 var lvl_points = 0
@@ -26,10 +26,6 @@ func end_lvl_check(new_points:int):
 		lvl_points = 0
 		env.queue_free()
 		env = null
-func end_lvl(success:bool):
-	EventBus.emit("end_lvl",success)
-	env.queue_free()
-	env = null
 
 		
 func start_lvl(punished:bool):

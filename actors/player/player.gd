@@ -125,4 +125,5 @@ func fire_weapon():
 		# No need to update SaveData.energy here as the setter handles it
 
 func died():
-	EventBus.emit("game_over",false)
+	health = max_health
+	#EventBus.emit("game_over",false)
