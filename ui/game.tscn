@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cgwlalfbkx2s5"]
+[gd_scene load_steps=13 format=3 uid="uid://ddfdb8ulpy5f"]
 
 [ext_resource type="Script" uid="uid://cf61d3xem4xv5" path="res://ui/three_way_display.gd" id="1_rg8gd"]
 [ext_resource type="Script" uid="uid://d27w00i7wny55" path="res://ui/three_way_camera.gd" id="2_af5le"]

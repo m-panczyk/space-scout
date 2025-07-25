@@ -1,134 +1,86 @@
-[gd_scene load_steps=13 format=3 uid="uid://ch47nd3iei8k7"]
+[gd_scene load_steps=20 format=3 uid="uid://cgwlalfbkx2s5"]
 
-[ext_resource type="Script" uid="uid://beaf3hr6264to" path="res://game.gd" id="1_80nbo"]
-[ext_resource type="PackedScene" uid="uid://bs1hu7lpdivca" path="res://lvl/lvl.tscn" id="2_iotsf"]
-[ext_resource type="Script" uid="uid://b8aclcm6ewxmq" path="res://ui/HUD/heath_bar.gd" id="3_fc0e3"]
-[ext_resource type="PackedScene" uid="uid://bh5o0r5ut5y0d" path="res://lvl/map/map.tscn" id="3_ryrav"]
-[ext_resource type="Script" uid="uid://bhda77d0hjhi2" path="res://ui/right_side.gd" id="4_mfdv2"]
-[ext_resource type="Texture2D" uid="uid://ca4ax3by7oabn" path="res://ui/img/metal.png" id="5_7jktm"]
-[ext_resource type="Script" uid="uid://d1pnprmds7e2g" path="res://ui/zoom_slider.gd" id="6_eow3j"]
-[ext_resource type="Script" uid="uid://chmfum2qqdak5" path="res://ui/point_count.gd" id="8_hve3p"]
-[ext_resource type="PackedScene" uid="uid://u83wwivbovfd" path="res://ui/menu/menu_container.tscn" id="8_j5wjh"]
-[ext_resource type="Script" uid="uid://orvcs75vjfdf" path="res://ui/menu/pause_panel.gd" id="8_vef74"]
-[ext_resource type="Script" uid="uid://clm5y8mhfbomc" path="res://lvl/question.gd" id="10_lc2xo"]
-[ext_resource type="Script" uid="uid://cpmgc4pk12uyt" path="res://ui/touch_esc.gd" id="12_iotsf"]
+[ext_resource type="Script" uid="uid://cf61d3xem4xv5" path="res://ui/three_way_display.gd" id="1_rg8gd"]
+[ext_resource type="Script" uid="uid://d27w00i7wny55" path="res://ui/three_way_camera.gd" id="2_af5le"]
+[ext_resource type="Script" uid="uid://knh3ligoqkyo" path="res://ui/three_way_panel.gd" id="3_af5le"]
+[ext_resource type="Script" uid="uid://b8aclcm6ewxmq" path="res://ui/HUD/heath_bar.gd" id="4_a7i5o"]
+[ext_resource type="PackedScene" uid="uid://bs1hu7lpdivca" path="res://lvl/lvl.tscn" id="4_p50ye"]
+[ext_resource type="Script" uid="uid://chmfum2qqdak5" path="res://ui/point_count.gd" id="5_v2ajr"]
+[ext_resource type="Script" uid="uid://clm5y8mhfbomc" path="res://lvl/question.gd" id="6_ombk5"]
+[ext_resource type="PackedScene" uid="uid://bh5o0r5ut5y0d" path="res://lvl/map/map.tscn" id="8_2a488"]
+[ext_resource type="Script" uid="uid://d1pnprmds7e2g" path="res://ui/zoom_slider.gd" id="9_amnc3"]
+[ext_resource type="Shader" uid="uid://cga5xkvehx4xq" path="res://ui/retrowave.gdshader" id="10_hve3p"]
+[ext_resource type="Shader" uid="uid://bpypf5ohe3reh" path="res://ui/space.gdshader" id="11_mfdv2"]
 
-[node name="Game" type="ColorRect"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
-script = ExtResource("1_80nbo")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mfdv2"]
+render_priority = 0
+shader = ExtResource("10_hve3p")
+shader_parameter/battery = 1.0
+shader_parameter/anchor = -0.5
+shader_parameter/speed_scale = 1.0
+shader_parameter/fov = 0.2
+shader_parameter/background_color = Vector4(0, 0.1, 0.2, 1)
+shader_parameter/grid_color = Vector4(1, 0.5, 1, 1)
 
-[node name="Center" type="SubViewportContainer" parent="." groups=["columns"]]
-layout_mode = 1
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -161.0
-offset_right = 536.0
-grow_horizontal = 2
-grow_vertical = 2
-stretch = true
+[sub_resource type="PlaneMesh" id="PlaneMesh_hve3p"]
+material = SubResource("ShaderMaterial_mfdv2")
+size = Vector2(200, 100)
 
-[node name="SubViewport" type="SubViewport" parent="Center"]
-handle_input_locally = false
-size = Vector2i(697, 1080)
-size_2d_override = Vector2i(1080, 1920)
-size_2d_override_stretch = true
-render_target_update_mode = 4
+[sub_resource type="ViewportTexture" id="ViewportTexture_p50ye"]
+viewport_path = NodePath("Panels/LeftPanel/PanelViewport")
 
-[node name="GameLevel" parent="Center/SubViewport" instance=ExtResource("2_iotsf")]
-unique_name_in_owner = true
+[sub_resource type="ViewportTexture" id="ViewportTexture_uu7im"]
+viewport_path = NodePath("Panels/CenterPanel/PanelViewport")
 
-[node name="LeftSide" type="TextureRect" parent="." groups=["columns"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 0.347222
-anchor_bottom = 1.0
-grow_vertical = 2
-texture = ExtResource("5_7jktm")
-expand_mode = 4
-metadata/_edit_use_anchors_ = true
+[sub_resource type="ViewportTexture" id="ViewportTexture_1ya7t"]
+viewport_path = NodePath("Panels/RightPanel/PanelViewport")
 
-[node name="RightSide" type="TextureRect" parent="." groups=["columns"]]
-layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 360.0
-grow_horizontal = 0
-grow_vertical = 2
-texture = ExtResource("5_7jktm")
-expand_mode = 4
-flip_h = true
-script = ExtResource("4_mfdv2")
+[sub_resource type="Environment" id="Environment_hve3p"]
 
-[node name="TextureRect" type="TextureRect" parent="RightSide"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-expand_mode = 1
+[sub_resource type="SphereMesh" id="SphereMesh_mfdv2"]
+radius = 100.0
+height = 100.0
+radial_segments = 32
 
-[node name="HexTileController" parent="RightSide/TextureRect" instance=ExtResource("3_ryrav")]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.158333
-anchor_top = 0.087963
-anchor_right = 0.733333
-anchor_bottom = 0.473148
-offset_bottom = 3.05176e-05
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iotsf"]
+shader = ExtResource("11_mfdv2")
+shader_parameter/bg_color = Color(0, 0, 0, 1)
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/bigStarSlow = 2.0
+shader_parameter/mediumStarSlow = 6.0
+shader_parameter/smallStarSlow = 8.0
+shader_parameter/smallStarAmount = 0.002
+shader_parameter/mediumStarAmount = 0.01
+shader_parameter/bigStarAmount = 0.02
 
-[node name="HSlider" type="HSlider" parent="RightSide/TextureRect"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.158333
-anchor_top = 0.473148
-anchor_right = 0.733333
-anchor_bottom = 0.487963
-grow_horizontal = 2
-grow_vertical = 0
-focus_mode = 1
-min_value = 0.1
-max_value = 1.0
-step = 0.1
-value = 0.1
-script = ExtResource("6_eow3j")
-metadata/_edit_use_anchors_ = true
+[node name="Game" type="Node3D"]
+script = ExtResource("1_rg8gd")
+metadata/_custom_type_script = "uid://cf61d3xem4xv5"
 
-[node name="StartLevelButton" type="Button" parent="RightSide/TextureRect"]
-unique_name_in_owner = true
-layout_mode = 2
-anchor_left = 0.638889
-anchor_top = 0.834259
-anchor_right = 0.755556
-anchor_bottom = 0.862963
-focus_mode = 1
-text = "GO!"
-metadata/_edit_use_anchors_ = true
+[node name="ThreeWayCamera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9.4959)
+current = true
+script = ExtResource("2_af5le")
+metadata/_custom_type_script = "uid://d27w00i7wny55"
 
-[node name="RightHide" type="Button" parent="RightSide"]
-visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 0.0944444
-anchor_bottom = 1.0
-grow_vertical = 2
-focus_mode = 1
-text = ">"
-metadata/_edit_use_anchors_ = true
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ThreeWayCamera3D"]
+transform = Transform3D(1, 0, -4.37114e-08, -4.37114e-08, 1.91069e-15, -1, 0, 1, 1.91069e-15, 0, 0, -50)
+mesh = SubResource("PlaneMesh_hve3p")
 
-[node name="HUD" type="TextureRect" parent="."]
+[node name="Panels" type="Node3D" parent="."]
+
+[node name="LeftPanel" type="Node3D" parent="Panels"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -11, 0, -2.71981)
+script = ExtResource("3_af5le")
+metadata/_custom_type_script = "uid://knh3ligoqkyo"
+
+[node name="PanelViewport" type="SubViewport" parent="Panels/LeftPanel"]
+transparent_bg = true
+size = Vector2i(1080, 1920)
+
+[node name="HUD" type="TextureRect" parent="Panels/LeftPanel/PanelViewport"]
 unique_name_in_owner = true
 clip_children = 2
-layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.0509259
 anchor_top = 0.0527778
@@ -137,7 +89,7 @@ anchor_bottom = 0.246296
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HUD"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panels/LeftPanel/PanelViewport/HUD"]
 modulate = Color(1, 1, 1, 0.878431)
 layout_mode = 1
 anchors_preset = -1
@@ -151,37 +103,37 @@ offset_right = -0.0960083
 offset_bottom = 0.0249939
 alignment = 1
 
-[node name="HealthBar2" type="ProgressBar" parent="HUD/VBoxContainer"]
+[node name="HealthBar2" type="ProgressBar" parent="Panels/LeftPanel/PanelViewport/HUD/VBoxContainer"]
 self_modulate = Color(0, 0.643305, 0.0462931, 1)
 layout_mode = 2
 size_flags_vertical = 3
 step = 1.0
 rounded = true
 show_percentage = false
-script = ExtResource("3_fc0e3")
+script = ExtResource("4_a7i5o")
 
-[node name="EnergyBar2" type="ProgressBar" parent="HUD/VBoxContainer"]
+[node name="EnergyBar2" type="ProgressBar" parent="Panels/LeftPanel/PanelViewport/HUD/VBoxContainer"]
 self_modulate = Color(0, 0.254902, 0.909804, 1)
 clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
 show_percentage = false
-script = ExtResource("3_fc0e3")
+script = ExtResource("4_a7i5o")
 data_type = "energy"
 
-[node name="PointCount" type="Label" parent="HUD/VBoxContainer"]
+[node name="PointCount" type="Label" parent="Panels/LeftPanel/PanelViewport/HUD/VBoxContainer"]
 layout_mode = 2
 text = "0 pts"
 horizontal_alignment = 2
-script = ExtResource("8_hve3p")
+script = ExtResource("5_v2ajr")
 
-[node name="PauseSide" type="Button" parent="HUD/VBoxContainer"]
+[node name="PauseSide" type="Button" parent="Panels/LeftPanel/PanelViewport/HUD/VBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "<<<"
 
-[node name="Question" type="RichTextLabel" parent="HUD" groups=["PORTALS"]]
+[node name="Question" type="RichTextLabel" parent="Panels/LeftPanel/PanelViewport/HUD" groups=["PORTALS"]]
 visible = false
 z_index = 1
 layout_mode = 1
@@ -202,9 +154,9 @@ text = "Question
 "
 fit_content = true
 horizontal_alignment = 1
-script = ExtResource("10_lc2xo")
+script = ExtResource("6_ombk5")
 
-[node name="ColorRect" type="ColorRect" parent="HUD/Question"]
+[node name="ColorRect" type="ColorRect" parent="Panels/LeftPanel/PanelViewport/HUD/Question"]
 visible = false
 show_behind_parent = true
 layout_mode = 1
@@ -215,7 +167,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HUD/Question"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panels/LeftPanel/PanelViewport/HUD/Question"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -224,66 +176,110 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="Answer1" type="Label" parent="HUD/Question/HBoxContainer"]
+[node name="Answer1" type="Label" parent="Panels/LeftPanel/PanelViewport/HUD/Question/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.0117647, 1, 1)
 text = "GOOD"
 horizontal_alignment = 1
 
-[node name="Answer2" type="Label" parent="HUD/Question/HBoxContainer"]
+[node name="Answer2" type="Label" parent="Panels/LeftPanel/PanelViewport/HUD/Question/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0, 0.784314, 0, 1)
 text = "BAD"
 horizontal_alignment = 1
 
-[node name="Answer3" type="Label" parent="HUD/Question/HBoxContainer"]
+[node name="Answer3" type="Label" parent="Panels/LeftPanel/PanelViewport/HUD/Question/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.760784, 1, 0.0509804, 1)
 text = "BAD"
 horizontal_alignment = 1
 
-[node name="PausePanel" type="ColorRect" parent="."]
+[node name="PanelSprite" type="Sprite3D" parent="Panels/LeftPanel"]
+texture = SubResource("ViewportTexture_p50ye")
+
+[node name="CenterPanel" type="Node3D" parent="Panels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.71981)
+script = ExtResource("3_af5le")
+metadata/_custom_type_script = "uid://knh3ligoqkyo"
+
+[node name="PanelViewport" type="SubViewport" parent="Panels/CenterPanel"]
+transparent_bg = true
+size = Vector2i(1080, 1920)
+size_2d_override_stretch = true
+
+[node name="GameLevel" parent="Panels/CenterPanel/PanelViewport" instance=ExtResource("4_p50ye")]
 unique_name_in_owner = true
-process_mode = 3
-visible = false
-top_level = true
-z_index = 1
-layout_mode = 1
+
+[node name="PanelSprite" type="Sprite3D" parent="Panels/CenterPanel"]
+texture = SubResource("ViewportTexture_uu7im")
+
+[node name="RightPanel" type="Node3D" parent="Panels"]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 11, 0, -2.72)
+script = ExtResource("3_af5le")
+metadata/_custom_type_script = "uid://knh3ligoqkyo"
+
+[node name="PanelViewport" type="SubViewport" parent="Panels/RightPanel"]
+transparent_bg = true
+size = Vector2i(1080, 1920)
+size_2d_override_stretch = true
+
+[node name="TextureRect" type="TextureRect" parent="Panels/RightPanel/PanelViewport"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.784314)
-script = ExtResource("8_vef74")
+expand_mode = 1
 
-[node name="MenuContainer" parent="PausePanel" instance=ExtResource("8_j5wjh")]
-layout_mode = 1
-
-[node name="TouchEsc" type="Button" parent="."]
-process_mode = 3
-top_level = true
+[node name="HexTileController" parent="Panels/RightPanel/PanelViewport/TextureRect" instance=ExtResource("8_2a488")]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.944444
-anchor_top = 0.944444
-anchor_right = 0.990741
-anchor_bottom = 0.990741
-grow_horizontal = 0
+anchor_left = 0.158333
+anchor_top = 0.087963
+anchor_right = 0.733333
+anchor_bottom = 0.473148
+offset_bottom = 3.05176e-05
+
+[node name="HSlider" type="HSlider" parent="Panels/RightPanel/PanelViewport/TextureRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.158333
+anchor_top = 0.473148
+anchor_right = 0.733333
+anchor_bottom = 0.487963
+grow_horizontal = 2
 grow_vertical = 0
 focus_mode = 1
-text = "ESC"
-script = ExtResource("12_iotsf")
+min_value = 0.1
+max_value = 1.0
+step = 0.1
+value = 0.1
+script = ExtResource("9_amnc3")
 metadata/_edit_use_anchors_ = true
 
-[connection signal="resized" from="RightSide" to="RightSide" method="_on_resized"]
-[connection signal="value_changed" from="RightSide/TextureRect/HSlider" to="RightSide/TextureRect/HSlider" method="_on_value_changed"]
-[connection signal="pressed" from="RightSide/TextureRect/StartLevelButton" to="." method="_on_start_level_button_pressed"]
-[connection signal="pressed" from="RightSide/RightHide" to="RightSide" method="_on_right_hide_pressed"]
-[connection signal="pressed" from="HUD/VBoxContainer/PauseSide" to="." method="_on_pause_side_pressed"]
-[connection signal="button_down" from="TouchEsc" to="TouchEsc" method="_on_button_down"]
-[connection signal="button_up" from="TouchEsc" to="TouchEsc" method="_on_button_up"]
-[connection signal="pressed" from="TouchEsc" to="TouchEsc" method="_on_pressed"]
+[node name="StartLevelButton" type="Button" parent="Panels/RightPanel/PanelViewport/TextureRect"]
+unique_name_in_owner = true
+layout_mode = 2
+anchor_left = 0.638889
+anchor_top = 0.834259
+anchor_right = 0.755556
+anchor_bottom = 0.862963
+focus_mode = 1
+text = "GO!"
+metadata/_edit_use_anchors_ = true
+
+[node name="PanelSprite" type="Sprite3D" parent="Panels/RightPanel"]
+texture = SubResource("ViewportTexture_1ya7t")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_hve3p")
+
+[node name="BackgroundSphere" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("SphereMesh_mfdv2")
+surface_material_override/0 = SubResource("ShaderMaterial_iotsf")
+
+[connection signal="value_changed" from="Panels/RightPanel/PanelViewport/TextureRect/HSlider" to="Panels/RightPanel/PanelViewport/TextureRect/HSlider" method="_on_value_changed"]

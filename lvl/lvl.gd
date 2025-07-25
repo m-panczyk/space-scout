@@ -3,7 +3,7 @@ class_name GameLevel
 
 @export var bg_type = "0"
 @export var bg_speed = .1
-@export var fall_speed = 1000
+@export var fall_speed = 10
 
 var env:EnvGenerator = null
 var lvl_points = 0
@@ -32,7 +32,7 @@ func start_lvl(punished:bool):
 	max_level_points = 100/SaveData.game_progress
 	bg.lvl = (str(randi_range(1,34)))
 	env = EnvGenerator.new()
-	env.base_speed = fall_speed
+	env.base_speed = fall_speed*SaveData.game_progress
 	lvl_points = 0
 	add_child(env)
 	

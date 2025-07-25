@@ -35,7 +35,7 @@ func setup_spawn_points() -> void:
 	var end_pos = Vector2(GlobalSettings.virtual_resolution.x, 0)
 	spawn_points = []
 	
-	for i in range(1, 6):
+	for i in range(0, 7):
 		var point = start_pos + (end_pos - start_pos) * i / 6.0
 		spawn_points.append(point)
 
