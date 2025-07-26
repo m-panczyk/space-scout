@@ -1,30 +1,15 @@
-[gd_scene load_steps=20 format=3 uid="uid://cgwlalfbkx2s5"]
+[gd_scene load_steps=17 format=3 uid="uid://cgwlalfbkx2s5"]
 
 [ext_resource type="Script" uid="uid://cf61d3xem4xv5" path="res://ui/three_way_display.gd" id="1_rg8gd"]
 [ext_resource type="Script" uid="uid://d27w00i7wny55" path="res://ui/three_way_camera.gd" id="2_af5le"]
 [ext_resource type="Script" uid="uid://knh3ligoqkyo" path="res://ui/three_way_panel.gd" id="3_af5le"]
+[ext_resource type="Shader" uid="uid://bst1invixnai2" path="res://retrowave_sky.gdshader" id="3_mfdv2"]
 [ext_resource type="Script" uid="uid://b8aclcm6ewxmq" path="res://ui/HUD/heath_bar.gd" id="4_a7i5o"]
 [ext_resource type="PackedScene" uid="uid://bs1hu7lpdivca" path="res://lvl/lvl.tscn" id="4_p50ye"]
 [ext_resource type="Script" uid="uid://chmfum2qqdak5" path="res://ui/point_count.gd" id="5_v2ajr"]
 [ext_resource type="Script" uid="uid://clm5y8mhfbomc" path="res://lvl/question.gd" id="6_ombk5"]
 [ext_resource type="PackedScene" uid="uid://bh5o0r5ut5y0d" path="res://lvl/map/map.tscn" id="8_2a488"]
 [ext_resource type="Script" uid="uid://d1pnprmds7e2g" path="res://ui/zoom_slider.gd" id="9_amnc3"]
-[ext_resource type="Shader" uid="uid://cga5xkvehx4xq" path="res://ui/retrowave.gdshader" id="10_hve3p"]
-[ext_resource type="Shader" uid="uid://bpypf5ohe3reh" path="res://ui/space.gdshader" id="11_mfdv2"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mfdv2"]
-render_priority = 0
-shader = ExtResource("10_hve3p")
-shader_parameter/battery = 1.0
-shader_parameter/anchor = -0.5
-shader_parameter/speed_scale = 1.0
-shader_parameter/fov = 0.2
-shader_parameter/background_color = Vector4(0, 0.1, 0.2, 1)
-shader_parameter/grid_color = Vector4(1, 0.5, 1, 1)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_hve3p"]
-material = SubResource("ShaderMaterial_mfdv2")
-size = Vector2(200, 100)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_p50ye"]
 viewport_path = NodePath("Panels/LeftPanel/PanelViewport")
@@ -35,23 +20,33 @@ viewport_path = NodePath("Panels/CenterPanel/PanelViewport")
 [sub_resource type="ViewportTexture" id="ViewportTexture_1ya7t"]
 viewport_path = NodePath("Panels/RightPanel/PanelViewport")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mfdv2"]
+shader = ExtResource("3_mfdv2")
+shader_parameter/battery = 1.0
+shader_parameter/anchor = -0.5
+shader_parameter/speed_scale = 0.35
+shader_parameter/grid_scale = 1.0
+shader_parameter/line_thickness = 0.03
+shader_parameter/secondary_line_thickness = 0.03
+shader_parameter/secondary_line_spacing = 5.0
+shader_parameter/fade_start_distance = 8.0
+shader_parameter/fade_end_distance = 1.0
+shader_parameter/background_color = Color(0, 0, 0, 1)
+shader_parameter/grid_color = Color(0, 0.878454, 0.138207, 1)
+
+[sub_resource type="Sky" id="Sky_iotsf"]
+sky_material = SubResource("ShaderMaterial_mfdv2")
+radiance_size = 1
+
 [sub_resource type="Environment" id="Environment_hve3p"]
-
-[sub_resource type="SphereMesh" id="SphereMesh_mfdv2"]
-radius = 100.0
-height = 100.0
-radial_segments = 32
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_iotsf"]
-shader = ExtResource("11_mfdv2")
-shader_parameter/bg_color = Color(0, 0, 0, 1)
-shader_parameter/offset = Vector2(0, 0)
-shader_parameter/bigStarSlow = 2.0
-shader_parameter/mediumStarSlow = 6.0
-shader_parameter/smallStarSlow = 8.0
-shader_parameter/smallStarAmount = 0.002
-shader_parameter/mediumStarAmount = 0.01
-shader_parameter/bigStarAmount = 0.02
+background_mode = 2
+sky = SubResource("Sky_iotsf")
+ambient_light_source = 3
+ambient_light_energy = 3.83
+reflected_light_source = 2
+fog_light_color = Color(0, 0, 0, 1)
+fog_sun_scatter = 1.0
+fog_sky_affect = 0.0
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_rg8gd")
@@ -62,10 +57,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9.4959)
 current = true
 script = ExtResource("2_af5le")
 metadata/_custom_type_script = "uid://d27w00i7wny55"
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="ThreeWayCamera3D"]
-transform = Transform3D(1, 0, -4.37114e-08, -4.37114e-08, 1.91069e-15, -1, 0, 1, 1.91069e-15, 0, 0, -50)
-mesh = SubResource("PlaneMesh_hve3p")
 
 [node name="Panels" type="Node3D" parent="."]
 
@@ -226,32 +217,15 @@ transparent_bg = true
 size = Vector2i(1080, 1920)
 size_2d_override_stretch = true
 
-[node name="TextureRect" type="TextureRect" parent="Panels/RightPanel/PanelViewport"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-expand_mode = 1
+[node name="FlowContainer" type="FlowContainer" parent="Panels/RightPanel/PanelViewport"]
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="HexTileController" parent="Panels/RightPanel/PanelViewport/TextureRect" instance=ExtResource("8_2a488")]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.158333
-anchor_top = 0.087963
-anchor_right = 0.733333
-anchor_bottom = 0.473148
-offset_bottom = 3.05176e-05
+[node name="HexTileController" parent="Panels/RightPanel/PanelViewport/FlowContainer" instance=ExtResource("8_2a488")]
+layout_mode = 2
 
-[node name="HSlider" type="HSlider" parent="Panels/RightPanel/PanelViewport/TextureRect"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.158333
-anchor_top = 0.473148
-anchor_right = 0.733333
-anchor_bottom = 0.487963
-grow_horizontal = 2
-grow_vertical = 0
+[node name="HSlider" type="HSlider" parent="Panels/RightPanel/PanelViewport/FlowContainer"]
+layout_mode = 2
 focus_mode = 1
 min_value = 0.1
 max_value = 1.0
@@ -260,13 +234,9 @@ value = 0.1
 script = ExtResource("9_amnc3")
 metadata/_edit_use_anchors_ = true
 
-[node name="StartLevelButton" type="Button" parent="Panels/RightPanel/PanelViewport/TextureRect"]
+[node name="StartLevelButton" type="Button" parent="Panels/RightPanel/PanelViewport/FlowContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-anchor_left = 0.638889
-anchor_top = 0.834259
-anchor_right = 0.755556
-anchor_bottom = 0.862963
 focus_mode = 1
 text = "GO!"
 metadata/_edit_use_anchors_ = true
@@ -277,9 +247,4 @@ texture = SubResource("ViewportTexture_1ya7t")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_hve3p")
 
-[node name="BackgroundSphere" type="MeshInstance3D" parent="."]
-visible = false
-mesh = SubResource("SphereMesh_mfdv2")
-surface_material_override/0 = SubResource("ShaderMaterial_iotsf")
-
-[connection signal="value_changed" from="Panels/RightPanel/PanelViewport/TextureRect/HSlider" to="Panels/RightPanel/PanelViewport/TextureRect/HSlider" method="_on_value_changed"]
+[connection signal="value_changed" from="Panels/RightPanel/PanelViewport/FlowContainer/HSlider" to="Panels/RightPanel/PanelViewport/FlowContainer/HSlider" method="_on_value_changed"]
