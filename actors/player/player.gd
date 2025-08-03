@@ -98,6 +98,8 @@ func health_changed():
 
 func process_move(delta: float):
 	var velocity = Vector2.ZERO
+	if Input.is_action_pressed("game_fire"):
+		fire_weapon()
 	if Input.is_action_pressed("ui_left"):
 		get_animation().frame = 1
 		velocity.x -=1
@@ -113,10 +115,6 @@ func process_move(delta: float):
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
 	position += velocity * delta
-
-func _input(event: InputEvent) -> void:
-	if event.is_action("game_fire"):
-		fire_weapon()
 
 func fire_weapon():
 	if energy >= weapon.consumption:

@@ -49,7 +49,8 @@ func _exit_tree() -> void:
 
 func prepare_lvl(punished:bool):
 	if punished:
-		material = load("res://hyper_shader_material.tres")
+		#material = load("res://hyper_shader_material.tres")
+		pass
 
 func end_lvl(success:bool):
 	if success:

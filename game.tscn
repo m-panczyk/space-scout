@@ -1,15 +1,26 @@
-[gd_scene load_steps=17 format=3 uid="uid://cgwlalfbkx2s5"]
+[gd_scene load_steps=21 format=3 uid="uid://cgwlalfbkx2s5"]
 
-[ext_resource type="Script" uid="uid://cf61d3xem4xv5" path="res://ui/three_way_display.gd" id="1_rg8gd"]
+[ext_resource type="Script" uid="uid://dffi65ighf0tu" path="res://game.gd" id="1_vef74"]
 [ext_resource type="Script" uid="uid://d27w00i7wny55" path="res://ui/three_way_camera.gd" id="2_af5le"]
+[ext_resource type="Script" uid="uid://orvcs75vjfdf" path="res://ui/menu/pause_panel.gd" id="2_lc2xo"]
+[ext_resource type="PackedScene" uid="uid://u83wwivbovfd" path="res://ui/menu/menu_container.tscn" id="3_215e1"]
 [ext_resource type="Script" uid="uid://knh3ligoqkyo" path="res://ui/three_way_panel.gd" id="3_af5le"]
 [ext_resource type="Shader" uid="uid://bst1invixnai2" path="res://retrowave_sky.gdshader" id="3_mfdv2"]
 [ext_resource type="Script" uid="uid://b8aclcm6ewxmq" path="res://ui/HUD/heath_bar.gd" id="4_a7i5o"]
+[ext_resource type="Shader" uid="uid://cpljv74flwyf8" path="res://frame.gdshader" id="4_mfdv2"]
 [ext_resource type="PackedScene" uid="uid://bs1hu7lpdivca" path="res://lvl/lvl.tscn" id="4_p50ye"]
 [ext_resource type="Script" uid="uid://chmfum2qqdak5" path="res://ui/point_count.gd" id="5_v2ajr"]
 [ext_resource type="Script" uid="uid://clm5y8mhfbomc" path="res://lvl/question.gd" id="6_ombk5"]
-[ext_resource type="PackedScene" uid="uid://bh5o0r5ut5y0d" path="res://lvl/map/map.tscn" id="8_2a488"]
-[ext_resource type="Script" uid="uid://d1pnprmds7e2g" path="res://ui/zoom_slider.gd" id="9_amnc3"]
+[ext_resource type="Texture2D" uid="uid://nbg0cnufie8x" path="res://icon.png" id="8_hve3p"]
+[ext_resource type="PackedScene" uid="uid://d18kp6hplfcve" path="res://ui/right_panel.tscn" id="8_vef74"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iotsf"]
+shader = ExtResource("4_mfdv2")
+shader_parameter/background_color = Color(0.05, 0.1, 0.2, 0.9)
+shader_parameter/frame_color = Color(0, 0.8, 1, 1)
+shader_parameter/frame_width = 0.02
+shader_parameter/corner_radius = 0.1
+shader_parameter/pulse_speed = 0.8
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_p50ye"]
 viewport_path = NodePath("Panels/LeftPanel/PanelViewport")
@@ -49,8 +60,25 @@ fog_sun_scatter = 1.0
 fog_sky_affect = 0.0
 
 [node name="Game" type="Node3D"]
-script = ExtResource("1_rg8gd")
+script = ExtResource("1_vef74")
 metadata/_custom_type_script = "uid://cf61d3xem4xv5"
+
+[node name="PausePanel" type="ColorRect" parent="."]
+unique_name_in_owner = true
+process_mode = 3
+visible = false
+top_level = true
+z_index = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.784314)
+script = ExtResource("2_lc2xo")
+
+[node name="MenuContainer" parent="PausePanel" instance=ExtResource("3_215e1")]
+layout_mode = 1
 
 [node name="ThreeWayCamera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9.4959)
@@ -61,7 +89,7 @@ metadata/_custom_type_script = "uid://d27w00i7wny55"
 [node name="Panels" type="Node3D" parent="."]
 
 [node name="LeftPanel" type="Node3D" parent="Panels"]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -11, 0, -2.71981)
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -10, 0, -1.71981)
 script = ExtResource("3_af5le")
 metadata/_custom_type_script = "uid://knh3ligoqkyo"
 
@@ -69,14 +97,26 @@ metadata/_custom_type_script = "uid://knh3ligoqkyo"
 transparent_bg = true
 size = Vector2i(1080, 1920)
 
+[node name="TextureRect" type="TextureRect" parent="Panels/LeftPanel/PanelViewport"]
+material = SubResource("ShaderMaterial_iotsf")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_right = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_hve3p")
+expand_mode = 4
+
 [node name="HUD" type="TextureRect" parent="Panels/LeftPanel/PanelViewport"]
 unique_name_in_owner = true
 clip_children = 2
-anchors_preset = -1
-anchor_left = 0.0509259
-anchor_top = 0.0527778
-anchor_right = 0.294444
-anchor_bottom = 0.246296
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
 
@@ -201,6 +241,15 @@ transparent_bg = true
 size = Vector2i(1080, 1920)
 size_2d_override_stretch = true
 
+[node name="TextureRect" type="TextureRect" parent="Panels/CenterPanel/PanelViewport"]
+material = SubResource("ShaderMaterial_iotsf")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_hve3p")
+
 [node name="GameLevel" parent="Panels/CenterPanel/PanelViewport" instance=ExtResource("4_p50ye")]
 unique_name_in_owner = true
 
@@ -208,7 +257,7 @@ unique_name_in_owner = true
 texture = SubResource("ViewportTexture_uu7im")
 
 [node name="RightPanel" type="Node3D" parent="Panels"]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 11, 0, -2.72)
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 10, 0, -1.72)
 script = ExtResource("3_af5le")
 metadata/_custom_type_script = "uid://knh3ligoqkyo"
 
@@ -217,34 +266,24 @@ transparent_bg = true
 size = Vector2i(1080, 1920)
 size_2d_override_stretch = true
 
-[node name="FlowContainer" type="FlowContainer" parent="Panels/RightPanel/PanelViewport"]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="TextureRect" type="TextureRect" parent="Panels/RightPanel/PanelViewport"]
+material = SubResource("ShaderMaterial_iotsf")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_hve3p")
 
-[node name="HexTileController" parent="Panels/RightPanel/PanelViewport/FlowContainer" instance=ExtResource("8_2a488")]
-layout_mode = 2
-
-[node name="HSlider" type="HSlider" parent="Panels/RightPanel/PanelViewport/FlowContainer"]
-layout_mode = 2
-focus_mode = 1
-min_value = 0.1
-max_value = 1.0
-step = 0.1
-value = 0.1
-script = ExtResource("9_amnc3")
-metadata/_edit_use_anchors_ = true
-
-[node name="StartLevelButton" type="Button" parent="Panels/RightPanel/PanelViewport/FlowContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-focus_mode = 1
-text = "GO!"
-metadata/_edit_use_anchors_ = true
+[node name="FlowContainer" parent="Panels/RightPanel/PanelViewport" instance=ExtResource("8_vef74")]
+offset_left = 100.0
+offset_top = 100.0
+offset_right = -100.0
+offset_bottom = -100.0
 
 [node name="PanelSprite" type="Sprite3D" parent="Panels/RightPanel"]
 texture = SubResource("ViewportTexture_1ya7t")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_hve3p")
-
-[connection signal="value_changed" from="Panels/RightPanel/PanelViewport/FlowContainer/HSlider" to="Panels/RightPanel/PanelViewport/FlowContainer/HSlider" method="_on_value_changed"]

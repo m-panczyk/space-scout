@@ -71,6 +71,28 @@ material = SubResource("ShaderMaterial_lqf52")
 scale = Vector2(3, 3)
 texture = ExtResource("5_rbhs8")
 
+[node name="Text" type="RichTextLabel" parent="portal0"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -200.0
+offset_right = 180.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/normal_font_size = 36
+text = "placeholder"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1
+drag_and_drop_selection_enabled = false
+
 [node name="portal1" type="Area2D" parent="." groups=["PORTALS"]]
 visible = false
 z_index = 1
@@ -87,6 +109,28 @@ material = SubResource("ShaderMaterial_rbhs8")
 scale = Vector2(3, 3)
 texture = ExtResource("5_rbhs8")
 
+[node name="Text" type="RichTextLabel" parent="portal1"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -200.0
+offset_right = 180.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/normal_font_size = 36
+text = "placeholder"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1
+drag_and_drop_selection_enabled = false
+
 [node name="portal2" type="Area2D" parent="." groups=["PORTALS"]]
 visible = false
 z_index = 1
@@ -101,6 +145,28 @@ shape = SubResource("RectangleShape2D_lqf52")
 material = SubResource("ShaderMaterial_5hiuc")
 scale = Vector2(3, 3)
 texture = ExtResource("5_rbhs8")
+
+[node name="Text" type="RichTextLabel" parent="portal2"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -200.0
+offset_right = 180.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/normal_font_size = 36
+text = "placeholder"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+vertical_alignment = 1
+drag_and_drop_selection_enabled = false
 
 [node name="Player" type="Area2D" parent="."]
 position = Vector2(540, 960)

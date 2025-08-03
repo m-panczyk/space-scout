@@ -30,6 +30,7 @@ func end_lvl_check(new_points:int):
 		
 func start_lvl(punished:bool):
 	max_level_points = 100/SaveData.game_progress
+	EventBus.emit("max_lvl_set",max_level_points)
 	bg.lvl = (str(randi_range(1,34)))
 	env = EnvGenerator.new()
 	env.base_speed = fall_speed*SaveData.game_progress
