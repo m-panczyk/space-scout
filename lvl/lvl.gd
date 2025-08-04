@@ -24,16 +24,16 @@ func end_lvl_check(new_points:int):
 	if lvl_points >= max_level_points:
 		get_tree().call_group("PORTALS","show_question")
 		lvl_points = 0
-		env.queue_free()
-		env = null
+		env.ready_to_free = true
 
 		
 func start_lvl(punished:bool):
-	max_level_points = 100/SaveData.game_progress
+	if env != null && env.ready_to_free:
+		env.queue_free()
+	max_level_points = lerp(500,100,(SaveData.game_progress/20))
 	EventBus.emit("max_lvl_set",max_level_points)
 	bg.lvl = (str(randi_range(1,34)))
 	env = EnvGenerator.new()
-	env.base_speed = fall_speed*SaveData.game_progress
 	lvl_points = 0
 	add_child(env)
 	

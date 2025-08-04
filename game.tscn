@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cgwlalfbkx2s5"]
+[gd_scene load_steps=22 format=3 uid="uid://cgwlalfbkx2s5"]
 
 [ext_resource type="Script" uid="uid://dffi65ighf0tu" path="res://game.gd" id="1_vef74"]
 [ext_resource type="Script" uid="uid://d27w00i7wny55" path="res://ui/three_way_camera.gd" id="2_af5le"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://clm5y8mhfbomc" path="res://lvl/question.gd" id="6_ombk5"]
 [ext_resource type="Texture2D" uid="uid://nbg0cnufie8x" path="res://icon.png" id="8_hve3p"]
 [ext_resource type="PackedScene" uid="uid://d18kp6hplfcve" path="res://ui/right_panel.tscn" id="8_vef74"]
+[ext_resource type="Script" uid="uid://3ef2o4dkxoh0" path="res://ui/HUD/game_progress.gd" id="10_215e1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iotsf"]
 shader = ExtResource("4_mfdv2")
@@ -157,6 +158,12 @@ layout_mode = 2
 text = "0 pts"
 horizontal_alignment = 2
 script = ExtResource("5_v2ajr")
+
+[node name="GameProgress" type="Label" parent="Panels/LeftPanel/PanelViewport/HUD/VBoxContainer"]
+layout_mode = 2
+text = "0 pts"
+horizontal_alignment = 2
+script = ExtResource("10_215e1")
 
 [node name="PauseSide" type="Button" parent="Panels/LeftPanel/PanelViewport/HUD/VBoxContainer"]
 unique_name_in_owner = true

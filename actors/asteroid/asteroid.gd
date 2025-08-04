@@ -20,5 +20,4 @@ func accelerate(acceleration:float):
 	speed += acceleration
 
 func died():
-	EventBus.emit("add_point",max_health)
 	queue_free()

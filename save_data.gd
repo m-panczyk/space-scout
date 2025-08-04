@@ -18,7 +18,7 @@ var fall_speed
 
 var points = 0
 var explored_tiles = []
-var ship_position = Vector2i(5,5)
+var ship_position = Vector2i(10,10)
 
 var weapon_name = 'basic'
 var energy = 0
@@ -82,7 +82,7 @@ func reset_to_defaults() -> void:
 	fall_speed = null
 	points = 0
 	explored_tiles = []
-	ship_position = Vector2i(5, 5)
+	ship_position = Vector2i(10, 10)
 	weapon_name = 'basic'
 	energy = 0
 	energy_max = 10

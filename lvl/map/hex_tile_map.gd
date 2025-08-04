@@ -96,7 +96,6 @@ func handle_cell_selection(clicked_cell: Vector2i, is_pressed: bool, is_synth: b
 			if target != null:
 				reset_cell(target)
 			target = clicked_cell
-			SaveData.game_progress = calculate_hex_distance(target,endgame)
 			set_cell(target, 3, Vector2i(0, 0), 2)  # Set target visual
 			
 			# Emit target_selected signal
@@ -110,6 +109,7 @@ func set_ship_position(new_ship_position: Vector2i = Vector2i(5, 5)) -> void:
 	
 	# Update camera position
 	%Camera2D.position = map_to_local(ship_position)
+	SaveData.game_progress = calculate_hex_distance(ship_position,endgame)
 
 func reset_cell(cell: Vector2i) -> void:
 	if explored.has(cell):
