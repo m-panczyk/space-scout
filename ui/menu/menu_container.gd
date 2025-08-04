@@ -4,6 +4,9 @@ var current_scene
 
 func _ready() -> void:
 	current_scene = $ScrollContainer/CurrentScene
+	if get_parent().name == "PausePanel":
+		if current_scene.has_method("pause_menu"):
+			current_scene.pause_menu()
 
 func replace_current_scene(new_scene: PackedScene) -> void:
 	print("replacing current scene")
