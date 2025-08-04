@@ -5,10 +5,12 @@ var base_speed = 0
 var item_list = [[Asteroid, 10]]
 var spawn_points: Array[Vector2]
 var spawned_items: Array[Array] = []  # Array of arrays, one for each spawn point
+var spawned_items_by_type_and_point: Array[Dictionary] = []  # Track items by type per spawn point
 var min_spawn_distance = 200.0  # Minimum distance before spawning new item
 var spawn_rate = 2.0  # Maximum spawns per second (across all spawn points)
 var spawn_timer: Timer
 var ready_to_free = false
+var max_items_per_type_per_point = 3  # Maximum number of items of the same type per spawn point
 
 # Difficulty scaling parameters
 var min_spawn_rate = 0.5  # Easiest level spawn rate (level 20)
@@ -43,16 +45,68 @@ func weighted_pick(item_list: Array) -> Actor:
 	
 	return item_list[-1][0].new()  # Instantiate the class
 
+func get_item_count_by_type_at_point(spawn_index: int, type_name: String) -> int:
+	if spawn_index >= spawned_items_by_type_and_point.size():
+		return 0
+	
+	var type_dict = spawned_items_by_type_and_point[spawn_index]
+	if not type_dict.has(type_name):
+		return 0
+	
+	var items = type_dict[type_name]
+	# Clean up invalid references
+	for i in range(items.size() - 1, -1, -1):
+		if not is_instance_valid(items[i]):
+			items.remove_at(i)
+	
+	return items.size()
+
+func add_item_to_type_tracking(item: Actor, spawn_index: int) -> void:
+	if spawn_index >= spawned_items_by_type_and_point.size():
+		return
+	
+	var type_name = item.get_script().get_global_name() if item.get_script() else str(item.get_class())
+	if not type_name:
+		type_name = str(item.get_class())
+	
+	var type_dict = spawned_items_by_type_and_point[spawn_index]
+	if not type_dict.has(type_name):
+		type_dict[type_name] = []
+	
+	type_dict[type_name].append(item)
+
+func remove_item_from_type_tracking(item: Actor, spawn_index: int) -> void:
+	if spawn_index >= spawned_items_by_type_and_point.size():
+		return
+	
+	var type_name = item.get_script().get_global_name() if item.get_script() else str(item.get_class())
+	if not type_name:
+		type_name = str(item.get_class())
+	
+	var type_dict = spawned_items_by_type_and_point[spawn_index]
+	if type_dict.has(type_name):
+		type_dict[type_name].erase(item)
+
+func can_spawn_type_at_point(spawn_index: int, item_type: Actor) -> bool:
+	var type_name = item_type.get_script().get_global_name() if item_type.get_script() else str(item_type.get_class())
+	if not type_name:
+		type_name = str(item_type.get_class())
+	
+	var current_count = get_item_count_by_type_at_point(spawn_index, type_name)
+	return current_count < max_items_per_type_per_point
+
 func setup_spawn_points() -> void:
 	var start_pos = Vector2(0, 0)
 	var end_pos = Vector2(GlobalSettings.virtual_resolution.x, 0)
 	spawn_points = []
 	spawned_items = []
+	spawned_items_by_type_and_point = []
 	
 	for i in range(0, 7):
 		var point = start_pos + (end_pos - start_pos) * i / 6.0
 		spawn_points.append(point)
 		spawned_items.append([])  # Initialize empty array for each spawn point
+		spawned_items_by_type_and_point.append({})  # Initialize empty dictionary for each spawn point
 
 func setup_spawn_timer() -> void:
 	spawn_timer = Timer.new()
@@ -94,6 +148,9 @@ func spawn_at_point(spawn_index: int) -> void:
 	# Add to the spawned items list for this spawn point
 	spawned_items[spawn_index].append(new_item)
 	
+	# Add to type tracking for this spawn point
+	add_item_to_type_tracking(new_item, spawn_index)
+	
 	# Connect to the item's tree_exiting signal to clean up when it's freed
 	new_item.tree_exiting.connect(_on_item_freed.bind(new_item, spawn_index))
 	
@@ -107,6 +164,9 @@ func _on_item_freed(item: Actor, spawn_index: int) -> void:
 	# Remove the item from our tracking list
 	if spawn_index < spawned_items.size():
 		spawned_items[spawn_index].erase(item)
+	
+	# Remove from type tracking
+	remove_item_from_type_tracking(item, spawn_index)
 
 func can_spawn_at_point(spawn_index: int) -> bool:
 	if spawn_index >= spawned_items.size():
@@ -132,12 +192,21 @@ func can_spawn_at_point(spawn_index: int) -> bool:
 	return distance_from_spawn >= min_spawn_distance
 
 func cleanup_invalid_items() -> void:
-	# Clean up any invalid item references
+	# Clean up any invalid item references from spawn points
 	for i in range(spawned_items.size()):
 		var items_at_point = spawned_items[i]
 		for j in range(items_at_point.size() - 1, -1, -1):  # Iterate backwards
 			if not is_instance_valid(items_at_point[j]):
 				items_at_point.remove_at(j)
+	
+	# Clean up invalid item references from type tracking
+	for i in range(spawned_items_by_type_and_point.size()):
+		var type_dict = spawned_items_by_type_and_point[i]
+		for type_name in type_dict.keys():
+			var items = type_dict[type_name]
+			for j in range(items.size() - 1, -1, -1):  # Iterate backwards
+				if not is_instance_valid(items[j]):
+					items.remove_at(j)
 
 func _process(delta: float) -> void:
 	if ready_to_free:
@@ -206,6 +275,27 @@ func refresh_difficulty() -> void:
 	# Call this when game_progress changes during gameplay
 	update_difficulty_from_progress()
 
+# Helper function to set the maximum items per type per spawn point
+func set_max_items_per_type_per_point(max_count: int) -> void:
+	max_items_per_type_per_point = max(1, max_count)  # Minimum of 1 to prevent issues
+
+# Helper function to get current count of a specific item type at a spawn point
+func get_items_of_type_at_point(spawn_index: int, type_name: String) -> Array:
+	if spawn_index >= spawned_items_by_type_and_point.size():
+		return []
+	
+	var type_dict = spawned_items_by_type_and_point[spawn_index]
+	if not type_dict.has(type_name):
+		return []
+	
+	var valid_items = []
+	var items = type_dict[type_name]
+	for item in items:
+		if is_instance_valid(item):
+			valid_items.append(item)
+	
+	return valid_items
+
 func find_best_spawn_point() -> int:
 	# Get player position
 	var player_nodes = get_tree().get_nodes_in_group("PLAYER")
@@ -216,7 +306,7 @@ func find_best_spawn_point() -> int:
 	var player = player_nodes[0]  # Get first player
 	var player_x = player.global_position.x
 	
-	# Find spawn point closest to player on x-axis that can spawn
+	# Find the closest spawn point to player
 	var best_spawn_index = -1
 	var closest_distance = INF
 	
@@ -225,14 +315,39 @@ func find_best_spawn_point() -> int:
 		if distance_x < closest_distance:
 			closest_distance = distance_x
 			best_spawn_index = i
-	# If no spawn point near player is available, try random valid point
-	if best_spawn_index == -1 or not can_spawn_at_point(best_spawn_index):
-		best_spawn_index = find_random_valid_spawn_point()
 	
-	return best_spawn_index
+	# Try the closest spawn point first
+	if best_spawn_index != -1:
+		# Check if we can spawn at this point (includes min_spawn_distance check)
+		if can_spawn_at_point(best_spawn_index):
+			# Also check if we can spawn the selected item type there
+			var test_item = weighted_pick(item_list)
+			if test_item != null:
+				if can_spawn_type_at_point(best_spawn_index, test_item):
+					test_item.queue_free()  # Clean up the test item
+					return best_spawn_index
+				else:
+					test_item.queue_free()  # Clean up the test item
+	
+	# If closest spawn point doesn't work, use random valid spawn point
+	return find_random_valid_spawn_point()
+
+func find_spawn_point_for_item_type(item_type: Actor) -> int:
+	# Find any spawn point that can spawn this item type
+	var valid_points: Array[int] = []
+	
+	for i in range(spawn_points.size()):
+		if can_spawn_at_point(i) and can_spawn_type_at_point(i, item_type):
+			valid_points.append(i)
+	
+	# Return random valid point for this type or -1 if none available
+	if valid_points.is_empty():
+		return -1
+	else:
+		return valid_points[randi() % valid_points.size()]
 
 func find_random_valid_spawn_point() -> int:
-	# Get all valid spawn points
+	# Get all valid spawn points (ignoring type limits)
 	var valid_points: Array[int] = []
 	for i in range(spawn_points.size()):
 		if can_spawn_at_point(i):
@@ -243,3 +358,32 @@ func find_random_valid_spawn_point() -> int:
 		return -1
 	else:
 		return valid_points[randi() % valid_points.size()]
+
+# ADDITIONAL: Helper function to check if any spawn point can spawn
+func has_available_spawn_points() -> bool:
+	for i in range(spawn_points.size()):
+		if can_spawn_at_point(i):
+			return true
+	return false
+
+# ADDITIONAL: Get spawn point status for debugging
+func get_spawn_point_status() -> Array[Dictionary]:
+	var status: Array[Dictionary] = []
+	for i in range(spawn_points.size()):
+		var point_status = {
+			"index": i,
+			"position": spawn_points[i],
+			"can_spawn": can_spawn_at_point(i),
+			"item_count": spawned_items[i].size(),
+			"last_item_distance": 0.0
+		}
+		
+		# Calculate distance of last item from spawn point
+		if not spawned_items[i].is_empty():
+			var last_item = spawned_items[i][-1]
+			if is_instance_valid(last_item):
+				point_status.last_item_distance = last_item.position.distance_to(spawn_points[i])
+		
+		status.append(point_status)
+	
+	return status
