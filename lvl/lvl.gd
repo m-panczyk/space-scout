@@ -30,7 +30,7 @@ func end_lvl_check(new_points:int):
 func start_lvl(punished:bool):
 	if env != null && env.ready_to_free:
 		env.queue_free()
-	max_level_points = lerp(500,100,(SaveData.game_progress/20))
+	max_level_points = lerp(100,20,(SaveData.game_progress/20))
 	EventBus.emit("max_lvl_set",max_level_points)
 	bg.lvl = (str(randi_range(1,34)))
 	env = EnvGenerator.new()

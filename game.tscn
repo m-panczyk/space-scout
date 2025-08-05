@@ -54,6 +54,41 @@ fog_sky_affect = 0.0
 script = ExtResource("1_vef74")
 metadata/_custom_type_script = "uid://cf61d3xem4xv5"
 
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+visible = false
+show_behind_parent = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -824.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_lc2xo")
+patch_margin_left = 64
+patch_margin_top = 64
+patch_margin_right = 64
+patch_margin_bottom = 64
+
+[node name="Question" type="RichTextLabel" parent="NinePatchRect" groups=["PORTALS"]]
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0296296
+anchor_top = 0.125
+anchor_right = 0.97037
+anchor_bottom = 0.875
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "Question
+"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("6_ombk5")
+metadata/_edit_use_anchors_ = true
+
 [node name="PausePanel" type="ColorRect" parent="."]
 unique_name_in_owner = true
 process_mode = 3
@@ -86,6 +121,19 @@ metadata/_custom_type_script = "uid://knh3ligoqkyo"
 [node name="PanelViewport" type="SubViewport" parent="Panels/LeftPanel"]
 transparent_bg = true
 size = Vector2i(1080, 1920)
+
+[node name="TextureRect" type="TextureRect" parent="Panels/LeftPanel/PanelViewport"]
+modulate = Color(0.258824, 1, 0.25098, 0.933333)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_right = 4.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("10_lc2xo")
 
 [node name="HUD" type="TextureRect" parent="Panels/LeftPanel/PanelViewport"]
 unique_name_in_owner = true
@@ -148,87 +196,11 @@ visible = false
 layout_mode = 2
 text = "<<<"
 
-[node name="Question" type="RichTextLabel" parent="Panels/LeftPanel/PanelViewport/HUD" groups=["PORTALS"]]
-visible = false
-z_index = 1
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.0972222
-anchor_top = 0.15625
-anchor_right = 0.902778
-anchor_bottom = 0.839286
-offset_left = 2.43056
-offset_top = 0.34375
-offset_right = 29.5694
-offset_bottom = 0.589218
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-bbcode_enabled = true
-text = "Question
-"
-fit_content = true
-horizontal_alignment = 1
-script = ExtResource("6_ombk5")
-
-[node name="ColorRect" type="ColorRect" parent="Panels/LeftPanel/PanelViewport/HUD/Question"]
-visible = false
-show_behind_parent = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Panels/LeftPanel/PanelViewport/HUD/Question"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="Answer1" type="Label" parent="Panels/LeftPanel/PanelViewport/HUD/Question/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 0.0117647, 1, 1)
-text = "GOOD"
-horizontal_alignment = 1
-
-[node name="Answer2" type="Label" parent="Panels/LeftPanel/PanelViewport/HUD/Question/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0, 0.784314, 0, 1)
-text = "BAD"
-horizontal_alignment = 1
-
-[node name="Answer3" type="Label" parent="Panels/LeftPanel/PanelViewport/HUD/Question/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.760784, 1, 0.0509804, 1)
-text = "BAD"
-horizontal_alignment = 1
-
-[node name="TextureRect" type="TextureRect" parent="Panels/LeftPanel/PanelViewport"]
-modulate = Color(0.258824, 1, 0.25098, 0.933333)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -4.0
-offset_right = 4.0
-offset_bottom = 8.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("10_lc2xo")
-
 [node name="PanelSprite" type="Sprite3D" parent="Panels/LeftPanel"]
 texture = SubResource("ViewportTexture_p50ye")
 
 [node name="CenterPanel" type="Node3D" parent="Panels"]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.71981)
 script = ExtResource("3_af5le")
 metadata/_custom_type_script = "uid://knh3ligoqkyo"
@@ -238,10 +210,8 @@ transparent_bg = true
 size = Vector2i(1080, 1920)
 size_2d_override_stretch = true
 
-[node name="GameLevel" parent="Panels/CenterPanel/PanelViewport" instance=ExtResource("4_p50ye")]
-unique_name_in_owner = true
-
 [node name="TextureRect" type="TextureRect" parent="Panels/CenterPanel/PanelViewport"]
+visible = false
 modulate = Color(0.258824, 1, 0.25098, 0.933333)
 anchors_preset = 15
 anchor_right = 1.0
@@ -251,6 +221,9 @@ grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("10_lc2xo")
 expand_mode = 1
+
+[node name="GameLevel" parent="Panels/CenterPanel/PanelViewport" instance=ExtResource("4_p50ye")]
+unique_name_in_owner = true
 
 [node name="PanelSprite" type="Sprite3D" parent="Panels/CenterPanel"]
 texture = SubResource("ViewportTexture_uu7im")
@@ -265,12 +238,6 @@ transparent_bg = true
 size = Vector2i(1080, 1920)
 size_2d_override_stretch = true
 
-[node name="FlowContainer" parent="Panels/RightPanel/PanelViewport" instance=ExtResource("8_vef74")]
-offset_left = 100.0
-offset_top = 100.0
-offset_right = -100.0
-offset_bottom = -100.0
-
 [node name="TextureRect" type="TextureRect" parent="Panels/RightPanel/PanelViewport"]
 modulate = Color(0.258824, 1, 0.25098, 0.933333)
 anchors_preset = 15
@@ -283,6 +250,12 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("10_lc2xo")
+
+[node name="FlowContainer" parent="Panels/RightPanel/PanelViewport" instance=ExtResource("8_vef74")]
+offset_left = 100.0
+offset_top = 100.0
+offset_right = -100.0
+offset_bottom = -100.0
 
 [node name="PanelSprite" type="Sprite3D" parent="Panels/RightPanel"]
 texture = SubResource("ViewportTexture_1ya7t")

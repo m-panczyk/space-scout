@@ -1,7 +1,7 @@
 class_name ThreeWayDisplay
 extends Node3D
 
-## Three-panel display system with smart camera control
+## Three-panel display system with smart camera control and touch-to-focus
 ## Left: Player stats, inventory, upgrades
 ## Center: Main gameplay viewport  
 ## Right: Map and game progression stats
@@ -23,6 +23,8 @@ enum PanelType {
 @export_group("Input Settings")
 @export var enable_input: bool = true
 @export var block_input_during_transition: bool = true
+@export var enable_touch_to_focus: bool = true  # Touch to focus on partially visible panels
+@export var enable_right_click_to_focus: bool = true  # Right-click to focus on partially visible panels
 
 # Components
 @onready var camera: ThreeWayCamera3D = $ThreeWayCamera3D
@@ -85,8 +87,37 @@ func connect_signals():
 	camera.panel_changed.connect(_on_camera_panel_changed)
 	camera.transition_complete.connect(_on_camera_transition_complete)
 	
+	# Connect panel touch signals for focus functionality
+	if enable_touch_to_focus or enable_right_click_to_focus:
+		left_panel.panel_touched.connect(_on_panel_touched)
+		center_panel.panel_touched.connect(_on_panel_touched)
+		right_panel.panel_touched.connect(_on_panel_touched)
+	
 	if auto_adjust_on_resize:
 		get_viewport().size_changed.connect(_on_viewport_resized)
+
+func _on_panel_touched(panel: ThreeWayPanel):
+	"""Handle panel touch/right-click events for focus functionality"""
+	if not enable_touch_to_focus and not enable_right_click_to_focus:
+		return
+	
+	# Don't switch if already transitioning
+	if camera.is_camera_transitioning():
+		return
+	
+	# Determine which panel was touched and switch to it
+	var target_panel_type: PanelType
+	if panel == left_panel:
+		target_panel_type = PanelType.LEFT_PANEL
+	elif panel == center_panel:
+		target_panel_type = PanelType.CENTER_PANEL
+	elif panel == right_panel:
+		target_panel_type = PanelType.RIGHT_PANEL
+	else:
+		return  # Unknown panel
+	
+	# Switch to the touched panel
+	switch_to_panel(target_panel_type, true)
 
 func _input(event):
 	if not enable_input:
@@ -152,6 +183,28 @@ func enable_panel(panel_type: PanelType, enabled: bool):
 	var panel = get_panel_by_type(panel_type)
 	if panel:
 		panel.set_panel_enabled(enabled)
+
+func set_focus_controls_enabled(touch_enabled: bool, right_click_enabled: bool):
+	"""Enable or disable touch-to-focus and right-click-to-focus functionality"""
+	enable_touch_to_focus = touch_enabled
+	enable_right_click_to_focus = right_click_enabled
+	
+	if touch_enabled or right_click_enabled:
+		# Connect signals if not already connected
+		if not left_panel.panel_touched.is_connected(_on_panel_touched):
+			left_panel.panel_touched.connect(_on_panel_touched)
+		if not center_panel.panel_touched.is_connected(_on_panel_touched):
+			center_panel.panel_touched.connect(_on_panel_touched)
+		if not right_panel.panel_touched.is_connected(_on_panel_touched):
+			right_panel.panel_touched.connect(_on_panel_touched)
+	else:
+		# Disconnect signals
+		if left_panel.panel_touched.is_connected(_on_panel_touched):
+			left_panel.panel_touched.disconnect(_on_panel_touched)
+		if center_panel.panel_touched.is_connected(_on_panel_touched):
+			center_panel.panel_touched.disconnect(_on_panel_touched)
+		if right_panel.panel_touched.is_connected(_on_panel_touched):
+			right_panel.panel_touched.disconnect(_on_panel_touched)
 
 ## Internal Methods
 

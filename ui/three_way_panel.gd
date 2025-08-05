@@ -6,6 +6,7 @@ extends Node3D
 
 signal content_loaded(panel: ThreeWayPanel)
 signal content_changed(panel: ThreeWayPanel)
+signal panel_touched(panel: ThreeWayPanel)  # New signal for touch-to-focus
 
 @export var panel_size: Vector2i = Vector2i(1080, 1920) : set = set_panel_size
 @export var pixel_size: float = 0.01
@@ -18,9 +19,24 @@ var viewport_texture: ViewportTexture
 var click_area: Area3D
 var collision_shape: CollisionShape3D
 
+# Reference to the camera for checking visibility
+var camera_ref: ThreeWayCamera3D
+
 func _ready():
 	find_components()
 	setup_click_detection()
+	find_camera_reference()
+
+func find_camera_reference():
+	"""Find the ThreeWayCamera3D in the scene"""
+	# Look for camera in parent hierarchy
+	var current = get_parent()
+	while current:
+		var camera = current.get_node_or_null("ThreeWayCamera3D")
+		if camera and camera is ThreeWayCamera3D:
+			camera_ref = camera
+			break
+		current = current.get_parent()
 
 func find_components():
 	"""Find required components - throw errors if missing"""
@@ -65,10 +81,63 @@ func setup_click_detection():
 	click_area.input_event.connect(_on_area_input_event)
 
 func _on_area_input_event(camera: Node, event: InputEvent, position: Vector3, normal: Vector3, shape_idx: int):
-	"""Forward click to viewport"""
+	"""Handle touch/click events on the panel"""
 	if not event is InputEventMouseButton and not event is InputEventScreenTouch:
 		return
 	
+	# Handle touch events
+	if event is InputEventScreenTouch:
+		handle_touch_event(event, position)
+		return
+	
+	# Handle mouse events
+	if event is InputEventMouseButton:
+		handle_mouse_event(event, position)
+		return
+
+func handle_touch_event(event: InputEventScreenTouch, position: Vector3):
+	"""Handle touch-specific events"""
+	if not event.pressed:
+		return
+	
+	# On touch devices, if panel is not fully visible, focus on it instead of forwarding touch
+	if not is_panel_fully_visible():
+		panel_touched.emit(self)
+		return
+	
+	# Panel is fully visible, forward touch to viewport content
+	forward_input_to_viewport(event, position)
+
+func handle_mouse_event(event: InputEventMouseButton, position: Vector3):
+	"""Handle mouse-specific events"""
+	if not event.pressed:
+		return
+	
+	# Right-click: focus on panel if not fully visible (like touch behavior)
+	if event.button_index == MOUSE_BUTTON_RIGHT:
+		if not is_panel_fully_visible():
+			panel_touched.emit(self)
+			return
+		# If panel is fully visible, still forward right-click to content (for context menus, etc.)
+		forward_input_to_viewport(event, position)
+		return
+	
+	# Left-click: always forward to viewport content (normal interaction)
+	if event.button_index == MOUSE_BUTTON_LEFT:
+		forward_input_to_viewport(event, position)
+		return
+
+func is_panel_fully_visible() -> bool:
+	"""Check if this panel is fully visible in the camera view"""
+	if not camera_ref:
+		find_camera_reference()
+		if not camera_ref:
+			return true  # Assume visible if can't find camera
+	
+	return camera_ref.is_panel_fully_visible(sprite3d)
+
+func forward_input_to_viewport(event: InputEvent, position: Vector3):
+	"""Forward the input event to the viewport content"""
 	# Convert 3D click position to 2D viewport coordinates
 	var viewport_pos = convert_click_to_viewport_coords(position)
 	if viewport_pos == Vector2(-1, -1):  # Invalid position
