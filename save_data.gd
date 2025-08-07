@@ -10,7 +10,11 @@ var current_subject:int = 0  # QGen.Przedmiot.MATEMATYKA
 var subject_progress = {}  # Postęp w różnych przedmiotach
 var subject_statistics = {}  # Statystyki dla przedmiotów
 
-var game_progress
+# Historia pytań - zawiera pary [Question, CorrectAnswer, Answer]
+# Question: tablica 4 stringów (pytanie + 3 odpowiedzi)
+# CorrectAnswer: int - indeks poprawnej odpowiedzi
+# Answer: int - indeks odpowiedzi gracza
+var questions_history = []
 
 var bg_type 
 var bg_speed
@@ -69,6 +73,75 @@ func initialize_subject_progress():
 				}
 			}
 
+# Dodaje nowe pytanie do historii
+func add_question_to_history(question: Array, correct_answer: int, player_answer: int) -> void:
+	if question.size() != 4:
+		push_error("Question array must contain exactly 4 strings (question + 3 answers)")
+		return
+	
+	var question_entry = [question.duplicate(), correct_answer, player_answer]
+	questions_history.append(question_entry)
+	
+	# Opcjonalnie: ograniczenie rozmiaru historii (np. do 1000 ostatnich pytań)
+	var max_history_size = 1000
+	if questions_history.size() > max_history_size:
+		questions_history = questions_history.slice(questions_history.size() - max_history_size)
+
+# Pobiera całą historię pytań
+func get_questions_history() -> Array:
+	return questions_history.duplicate()
+
+# Pobiera ostatnie N pytań z historii
+func get_recent_questions(count: int = 10) -> Array:
+	var start_index = max(0, questions_history.size() - count)
+	return questions_history.slice(start_index)
+
+# Pobiera statystyki historii pytań
+func get_questions_history_stats() -> Dictionary:
+	if questions_history.is_empty():
+		return {
+			"total_questions": 0,
+			"correct_answers": 0,
+			"accuracy": 0.0,
+			"recent_accuracy": 0.0  # dokładność z ostatnich 20 pytań
+		}
+	
+	var total_questions = questions_history.size()
+	var correct_count = 0
+	var recent_correct = 0
+	var recent_count = min(20, total_questions)
+	
+	# Policz wszystkie poprawne odpowiedzi
+	for entry in questions_history:
+		var correct_answer = entry[1]
+		var player_answer = entry[2]
+		if correct_answer == player_answer:
+			correct_count += 1
+	
+	# Policz poprawne odpowiedzi z ostatnich 20 pytań
+	var recent_questions = get_recent_questions(recent_count)
+	for entry in recent_questions:
+		var correct_answer = entry[1]
+		var player_answer = entry[2]
+		if correct_answer == player_answer:
+			recent_correct += 1
+	
+	var accuracy = (float(correct_count) / float(total_questions)) * 100.0
+	var recent_accuracy = 0.0
+	if recent_count > 0:
+		recent_accuracy = (float(recent_correct) / float(recent_count)) * 100.0
+	
+	return {
+		"total_questions": total_questions,
+		"correct_answers": correct_count,
+		"accuracy": accuracy,
+		"recent_accuracy": recent_accuracy
+	}
+
+# Czyści historię pytań
+func clear_questions_history() -> void:
+	questions_history.clear()
+
 # Resets all game state variables to their default values
 func reset_to_defaults() -> void:
 	is_new = true
@@ -76,6 +149,7 @@ func reset_to_defaults() -> void:
 	current_subject = 0  # QGen.Przedmiot.MATEMATYKA
 	subject_progress = {}
 	subject_statistics = {}
+	questions_history = []  # Wyczyść historię pytań
 	
 	bg_type = null
 	bg_speed = null
@@ -128,6 +202,15 @@ func update_subject_progress(subject_enum: int, is_correct: bool, answer_time: f
 		var total_questions = subject_progress[subject_name]["questions_answered"]
 		if total_questions > 0:
 			subject_statistics[subject_name]["average_answer_time"] = subject_statistics[subject_name]["total_time_spent"] / total_questions
+
+# Połączona funkcja do aktualizacji postępu i dodania pytania do historii
+func process_question_answer(question: Array, correct_answer: int, player_answer: int, answer_time: float = 0.0):
+	# Dodaj pytanie do historii
+	add_question_to_history(question, correct_answer, player_answer)
+	
+	# Aktualizuj postęp w przedmiocie
+	var is_correct = (correct_answer == player_answer)
+	update_subject_progress(current_subject, is_correct, answer_time)
 
 # Funkcja pobierająca statystyki dla przedmiotu
 func get_subject_stats(subject_enum: int) -> Dictionary:
@@ -206,6 +289,14 @@ func _to_string() -> String:
 	output += "creation_date: " + str(creation_date) + "\n"
 	output += "save_date: " + str(save_date) + "\n"
 	
+	# Dodaj statystyki historii pytań
+	var history_stats = get_questions_history_stats()
+	output += "\n=== HISTORIA PYTAŃ ===\n"
+	output += "Wszystkich pytań: " + str(history_stats["total_questions"]) + "\n"
+	output += "Poprawnych odpowiedzi: " + str(history_stats["correct_answers"]) + "\n"
+	output += "Dokładność ogólna: " + str(int(history_stats["accuracy"])) + "%\n"
+	output += "Dokładność ostatnich 20: " + str(int(history_stats["recent_accuracy"])) + "%\n"
+	
 	# Dodaj statystyki przedmiotów
 	output += "\n=== STATYSTYKI PRZEDMIOTÓW ===\n"
 	for subject_name in subject_progress:
@@ -231,6 +322,13 @@ func get_pretty_stats() -> String:
 	bbtext += "[color=#ffff00]aktualny_przedmiot:[/color] [b]" + get_subject_name_from_enum(current_subject) + "[/b]\n"
 	bbtext += "[color=#ffff00]punkty:[/color] [b]" + str(points) + "[/b]\n"
 	bbtext += "[color=#ffff00]odkryte_kafelki:[/color] [b]" + str(explored_tiles.size()) + "[/b] kafelki\n"
+	
+	# Dodaj statystyki historii pytań
+	var history_stats = get_questions_history_stats()
+	bbtext += "\n[color=#00ff00]--- Historia Pytań ---[/color]\n"
+	bbtext += "[color=#ffff00]wszystkich_pytań:[/color] [b]" + str(history_stats["total_questions"]) + "[/b]\n"
+	bbtext += "[color=#ffff00]dokładność_ogólna:[/color] [b]" + str(int(history_stats["accuracy"])) + "%[/b]\n"
+	bbtext += "[color=#ffff00]dokładność_ostatnich_20:[/color] [b]" + str(int(history_stats["recent_accuracy"])) + "%[/b]\n"
 	
 	# Dodaj statystyki dla aktualnego przedmiotu
 	var current_subject_name = get_subject_name_from_enum(current_subject)
@@ -262,6 +360,14 @@ func show_as_detailed_popup():
 	bbtext += "[color=#ffff00]ship_position:[/color] " + str(ship_position) + "\n"
 	bbtext += "[color=#ffff00]creation_date:[/color] " + str(creation_date) + "\n"
 	bbtext += "[color=#ffff00]save_date:[/color] " + str(save_date) + "\n"
+	
+	# Dodaj szczegółowe statystyki historii pytań
+	var history_stats = get_questions_history_stats()
+	bbtext += "\n[b][color=#ff6600]=== HISTORIA PYTAŃ ===[/color][/b]\n"
+	bbtext += "Wszystkich pytań: [b]" + str(history_stats["total_questions"]) + "[/b]\n"
+	bbtext += "Poprawnych odpowiedzi: [b]" + str(history_stats["correct_answers"]) + "[/b]\n"
+	bbtext += "Dokładność ogólna: [b]" + str(int(history_stats["accuracy"])) + "%[/b]\n"
+	bbtext += "Dokładność ostatnich 20: [b]" + str(int(history_stats["recent_accuracy"])) + "%[/b]\n"
 	
 	# Dodaj szczegółowe statystyki przedmiotów
 	bbtext += "\n[b][color=#00ff00]=== STATYSTYKI PRZEDMIOTÓW ===[/color][/b]\n"
@@ -332,6 +438,7 @@ func save_game(save_name: String) -> void:
 		"current_subject": current_subject,
 		"subject_progress": subject_progress,
 		"subject_statistics": subject_statistics,
+		"questions_history": questions_history,  # Dodaj historię pytań do save data
 		"bg_type": bg_type,
 		"bg_speed": bg_speed,
 		"fall_speed": fall_speed,
@@ -389,6 +496,9 @@ func load_game(file_path: String) -> bool:
 	# Load subject progress (with fallback to empty if not present)
 	subject_progress = save_data.get("subject_progress", {})
 	subject_statistics = save_data.get("subject_statistics", {})
+	
+	# Load questions history (with fallback to empty if not present)
+	questions_history = save_data.get("questions_history", [])
 	
 	# Initialize if empty (for backward compatibility)
 	if subject_progress.is_empty() or subject_statistics.is_empty():
@@ -479,6 +589,7 @@ func get_all_save_files() -> Array:
 					var subject = save_data.get("current_subject", 0)
 					var difficulty_name = get_difficulty_name_from_level(difficulty)
 					var subject_name = get_subject_name_from_enum(subject)
+					var questions_count = save_data.get("questions_history", []).size()
 					
 					save_list.append({
 						"path": file_path,
@@ -489,6 +600,7 @@ func get_all_save_files() -> Array:
 						"difficulty_name": difficulty_name,
 						"current_subject": subject,
 						"subject_name": subject_name,
+						"questions_count": questions_count,  # Dodaj liczbę pytań
 						"creation_date": save_data.get("creation_date", save_data.get("save_datetime", "Unknown")),
 						"save_date": save_data.get("save_date", save_data.get("save_datetime", "Unknown"))
 					})

@@ -22,19 +22,15 @@ func _exit_tree() -> void:
 func end_lvl_check(new_points:int):
 	lvl_points += new_points
 	if lvl_points >= max_level_points:
+		GameState.set_question()
 		get_tree().call_group("PORTALS","show_question")
 		lvl_points = 0
 		env.ready_to_free = true
 
-func _ready() -> void:
-		if DisplayServer.is_touchscreen_available():
-			var touch_controls = GestureControls.new()
-			get_parent().add_child(touch_controls)
-		
 func start_lvl(punished:bool):
 	if env != null:
 		env.queue_free()
-	max_level_points = lerp(100,20,(SaveData.game_progress/20))
+	max_level_points = lerp(100,20,(GameState.game_progress/20))
 	EventBus.emit("max_lvl_set",max_level_points)
 	if punished:
 		bg.lvl = 0

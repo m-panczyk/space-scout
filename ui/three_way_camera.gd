@@ -6,6 +6,7 @@ extends Camera3D
 
 signal panel_changed(panel_index: int)
 signal transition_complete
+signal transition_started
 
 @export_group("Camera Settings")
 @export var transition_duration: float = 1.0
@@ -19,6 +20,7 @@ var current_panel_index: int = 1  # Start with center panel
 var fixed_position: Vector3
 var is_transitioning: bool = false
 var resize_timer: Timer
+var current_tween: Tween
 
 func _ready():
 	fixed_position = global_position
@@ -56,6 +58,7 @@ func switch_to_panel_index(index: int, animate: bool = true):
 	var target_panel = panels[index]
 	
 	if animate and transition_duration > 0:
+		transition_started.emit()
 		animate_to_panel(target_panel)
 	else:
 		frame_panel_instant(target_panel)
@@ -76,15 +79,19 @@ func animate_to_panel(target_panel: Sprite3D):
 	"""Smooth animated transition to target panel - rotation and zoom only"""
 	is_transitioning = true
 	
-	var tween = create_tween()
-	tween.set_parallel(true)
+	# Kill existing tween if any
+	if current_tween and current_tween.is_valid():
+		current_tween.kill()
+	
+	current_tween = create_tween()
+	current_tween.set_parallel(true)
 	
 	# Calculate target rotation to look at panel
 	var direction_to_panel = (target_panel.global_position - fixed_position).normalized()
 	var target_basis = Basis.looking_at(direction_to_panel, Vector3.UP)
 	
 	# Animate rotation
-	tween.tween_method(
+	current_tween.tween_method(
 		func(basis: Basis): global_transform.basis = basis,
 		global_transform.basis,
 		target_basis,
@@ -93,12 +100,26 @@ func animate_to_panel(target_panel: Sprite3D):
 	
 	# Calculate and animate FOV for optimal framing
 	var optimal_fov = calculate_optimal_fov(target_panel)
-	tween.tween_property(self, "fov", optimal_fov, transition_duration)
+	current_tween.tween_property(self, "fov", optimal_fov, transition_duration)
 	
-	tween.finished.connect(func():
+	current_tween.finished.connect(func():
 		is_transitioning = false
+		current_tween = null
 		transition_complete.emit()
 	)
+
+func make_transition_instant():
+	"""Make current transition instant"""
+	if current_tween and current_tween.is_valid():
+		current_tween.kill()
+		current_tween = null
+		
+		# Jump to final panel position
+		if current_panel_index >= 0 and current_panel_index < panels.size():
+			frame_panel_instant(panels[current_panel_index])
+		
+		is_transitioning = false
+		transition_complete.emit()
 
 func frame_panel_instant(target_panel: Sprite3D):
 	"""Instantly frame target panel - rotation and zoom only"""

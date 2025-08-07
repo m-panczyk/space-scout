@@ -55,41 +55,6 @@ fog_sky_affect = 0.0
 script = ExtResource("1_vef74")
 metadata/_custom_type_script = "uid://cf61d3xem4xv5"
 
-[node name="NinePatchRect" type="NinePatchRect" parent="."]
-visible = false
-show_behind_parent = true
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = -824.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("10_lc2xo")
-patch_margin_left = 64
-patch_margin_top = 64
-patch_margin_right = 64
-patch_margin_bottom = 64
-
-[node name="Question" type="RichTextLabel" parent="NinePatchRect" groups=["PORTALS"]]
-z_index = 1
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.0296296
-anchor_top = 0.125
-anchor_right = 0.97037
-anchor_bottom = 0.875
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-bbcode_enabled = true
-text = "Question
-"
-fit_content = true
-horizontal_alignment = 1
-vertical_alignment = 1
-script = ExtResource("6_ombk5")
-metadata/_edit_use_anchors_ = true
-
 [node name="PausePanel" type="ColorRect" parent="."]
 unique_name_in_owner = true
 process_mode = 3
@@ -107,7 +72,6 @@ color = Color(0, 0, 0, 0.784314)
 layout_mode = 1
 
 [node name="ThreeWayCamera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 0, 0, 0)
 current = true
 fov = 100.0
 far = 15.0
@@ -217,6 +181,42 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "<<<"
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Panels/CenterPanel/PanelViewport/NinePatchRect"]
+visible = false
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -1620.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_lc2xo")
+patch_margin_left = 64
+patch_margin_top = 64
+patch_margin_right = 64
+patch_margin_bottom = 64
+
+[node name="Question" type="RichTextLabel" parent="Panels/CenterPanel/PanelViewport/NinePatchRect/NinePatchRect" groups=["PORTALS"]]
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0296296
+anchor_top = 0.125
+anchor_right = 0.97037
+anchor_bottom = 0.875
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "Question
+"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("6_ombk5")
+metadata/_edit_use_anchors_ = true
 
 [node name="PanelSprite" type="Sprite3D" parent="Panels/CenterPanel"]
 texture = SubResource("ViewportTexture_uu7im")

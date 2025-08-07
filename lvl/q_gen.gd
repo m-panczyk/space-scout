@@ -59,14 +59,12 @@ enum Kategoria {
 # Pytania załadowane z plików JSON
 var pytania_json = {}
 
-# Istniejący system matematyczny
 var lvl_matematyka = [
 	[generuj_pytanie_dodawanie_odejmowanie, generuj_pytanie_tabliczka_mnozenia],
 	[generuj_pytanie_podzielnosc, generuj_pytanie_procent],
 	[generuj_pytanie_zaokraglanie, generuj_pytanie_potegi]
 ]
 
-# Nowy system rozszerzony
 var przedmioty_kategorie = {
 	Przedmiot.MATEMATYKA: {
 		0: [Kategoria.DODAWANIE_ODEJMOWANIE, Kategoria.TABLICZKA_MNOZENIA],
@@ -422,6 +420,13 @@ func get_subject_name(przedmiot: Przedmiot) -> String:
 		Przedmiot.PRZYRODA: return "Przyroda"
 		Przedmiot.POLSKI: return "Język Polski"
 		Przedmiot.ANGIELSKI: return "Język Angielski"
+		_: return "Nieznany"
+
+func get_difficulty_name(level: int) -> String:
+	match level:
+		0: return "10-11 lat"
+		1: return "12-13 lat"
+		2: return "14-15 lat"
 		_: return "Nieznany"
 
 # Funkcja do pobierania dostępnych kategorii dla danego przedmiotu i poziomu

@@ -120,35 +120,8 @@ func _on_panel_touched(panel: ThreeWayPanel):
 	switch_to_panel(target_panel_type, true)
 
 func _input(event):
-	if not enable_input:
-		return
-		
-	if block_input_during_transition and camera.is_camera_transitioning():
-		return
-	
-	if event.is_action_pressed("panel_right"):
-		switch_to_panel_to_the_right()
-	elif event.is_action_pressed("panel_left"):
-		switch_to_panel_to_the_left()
-	elif event.is_action_pressed("show_player_stats"):
-		switch_to_panel(PanelType.LEFT_PANEL)
-	elif event.is_action_pressed("show_gameplay"):
-		switch_to_panel(PanelType.CENTER_PANEL)
-	elif event.is_action_pressed("show_map"):
-		switch_to_panel(PanelType.RIGHT_PANEL)
-	if event is InputEventPanGesture:
-		handle_pan_gesture(event)
-
-func handle_pan_gesture(event: InputEventPanGesture):
-	"""Handle pan gesture for panel navigation"""
-	var pan_delta = event.delta
-	
-	# Only handle significant horizontal pans
-	if abs(pan_delta.x) > abs(pan_delta.y) and abs(pan_delta.x) > 10.0:
-		if pan_delta.x < 0:
-			switch_to_panel_to_the_right()
-		else:
-			switch_to_panel_to_the_left()
+	# Input handling moved to game.gd - this base class no longer processes input
+	pass
 
 func switch_to_panel(panel_type: PanelType, animate: bool = true):
 	"""Switch to specific panel by type"""

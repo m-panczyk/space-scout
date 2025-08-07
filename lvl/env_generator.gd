@@ -118,7 +118,7 @@ func setup_spawn_timer() -> void:
 
 func update_difficulty_from_progress() -> void:
 	# Clamp game_progress to valid range
-	var progress = clamp(SaveData.game_progress, 0, 20)
+	var progress = clamp(GameState.game_progress, 0, 20)
 	
 	# Calculate difficulty factor (0.0 = hardest, 1.0 = easiest)
 	var difficulty_factor = progress / 20.0
@@ -269,7 +269,7 @@ func set_difficulty_range(min_spawn: float, max_spawn: float, min_speed: float, 
 
 func get_current_difficulty_factor() -> float:
 	# Returns 0.0 (hardest) to 1.0 (easiest)
-	return clamp(SaveData.game_progress, 0, 20) / 20.0
+	return clamp(GameState.game_progress, 0, 20) / 20.0
 
 func refresh_difficulty() -> void:
 	# Call this when game_progress changes during gameplay

@@ -23,6 +23,7 @@ EventBus="*res://addons/event_bus_plugin/EventBus.gd"
 GlobalSettings="*res://global_settings.gd"
 SaveData="*res://save_data.gd"
 QGen="*res://lvl/q_gen.gd"
+GameState="*res://lvl/game_state.gd"
 
 [display]
 

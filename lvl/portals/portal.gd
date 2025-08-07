@@ -13,7 +13,7 @@ func _process(delta: float) -> void:
 
 func show_question():
 	show()
-	text.text = GlobalSettings.get_answers()[answer]
+	text.text = GameState.get_answers()[answer]
 	$CollisionShape2D.disabled = false
 	fall = true
 
@@ -29,6 +29,6 @@ func _ready() -> void:
 	text = find_child("Text")
 func got_answer(other_area):
 	if other_area is Player:
-		EventBus.emit("end_lvl",GlobalSettings.is_correct_answer(answer))
+		EventBus.emit("end_lvl",GameState.is_correct_answer(answer))
 		if is_inside_tree():
 			get_tree().call_group('PORTALS','hide_question')

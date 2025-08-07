@@ -6,7 +6,7 @@ func _ready() -> void:
 	EventBus.subscribe("start_lvl",update)
 	
 func update(_punished):
-	text = str(SaveData.game_progress," game progress")
+	text = str(GameState.game_progress," game progress")
 	
 func _exit_tree() -> void:
 	EventBus.unsubscribe("end_lvl",update)
