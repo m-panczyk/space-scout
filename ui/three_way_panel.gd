@@ -19,6 +19,8 @@ var content_instance: Node
 var viewport_texture: ViewportTexture
 var click_area: Area3D
 var collision_shape: CollisionShape3D
+var last_click_time: float = 0.0
+var double_click_threshold: float = 0.3
 
 # Reference to the camera for checking visibility
 var camera_ref: ThreeWayCamera3D
@@ -116,23 +118,31 @@ func handle_touch_event(event: InputEventScreenTouch, position: Vector3):
 
 func handle_mouse_event(event: InputEventMouseButton, position: Vector3):
 	"""Handle mouse-specific events"""
-	if not event.pressed:
-		return
-	
 	# Right-click: focus on panel if not fully visible (like touch behavior)
 	if event.button_index == MOUSE_BUTTON_RIGHT:
 		if not is_panel_fully_visible():
 			panel_touched.emit(self)
 			return
-		# If panel is fully visible, forward right-click to content
 		forward_input_to_viewport(event, position)
 		return
 	
-	# Left-click: always forward to viewport content (normal interaction)
+	# Left-click handling
 	if event.button_index == MOUSE_BUTTON_LEFT:
+		# Always forward to viewport content first
 		forward_input_to_viewport(event, position)
+		
+		if event.pressed:
+			if event.double_click:
+				# Double-click detected
+				EventBus.emit("gameplay_double_clicked", convert_click_to_viewport_coords(position))
+			else:
+				# Single click
+				EventBus.emit("gameplay_clicked", convert_click_to_viewport_coords(position))
+		else:
+			# Mouse released
+			EventBus.emit("gameplay_click_released", convert_click_to_viewport_coords(position))
 		return
-
+	
 func is_panel_fully_visible() -> bool:
 	"""Check if this panel is fully visible in the camera view"""
 	if not camera_ref:

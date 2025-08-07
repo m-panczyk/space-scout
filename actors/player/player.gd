@@ -8,6 +8,10 @@ var _energy_max = SaveData.energy_max
 var _energy_production = SaveData.energy_production
 
 # Public properties with getters/setters
+var animation:AnimatedSprite2D
+var target_position: Vector2
+var move_to_target: bool = false
+
 var weapon_name:
 	get:
 		return _weapon_name
@@ -51,7 +55,9 @@ func get_animation() -> AnimatedSprite2D:
 func get_size() -> Vector2:
 	return get_animation().sprite_frames.get_frame_texture(get_animation().animation,0).get_size()
 
-func _alt_ready() -> void:
+func _ready() -> void:
+	super()
+	animation = get_animation()
 	for rouge_player in get_tree().get_nodes_in_group("PLAYER"):
 		rouge_player.queue_free()
 	add_to_group("PLAYER")
@@ -79,10 +85,16 @@ func _alt_ready() -> void:
 		weapon = load_weapon.instantiate()
 		add_child(weapon)
 		EventBus.subscribe("player_fire",fire_weapon)
+		EventBus.subscribe("gameplay_clicked", _on_gameplay_clicked)
+		EventBus.subscribe("gameplay_click_released", _on_gameplay_click_released)
+		EventBus.subscribe("gameplay_double_clicked", _on_gameplay_double_clicked)
 
 func _exit_tree() -> void:
 	EventBus.unsubscribe("player_fire",fire_weapon)
-
+	EventBus.unsubscribe("gameplay_clicked", _on_gameplay_clicked)
+	EventBus.unsubscribe("gameplay_click_released", _on_gameplay_click_released)
+	EventBus.unsubscribe("gameplay_double_clicked", _on_gameplay_double_clicked)
+	
 func _on_energy_production_timer_timeout():
 	if energy < energy_max:
 		energy += energy_production[0]
@@ -95,23 +107,59 @@ func process_clamping():
 func health_changed():
 	SaveData.health = health
 	EventBus.emit("health_changed", [health,max_health])
+func _on_gameplay_clicked(click_position: Vector2):
+	target_position = click_position
+	move_to_target = true
 
+func _on_gameplay_click_released(_click_posiotion: Vector2):
+	move_to_target = false
+	animation.frame = 0  # Reset to idle animation
+
+func _on_gameplay_double_clicked(click_position: Vector2):
+	# Double-click fires weapon instead of moving
+	fire_weapon()
+	
 func process_move(delta: float):
 	var velocity = Vector2.ZERO
+	
 	if Input.is_action_pressed("game_fire"):
 		fire_weapon()
-	if Input.is_action_pressed("ui_left"):
-		get_animation().frame = 1
-		velocity.x -=1
-	if Input.is_action_pressed("ui_right"):
-		get_animation().frame = 2
-		velocity.x +=1
-	if velocity.x == 0:
-		get_animation().frame = 0
-	if Input.is_action_pressed("ui_up"):
-		velocity.y -= 1
-	if Input.is_action_pressed("ui_down"):
-		velocity.y += 1
+	
+	# Handle move-to-target from click
+	if move_to_target:
+		var direction_to_target = (target_position - global_position).normalized()
+		var distance_to_target = global_position.distance_to(target_position)
+		
+		# Stop moving when close enough
+		if distance_to_target < 10.0:  # Adjust threshold as needed
+			move_to_target = false
+			animation.frame = 0
+		else:
+			velocity = direction_to_target
+			# Set animation based on direction
+			if abs(direction_to_target.x) > abs(direction_to_target.y):
+				animation.frame = 2 if direction_to_target.x > 0 else 1
+			else:
+				animation.frame = 0
+	else:
+		# Standard keyboard input (only when not moving to target)
+		if Input.is_action_pressed("ui_left"):
+			animation.frame = 1
+			velocity.x -= 1
+		if Input.is_action_pressed("ui_right"):
+			animation.frame = 2
+			velocity.x += 1
+		if velocity.x == 0:
+			animation.frame = 0
+		if Input.is_action_pressed("ui_up"):
+			velocity.y -= 1
+		if Input.is_action_pressed("ui_down"):
+			velocity.y += 1
+		
+		# Allow keyboard input to override click movement
+		if velocity.length() > 0:
+			move_to_target = false
+	
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
 	position += velocity * delta
