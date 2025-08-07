@@ -1,8 +1,8 @@
 class_name ThreeWayCamera3D
 extends Camera3D
 
-## Specialized camera for ThreeWayDisplay system
-## Handles smooth transitions between exactly 3 panels
+## Simplified camera for ThreeWayDisplay system
+## Only adjusts rotation and zoom, keeps position fixed
 
 signal panel_changed(panel_index: int)
 signal transition_complete
@@ -16,12 +16,12 @@ signal transition_complete
 
 var panels: Array[Sprite3D] = []
 var current_panel_index: int = 1  # Start with center panel
-var original_position: Vector3
+var fixed_position: Vector3
 var is_transitioning: bool = false
 var resize_timer: Timer
 
 func _ready():
-	original_position = global_position
+	fixed_position = global_position
 	setup_resize_timer()
 
 func setup_resize_timer():
@@ -41,11 +41,11 @@ func initialize_with_panels(sprite_panels: Array):
 		else:
 			push_error("ThreeWayCamera3D: initialize_with_panels requires Array of Sprite3D nodes")
 			return
-	# Position camera to view center panel initially
+	
+	# Set up initial view for center panel
 	if panels.size() > 1:
-		global_position = original_position
-		look_at(panels[1].global_position, Vector3.UP)
-		adjust_distance_for_current_panel()
+		global_position = fixed_position
+		frame_panel_instant(panels[1])
 
 func switch_to_panel_index(index: int, animate: bool = true):
 	"""Switch to specific panel by index"""
@@ -62,82 +62,61 @@ func switch_to_panel_index(index: int, animate: bool = true):
 	
 	panel_changed.emit(current_panel_index)
 
-func switch_to_next_panel():
-	"""Switch to next panel (0->1->2->0)"""
-	var next_index = (current_panel_index + 1) % panels.size()
-	switch_to_panel_index(next_index)
+func switch_to_panel_to_the_right():
+	"""Switch to panel to the right (left->center->right, stop at right)"""
+	if current_panel_index < panels.size() - 1:
+		switch_to_panel_index(current_panel_index + 1)
 
-func switch_to_previous_panel():
-	"""Switch to previous panel (2->1->0->2)"""
-	var prev_index = (current_panel_index - 1) % panels.size()
-	if prev_index < 0:
-		prev_index = panels.size() - 1
-	switch_to_panel_index(prev_index)
+func switch_to_panel_to_the_left():
+	"""Switch to panel to the left (right->center->left, stop at left)"""
+	if current_panel_index > 0:
+		switch_to_panel_index(current_panel_index - 1)
 
 func animate_to_panel(target_panel: Sprite3D):
-	"""Smooth animated transition to target panel"""
+	"""Smooth animated transition to target panel - rotation and zoom only"""
 	is_transitioning = true
 	
 	var tween = create_tween()
 	tween.set_parallel(true)
 	
-	# Step 1: Rotate around pivot point to face panel
-	var pivot = original_position
-	var current_pos = global_position
-	var target_look_direction = (target_panel.global_position - pivot).normalized()
-	var distance_from_pivot = current_pos.distance_to(pivot)
-	var target_pos_after_rotation = pivot + target_look_direction * distance_from_pivot
+	# Calculate target rotation to look at panel
+	var direction_to_panel = (target_panel.global_position - fixed_position).normalized()
+	var target_basis = Basis.looking_at(direction_to_panel, Vector3.UP)
 	
-	# Animate position (creates rotation around pivot effect)
-	tween.tween_property(self, "global_position", target_pos_after_rotation, transition_duration * 0.5)
-	
-	# Animate rotation to look at panel
-	var current_basis = global_transform.basis
-	var target_basis = Basis.looking_at(target_look_direction, Vector3.UP)
+	# Animate rotation
 	tween.tween_method(
 		func(basis: Basis): global_transform.basis = basis,
-		current_basis,
+		global_transform.basis,
 		target_basis,
-		transition_duration * 0.5
+		transition_duration
 	)
 	
-	# Step 2: After rotation, adjust distance for optimal framing
-	tween.tween_callback(func(): adjust_distance_animated(target_panel))
-
-func adjust_distance_animated(target_panel: Sprite3D):
-	"""Animate distance adjustment for optimal panel framing"""
-	var optimal_distance = calculate_optimal_distance(target_panel)
-	var direction = (target_panel.global_position - global_position).normalized()
-	var target_position = target_panel.global_position - direction * optimal_distance
+	# Calculate and animate FOV for optimal framing
+	var optimal_fov = calculate_optimal_fov(target_panel)
+	tween.tween_property(self, "fov", optimal_fov, transition_duration)
 	
-	var tween = create_tween()
-	tween.tween_property(self, "global_position", target_position, transition_duration * 0.5)
 	tween.finished.connect(func():
 		is_transitioning = false
 		transition_complete.emit()
 	)
 
 func frame_panel_instant(target_panel: Sprite3D):
-	"""Instantly position camera for target panel"""
-	# Rotate around pivot to face panel
-	var pivot = original_position
-	var current_pos = global_position
-	var target_look_direction = (target_panel.global_position - pivot).normalized()
-	var distance_from_pivot = current_pos.distance_to(pivot)
+	"""Instantly frame target panel - rotation and zoom only"""
+	# Point camera at panel
+	var direction_to_panel = (target_panel.global_position - fixed_position).normalized()
+	global_transform.basis = Basis.looking_at(direction_to_panel, Vector3.UP)
 	
-	global_position = pivot + target_look_direction * distance_from_pivot
-	look_at(target_panel.global_position, Vector3.UP)
-	
-	# Adjust distance for optimal framing
-	adjust_distance_for_panel(target_panel)
+	# Adjust FOV for optimal framing
+	fov = calculate_optimal_fov(target_panel)
 
-func calculate_optimal_distance(panel_sprite: Sprite3D) -> float:
-	"""Calculate optimal camera distance for panel"""
+func calculate_optimal_fov(panel_sprite: Sprite3D) -> float:
+	"""Calculate optimal FOV to frame the panel properly"""
 	var panel_node = panel_sprite.get_parent() as ThreeWayPanel
 	if not panel_node:
-		return min_distance
+		return 75.0  # Default FOV
 	
 	var panel_size = panel_node.get_world_size()
+	var distance_to_panel = fixed_position.distance_to(panel_sprite.global_position)
 	var viewport_size = get_viewport().get_visible_rect().size
 	var aspect_ratio = viewport_size.x / viewport_size.y
 	
@@ -151,22 +130,13 @@ func calculate_optimal_distance(panel_sprite: Sprite3D) -> float:
 	# Add padding
 	max_dimension *= (1.0 + padding_ratio)
 	
-	# Calculate distance using FOV
-	var half_fov_rad = deg_to_rad(fov / 2.0)
-	var required_distance = (max_dimension / 2.0) / tan(half_fov_rad)
+	# Calculate required FOV
+	var half_height = max_dimension / 2.0
+	var required_fov_rad = 2.0 * atan(half_height / distance_to_panel)
+	var required_fov_deg = rad_to_deg(required_fov_rad)
 	
-	return clamp(required_distance, min_distance, max_distance)
-
-func adjust_distance_for_panel(panel_sprite: Sprite3D):
-	"""Adjust camera distance for optimal panel framing"""
-	var optimal_distance = calculate_optimal_distance(panel_sprite)
-	var direction = (panel_sprite.global_position - global_position).normalized()
-	global_position = panel_sprite.global_position - direction * optimal_distance
-
-func adjust_distance_for_current_panel():
-	"""Adjust distance for currently selected panel"""
-	if current_panel_index >= 0 and current_panel_index < panels.size():
-		adjust_distance_for_panel(panels[current_panel_index])
+	# Clamp FOV to reasonable range
+	return clamp(required_fov_deg, 30.0, 120.0)
 
 func get_current_panel_sprite() -> Sprite3D:
 	"""Get currently targeted panel sprite"""
@@ -223,8 +193,7 @@ func _on_resize_timeout():
 	"""Readjust camera after viewport resize"""
 	if current_panel_index >= 0 and current_panel_index < panels.size():
 		var current_panel = panels[current_panel_index]
-		look_at(current_panel.global_position, Vector3.UP)
-		adjust_distance_for_panel(current_panel)
+		frame_panel_instant(current_panel)
 
 func is_camera_transitioning() -> bool:
 	"""Check if camera is currently transitioning"""
@@ -237,9 +206,9 @@ func get_current_panel_index() -> int:
 	return current_panel_index
 
 func reset_to_original_position():
-	"""Reset camera to original position and reframe current panel"""
-	global_position = original_position
-	rotation = Vector3.ZERO
+	"""Reset camera to fixed position and reframe current panel"""
+	global_position = fixed_position
+	fov = 75.0  # Reset to default FOV
 	
 	await get_tree().process_frame
 	

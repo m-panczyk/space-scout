@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cgwlalfbkx2s5"]
+[gd_scene load_steps=20 format=3 uid="uid://cgwlalfbkx2s5"]
 
 [ext_resource type="Script" uid="uid://dffi65ighf0tu" path="res://game.gd" id="1_vef74"]
 [ext_resource type="Script" uid="uid://d27w00i7wny55" path="res://ui/three_way_camera.gd" id="2_af5le"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://d18kp6hplfcve" path="res://ui/right_panel.tscn" id="8_vef74"]
 [ext_resource type="Script" uid="uid://3ef2o4dkxoh0" path="res://ui/HUD/game_progress.gd" id="10_215e1"]
 [ext_resource type="Texture2D" uid="uid://dcbktk4lemo2q" path="res://ui/img/neon_frame.png" id="10_lc2xo"]
+[ext_resource type="PackedScene" uid="uid://c5qw6ssdl0lxr" path="res://ui/nine_patch_rect.tscn" id="12_lc2xo"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_p50ye"]
 viewport_path = NodePath("Panels/LeftPanel/PanelViewport")
@@ -106,15 +107,17 @@ color = Color(0, 0, 0, 0.784314)
 layout_mode = 1
 
 [node name="ThreeWayCamera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9.4959)
+transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 0, 0, 0)
 current = true
+fov = 100.0
+far = 15.0
 script = ExtResource("2_af5le")
 metadata/_custom_type_script = "uid://d27w00i7wny55"
 
 [node name="Panels" type="Node3D" parent="."]
 
 [node name="LeftPanel" type="Node3D" parent="Panels"]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -10, 0, -1.71981)
+transform = Transform3D(0.309017, 0, 0.951057, 0, 1, 0, -0.951057, 0, 0.309017, -7.164, 0, -2.328)
 script = ExtResource("3_af5le")
 metadata/_custom_type_script = "uid://knh3ligoqkyo"
 
@@ -122,86 +125,26 @@ metadata/_custom_type_script = "uid://knh3ligoqkyo"
 transparent_bg = true
 size = Vector2i(1080, 1920)
 
-[node name="TextureRect" type="TextureRect" parent="Panels/LeftPanel/PanelViewport"]
-modulate = Color(0.258824, 1, 0.25098, 0.933333)
+[node name="NinePatchRect" type="NinePatchRect" parent="Panels/LeftPanel/PanelViewport"]
+show_behind_parent = true
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -4.0
-offset_right = 4.0
-offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 texture = ExtResource("10_lc2xo")
-
-[node name="HUD" type="TextureRect" parent="Panels/LeftPanel/PanelViewport"]
-unique_name_in_owner = true
-clip_children = 2
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-expand_mode = 1
-metadata/_edit_use_anchors_ = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panels/LeftPanel/PanelViewport/HUD"]
-modulate = Color(1, 1, 1, 0.878431)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.117
-anchor_top = 0.158
-anchor_right = 0.896
-anchor_bottom = 0.825
-offset_left = -0.142002
-offset_top = 0.0859985
-offset_right = -0.0960083
-offset_bottom = 0.0249939
-alignment = 1
-
-[node name="HealthBar2" type="ProgressBar" parent="Panels/LeftPanel/PanelViewport/HUD/VBoxContainer"]
-self_modulate = Color(0, 0.643305, 0.0462931, 1)
-layout_mode = 2
-size_flags_vertical = 3
-step = 1.0
-rounded = true
-show_percentage = false
-script = ExtResource("4_a7i5o")
-
-[node name="EnergyBar2" type="ProgressBar" parent="Panels/LeftPanel/PanelViewport/HUD/VBoxContainer"]
-self_modulate = Color(0, 0.254902, 0.909804, 1)
-clip_contents = true
-layout_mode = 2
-size_flags_vertical = 3
-show_percentage = false
-script = ExtResource("4_a7i5o")
-data_type = "energy"
-
-[node name="PointCount" type="Label" parent="Panels/LeftPanel/PanelViewport/HUD/VBoxContainer"]
-layout_mode = 2
-text = "0 pts"
-horizontal_alignment = 2
-script = ExtResource("5_v2ajr")
-
-[node name="GameProgress" type="Label" parent="Panels/LeftPanel/PanelViewport/HUD/VBoxContainer"]
-layout_mode = 2
-text = "0 pts"
-horizontal_alignment = 2
-script = ExtResource("10_215e1")
-
-[node name="PauseSide" type="Button" parent="Panels/LeftPanel/PanelViewport/HUD/VBoxContainer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "<<<"
+draw_center = false
+patch_margin_left = 32
+patch_margin_top = 32
+patch_margin_right = 32
+patch_margin_bottom = 32
 
 [node name="PanelSprite" type="Sprite3D" parent="Panels/LeftPanel"]
 texture = SubResource("ViewportTexture_p50ye")
 
 [node name="CenterPanel" type="Node3D" parent="Panels"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.71981)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.532)
 script = ExtResource("3_af5le")
 metadata/_custom_type_script = "uid://knh3ligoqkyo"
 
@@ -210,26 +153,76 @@ transparent_bg = true
 size = Vector2i(1080, 1920)
 size_2d_override_stretch = true
 
-[node name="TextureRect" type="TextureRect" parent="Panels/CenterPanel/PanelViewport"]
-visible = false
-modulate = Color(0.258824, 1, 0.25098, 0.933333)
+[node name="GameLevel" parent="Panels/CenterPanel/PanelViewport" instance=ExtResource("4_p50ye")]
+unique_name_in_owner = true
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Panels/CenterPanel/PanelViewport"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 texture = ExtResource("10_lc2xo")
-expand_mode = 1
+draw_center = false
+patch_margin_left = 32
+patch_margin_top = 32
+patch_margin_right = 32
+patch_margin_bottom = 32
 
-[node name="GameLevel" parent="Panels/CenterPanel/PanelViewport" instance=ExtResource("4_p50ye")]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panels/CenterPanel/PanelViewport/NinePatchRect"]
+modulate = Color(1, 1, 1, 0.878431)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0296296
+anchor_top = 0.833333
+anchor_right = 0.97037
+anchor_bottom = 0.966667
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="GameProgress" type="Label" parent="Panels/CenterPanel/PanelViewport/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+text = "0 pts"
+horizontal_alignment = 2
+script = ExtResource("10_215e1")
+
+[node name="PointCount" type="Label" parent="Panels/CenterPanel/PanelViewport/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+text = "0 pts"
+horizontal_alignment = 2
+script = ExtResource("5_v2ajr")
+
+[node name="HealthBar2" type="ProgressBar" parent="Panels/CenterPanel/PanelViewport/NinePatchRect/VBoxContainer"]
+self_modulate = Color(0, 0.643305, 0.0462931, 1)
+layout_mode = 2
+size_flags_vertical = 3
+step = 1.0
+rounded = true
+show_percentage = false
+script = ExtResource("4_a7i5o")
+
+[node name="EnergyBar2" type="ProgressBar" parent="Panels/CenterPanel/PanelViewport/NinePatchRect/VBoxContainer"]
+self_modulate = Color(0, 0.254902, 0.909804, 1)
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+show_percentage = false
+script = ExtResource("4_a7i5o")
+data_type = "energy"
+
+[node name="PauseSide" type="Button" parent="Panels/CenterPanel/PanelViewport/NinePatchRect/VBoxContainer"]
 unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "<<<"
 
 [node name="PanelSprite" type="Sprite3D" parent="Panels/CenterPanel"]
 texture = SubResource("ViewportTexture_uu7im")
 
 [node name="RightPanel" type="Node3D" parent="Panels"]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 10, 0, -1.72)
+transform = Transform3D(0.309017, 0, -0.951057, 0, 1, 0, 0.951057, 0, 0.309017, 7.16, 0, -2.328)
 script = ExtResource("3_af5le")
 metadata/_custom_type_script = "uid://knh3ligoqkyo"
 
@@ -238,24 +231,15 @@ transparent_bg = true
 size = Vector2i(1080, 1920)
 size_2d_override_stretch = true
 
-[node name="TextureRect" type="TextureRect" parent="Panels/RightPanel/PanelViewport"]
-modulate = Color(0.258824, 1, 0.25098, 0.933333)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -4.0
-offset_right = 4.0
-offset_bottom = 8.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("10_lc2xo")
-
 [node name="FlowContainer" parent="Panels/RightPanel/PanelViewport" instance=ExtResource("8_vef74")]
 offset_left = 100.0
 offset_top = 100.0
 offset_right = -100.0
 offset_bottom = -100.0
+mouse_default_cursor_shape = 3
+
+[node name="NinePatchRect" parent="Panels/RightPanel/PanelViewport" instance=ExtResource("12_lc2xo")]
+visible = false
 
 [node name="PanelSprite" type="Sprite3D" parent="Panels/RightPanel"]
 texture = SubResource("ViewportTexture_1ya7t")

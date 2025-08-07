@@ -126,18 +126,29 @@ func _input(event):
 	if block_input_during_transition and camera.is_camera_transitioning():
 		return
 	
-	if event.is_action_pressed("previous_panel"):
-		switch_to_previous_panel()
-	elif event.is_action_pressed("next_panel"):
-		switch_to_next_panel()
+	if event.is_action_pressed("panel_right"):
+		switch_to_panel_to_the_right()
+	elif event.is_action_pressed("panel_left"):
+		switch_to_panel_to_the_left()
 	elif event.is_action_pressed("show_player_stats"):
 		switch_to_panel(PanelType.LEFT_PANEL)
 	elif event.is_action_pressed("show_gameplay"):
 		switch_to_panel(PanelType.CENTER_PANEL)
 	elif event.is_action_pressed("show_map"):
 		switch_to_panel(PanelType.RIGHT_PANEL)
+	if event is InputEventPanGesture:
+		handle_pan_gesture(event)
 
-## Public API Methods
+func handle_pan_gesture(event: InputEventPanGesture):
+	"""Handle pan gesture for panel navigation"""
+	var pan_delta = event.delta
+	
+	# Only handle significant horizontal pans
+	if abs(pan_delta.x) > abs(pan_delta.y) and abs(pan_delta.x) > 10.0:
+		if pan_delta.x < 0:
+			switch_to_panel_to_the_right()
+		else:
+			switch_to_panel_to_the_left()
 
 func switch_to_panel(panel_type: PanelType, animate: bool = true):
 	"""Switch to specific panel by type"""
@@ -147,17 +158,25 @@ func switch_to_panel(panel_type: PanelType, animate: bool = true):
 	current_panel_type = panel_type
 	camera.switch_to_panel_index(int(panel_type), animate)
 
-func switch_to_next_panel():
-	"""Switch to next panel (left -> center -> right -> left)"""
-	var next_panel = (current_panel_type + 1) % 3
-	switch_to_panel(next_panel as PanelType)
+func switch_to_panel_to_the_right():
+	"""Switch to panel to the right (left->center->right, stop at right)"""
+	match current_panel_type:
+		PanelType.LEFT_PANEL:
+			switch_to_panel(PanelType.CENTER_PANEL)
+		PanelType.CENTER_PANEL:
+			switch_to_panel(PanelType.RIGHT_PANEL)
+		PanelType.RIGHT_PANEL:
+			pass  # Already at rightmost panel, do nothing
 
-func switch_to_previous_panel():
-	"""Switch to previous panel (right -> center -> left -> right)"""
-	var prev_panel = (current_panel_type - 1) % 3
-	if prev_panel < 0:
-		prev_panel = 2
-	switch_to_panel(prev_panel as PanelType)
+func switch_to_panel_to_the_left():
+	"""Switch to panel to the left (right->center->left, stop at left)"""
+	match current_panel_type:
+		PanelType.RIGHT_PANEL:
+			switch_to_panel(PanelType.CENTER_PANEL)
+		PanelType.CENTER_PANEL:
+			switch_to_panel(PanelType.LEFT_PANEL)
+		PanelType.LEFT_PANEL:
+			pass  # Already at leftmost panel, do nothing
 
 func get_current_panel() -> ThreeWayPanel:
 	"""Get currently active panel"""
@@ -251,3 +270,11 @@ func pause_transitions():
 func resume_transitions():
 	"""Re-enable camera transitions"""
 	camera.transition_duration = transition_duration
+
+func can_switch_to_right() -> bool:
+	"""Check if can switch to panel to the right"""
+	return current_panel_type != PanelType.RIGHT_PANEL
+
+func can_switch_to_left() -> bool:
+	"""Check if can switch to panel to the left"""
+	return current_panel_type != PanelType.LEFT_PANEL

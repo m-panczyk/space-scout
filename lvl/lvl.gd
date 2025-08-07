@@ -26,13 +26,20 @@ func end_lvl_check(new_points:int):
 		lvl_points = 0
 		env.ready_to_free = true
 
+func _ready() -> void:
+		if DisplayServer.is_touchscreen_available():
+			var touch_controls = GestureControls.new()
+			get_parent().add_child(touch_controls)
 		
 func start_lvl(punished:bool):
-	if env != null && env.ready_to_free:
+	if env != null:
 		env.queue_free()
 	max_level_points = lerp(100,20,(SaveData.game_progress/20))
 	EventBus.emit("max_lvl_set",max_level_points)
-	bg.lvl = (str(randi_range(1,34)))
+	if punished:
+		bg.lvl = 0
+	else:
+		bg.lvl = (str(randi_range(1,34)))
 	env = EnvGenerator.new()
 	lvl_points = 0
 	add_child(env)

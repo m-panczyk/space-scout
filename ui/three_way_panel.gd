@@ -1,3 +1,4 @@
+# Fixed three_way_panel.gd
 class_name ThreeWayPanel
 extends Node3D
 
@@ -6,7 +7,7 @@ extends Node3D
 
 signal content_loaded(panel: ThreeWayPanel)
 signal content_changed(panel: ThreeWayPanel)
-signal panel_touched(panel: ThreeWayPanel)  # New signal for touch-to-focus
+signal panel_touched(panel: ThreeWayPanel)
 
 @export var panel_size: Vector2i = Vector2i(1080, 1920) : set = set_panel_size
 @export var pixel_size: float = 0.01
@@ -60,6 +61,8 @@ func find_components():
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	sprite3d.pixel_size = pixel_size
 	sprite3d.billboard = BaseMaterial3D.BILLBOARD_DISABLED
+	
+	# Viewport doesn't have gui_input signal - input handling is done through Area3D
 
 func setup_click_detection():
 	"""Set up Area3D for click detection"""
@@ -82,6 +85,9 @@ func setup_click_detection():
 
 func _on_area_input_event(camera: Node, event: InputEvent, position: Vector3, normal: Vector3, shape_idx: int):
 	"""Handle touch/click events on the panel"""
+	if not enabled:
+		return
+	
 	if not event is InputEventMouseButton and not event is InputEventScreenTouch:
 		return
 	
@@ -118,7 +124,7 @@ func handle_mouse_event(event: InputEventMouseButton, position: Vector3):
 		if not is_panel_fully_visible():
 			panel_touched.emit(self)
 			return
-		# If panel is fully visible, still forward right-click to content (for context menus, etc.)
+		# If panel is fully visible, forward right-click to content
 		forward_input_to_viewport(event, position)
 		return
 	
@@ -150,6 +156,7 @@ func forward_input_to_viewport(event: InputEvent, position: Vector3):
 		mouse_event.button_index = event.button_index
 		mouse_event.pressed = event.pressed
 		mouse_event.position = viewport_pos
+		mouse_event.global_position = viewport_pos
 		new_event = mouse_event
 	elif event is InputEventScreenTouch:
 		var touch_event = InputEventScreenTouch.new()
@@ -158,9 +165,20 @@ func forward_input_to_viewport(event: InputEvent, position: Vector3):
 		touch_event.position = viewport_pos
 		new_event = touch_event
 	
-	# Send to viewport
+	# Send to viewport - use both methods to ensure delivery
 	if new_event:
+		print("Forwarding input to viewport: ", name, " at position: ", viewport_pos)
 		viewport.push_input(new_event)
+		
+		# Also try using _gui_input directly on viewport content
+		if viewport.get_child_count() > 0:
+			var first_child = viewport.get_child(0)
+			if first_child is Control and first_child.has_method("_gui_input"):
+				first_child._gui_input(new_event)
+
+func _on_content_gui_input(event: InputEvent):
+	"""Handle input events from content"""
+	print("Content in panel ", name, " received input: ", event)
 
 func convert_click_to_viewport_coords(click_pos: Vector3) -> Vector2:
 	"""Convert 3D click position to 2D viewport coordinates"""
@@ -198,6 +216,10 @@ func set_content_scene(scene: PackedScene):
 	content_instance = scene.instantiate()
 	viewport.add_child(content_instance)
 	
+	# Ensure content can receive input if it's a Control node
+	if content_instance is Control:
+		setup_content_input_handling(content_instance)
+	
 	content_loaded.emit(self)
 	content_changed.emit(self)
 
@@ -211,8 +233,22 @@ func set_content_node(node: Node):
 	content_instance = node
 	viewport.add_child(content_instance)
 	
+	# Ensure content can receive input if it's a Control node
+	if content_instance is Control:
+		setup_content_input_handling(content_instance)
+	
 	content_loaded.emit(self)
 	content_changed.emit(self)
+
+func setup_content_input_handling(control: Control):
+	"""Setup input handling for Control nodes in the viewport"""
+	# Ensure the control fills the viewport and can receive mouse events
+	control.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	control.mouse_filter = Control.MOUSE_FILTER_PASS
+	
+	# Connect to gui_input if possible
+	if control.has_signal("gui_input") and not control.gui_input.is_connected(_on_content_gui_input):
+		control.gui_input.connect(_on_content_gui_input)
 
 func clear_content():
 	"""Remove current content from panel"""
@@ -237,6 +273,13 @@ func set_panel_size(size: Vector2i):
 	panel_size = size
 	if viewport:
 		viewport.size = size
+		
+	# Update collision shape to match new size
+	if collision_shape and collision_shape.shape:
+		var box_shape = collision_shape.shape as BoxShape3D
+		if box_shape:
+			var world_size = get_world_size()
+			box_shape.size = Vector3(world_size.x, world_size.y, 0.1)
 
 func set_panel_enabled(value: bool):
 	"""Enable/disable panel rendering"""
@@ -245,6 +288,9 @@ func set_panel_enabled(value: bool):
 		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if enabled else SubViewport.UPDATE_DISABLED
 	if sprite3d:
 		sprite3d.visible = enabled
+	if click_area:
+		click_area.set_collision_layer_value(1, enabled)
+		click_area.set_collision_mask_value(1, enabled)
 
 func get_world_size() -> Vector2:
 	"""Calculate panel size in world units"""

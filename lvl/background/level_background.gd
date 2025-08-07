@@ -22,6 +22,7 @@ var lvl:
 	get:
 		return _lvl
 	set(value):
+		value = str(value)
 		_lvl = value
 		SaveData.bg_type = value
 		set_texture_for_lvl()
