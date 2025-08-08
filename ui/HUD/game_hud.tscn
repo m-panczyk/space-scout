@@ -1,0 +1,150 @@
+[gd_scene load_steps=10 format=3 uid="uid://co3tagyt0d0k0"]
+
+[ext_resource type="Texture2D" uid="uid://c3abnhspn7616" path="res://ui/img/frame_empty.png" id="1_1a4iy"]
+[ext_resource type="Texture2D" uid="uid://dbcbprxmyl5ik" path="res://ui/img/frame.png" id="1_qujba"]
+[ext_resource type="Script" uid="uid://3ef2o4dkxoh0" path="res://ui/HUD/game_progress.gd" id="2_7f6fh"]
+[ext_resource type="Script" uid="uid://clm5y8mhfbomc" path="res://lvl/question.gd" id="5_17e2f"]
+[ext_resource type="Texture2D" uid="uid://dtsm43kanrqov" path="res://ui/img/animated_bar.png" id="7_17e2f"]
+[ext_resource type="Script" uid="uid://bw1yid1ped2wh" path="res://ui/HUD/animated_progressbar.gd" id="8_ibh6r"]
+[ext_resource type="Texture2D" uid="uid://cmc27280thp1g" path="res://ui/img/octagon.png" id="9_17e2f"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1a4iy"]
+atlas = ExtResource("7_17e2f")
+region = Rect2(0, 0, 761, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j118o"]
+atlas = ExtResource("7_17e2f")
+region = Rect2(0, 0, 761, 64)
+
+[node name="NinePatchRect" type="NinePatchRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 840.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_1a4iy")
+region_rect = Rect2(0, 0, 700, 700)
+patch_margin_left = 228
+patch_margin_top = 173
+patch_margin_right = 235
+patch_margin_bottom = 179
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+anchor_left = 0.465741
+anchor_top = 0.9
+anchor_right = 0.560185
+anchor_bottom = 0.961458
+size_flags_horizontal = 3
+fill_mode = 4
+nine_patch_stretch = true
+texture_under = ExtResource("9_17e2f")
+texture_progress = ExtResource("9_17e2f")
+tint_under = Color(0, 0, 0, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="EnergyBar" type="TextureRect" parent="TextureProgressBar"]
+texture_filter = 3
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+anchor_left = 0.794118
+anchor_top = 0.745763
+anchor_right = 4.70508
+anchor_bottom = 1.03008
+offset_right = 3.05176e-05
+size_flags_horizontal = 3
+size_flags_vertical = 8
+texture = SubResource("AtlasTexture_1a4iy")
+expand_mode = 3
+stretch_mode = 5
+flip_h = true
+script = ExtResource("8_ibh6r")
+data_type = "energy"
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="TextureProgressBar/EnergyBar"]
+layout_mode = 0
+anchor_left = 0.0802168
+anchor_top = -0.715371
+anchor_right = 0.982656
+anchor_bottom = -0.119229
+text = "BAR"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="HealthBar" type="TextureRect" parent="TextureProgressBar"]
+texture_filter = 3
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+anchor_left = -3.7549
+anchor_top = 0.745763
+anchor_right = 0.20864
+anchor_bottom = 1.0339
+size_flags_horizontal = 3
+size_flags_vertical = 8
+texture = SubResource("AtlasTexture_j118o")
+expand_mode = 3
+stretch_mode = 5
+script = ExtResource("8_ibh6r")
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="TextureProgressBar/HealthBar"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0197882
+anchor_top = -0.705882
+anchor_right = 0.930046
+anchor_bottom = -0.117647
+text = "BAR"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="TextureProgressBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("2_7f6fh")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+visible = false
+show_behind_parent = true
+z_index = 1
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 423.0
+grow_horizontal = 2
+texture = ExtResource("1_qujba")
+patch_margin_left = 243
+patch_margin_top = 189
+patch_margin_right = 235
+patch_margin_bottom = 189
+
+[node name="Question" type="RichTextLabel" parent="NinePatchRect" groups=["PORTALS"]]
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0296296
+anchor_top = 0.125
+anchor_right = 0.97037
+anchor_bottom = 0.875
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "Question
+"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("5_17e2f")
+metadata/_edit_use_anchors_ = true

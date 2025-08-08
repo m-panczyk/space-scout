@@ -7,7 +7,10 @@ func _ready():
 	# Connect to transition signals
 	camera.transition_started.connect(_on_transition_started)
 	transition_complete.connect(_on_transition_complete)
-
+	EventBus.subscribe("start_lvl",show_gameplay)
+func _exit_tree() -> void:
+	EventBus.unsubscribe("start_lvl",show_gameplay)
+	
 func _input(event: InputEvent) -> void:
 	# If transitioning and we get "press any key" input, make transition instant
 	if camera.is_camera_transitioning() and is_press_any_key_input(event):

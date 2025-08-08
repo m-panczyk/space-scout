@@ -12,6 +12,7 @@ signal panel_touched(panel: ThreeWayPanel)
 @export var panel_size: Vector2i = Vector2i(1080, 1920) : set = set_panel_size
 @export var pixel_size: float = 0.01
 @export var enabled: bool = true : set = set_panel_enabled
+@export var panel_type:ThreeWayDisplay.PanelType = ThreeWayDisplay.PanelType.CENTER_PANEL
 
 var sprite3d: Sprite3D
 var viewport: SubViewport
@@ -131,7 +132,7 @@ func handle_mouse_event(event: InputEventMouseButton, position: Vector3):
 		# Always forward to viewport content first
 		forward_input_to_viewport(event, position)
 		
-		if event.pressed:
+		if event.pressed and panel_type == ThreeWayDisplay.PanelType.CENTER_PANEL:
 			if event.double_click:
 				# Double-click detected
 				EventBus.emit("gameplay_double_clicked", convert_click_to_viewport_coords(position))

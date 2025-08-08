@@ -1,13 +1,17 @@
 extends Label
 
 func _ready() -> void:
-	update(0)
-	EventBus.subscribe("end_lvl",update)
-	EventBus.subscribe("start_lvl",update)
-	
-func update(_punished):
-	text = str(GameState.game_progress," game progress")
+	EventBus.subscribe('add_point',progress_update)
+	EventBus.subscribe('max_lvl_set',progress_setup)
 	
 func _exit_tree() -> void:
-	EventBus.unsubscribe("end_lvl",update)
-	EventBus.unsubscribe("start_lvl",update)
+	EventBus.unsubscribe('max_lvl_set',progress_setup)
+	EventBus.unsubscribe('add_point',progress_update)
+
+func progress_setup(max_lvl):
+	get_parent().value = 0
+	get_parent().max_value = max_lvl
+	
+func progress_update(points):
+	get_parent().value = get_parent().value + points
+	text = str(get_parent().value)

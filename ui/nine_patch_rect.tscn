@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5qw6ssdl0lxr"]
+
+[ext_resource type="Texture2D" uid="uid://dbcbprxmyl5ik" path="res://ui/img/frame.png" id="1_go3hw"]
+
+[node name="NinePatchRect" type="NinePatchRect"]
+show_behind_parent = true
+clip_children = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_go3hw")
+patch_margin_left = 230
+patch_margin_top = 188
+patch_margin_right = 232
+patch_margin_bottom = 177

@@ -239,16 +239,13 @@ func _on_subject_selected(index: int):
 	update_difficulty_descriptions()
 	update_stats()
 	
-	# Zaktualizuj GlobalSettings
-	GlobalSettings.set_current_subject(selected_subject)
-	
 	print("Wybrano przedmiot: ", QGen.get_subject_name(selected_subject))
 
 # Oryginalne funkcje przycisków - rozszerzone o obsługę przedmiotów
 func _on_easy_pressed() -> void:
 	SaveData.difficulty_level = 0
 	SaveData.current_subject = selected_subject
-	GlobalSettings.set_current_subject(selected_subject)
+
 	
 	print("Rozpoczynam grę - Przedmiot: ", QGen.get_subject_name(selected_subject), ", Poziom: 10-11 lat")
 	get_tree().change_scene_to_packed(load("res://game.tscn"))
@@ -256,7 +253,6 @@ func _on_easy_pressed() -> void:
 func _on_normal_pressed() -> void:
 	SaveData.difficulty_level = 1
 	SaveData.current_subject = selected_subject
-	GlobalSettings.set_current_subject(selected_subject)
 	
 	print("Rozpoczynam grę - Przedmiot: ", QGen.get_subject_name(selected_subject), ", Poziom: 12-13 lat")
 	get_tree().change_scene_to_packed(load("res://game.tscn"))
@@ -264,7 +260,6 @@ func _on_normal_pressed() -> void:
 func _on_hard_pressed() -> void:
 	SaveData.difficulty_level = 2
 	SaveData.current_subject = selected_subject
-	GlobalSettings.set_current_subject(selected_subject)
 	
 	print("Rozpoczynam grę - Przedmiot: ", QGen.get_subject_name(selected_subject), ", Poziom: 14-15 lat")
 	get_tree().change_scene_to_packed(load("res://game.tscn"))

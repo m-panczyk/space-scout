@@ -119,10 +119,6 @@ func _on_panel_touched(panel: ThreeWayPanel):
 	# Switch to the touched panel
 	switch_to_panel(target_panel_type, true)
 
-func _input(event):
-	# Input handling moved to game.gd - this base class no longer processes input
-	pass
-
 func switch_to_panel(panel_type: PanelType, animate: bool = true):
 	"""Switch to specific panel by type"""
 	if panel_type == current_panel_type:
@@ -220,7 +216,7 @@ func _on_viewport_resized():
 
 ## Utility Methods for Game Integration
 
-func show_gameplay():
+func show_gameplay(_punished:bool = false):
 	"""Convenience method to show main gameplay"""
 	switch_to_panel(PanelType.CENTER_PANEL)
 
