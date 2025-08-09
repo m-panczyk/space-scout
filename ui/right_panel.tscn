@@ -1,13 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://d18kp6hplfcve"]
+[gd_scene load_steps=5 format=3 uid="uid://d18kp6hplfcve"]
 
 [ext_resource type="Script" uid="uid://dj7j4ku1hfx5l" path="res://ui/right_panel.gd" id="1_di6be"]
 [ext_resource type="PackedScene" uid="uid://bh5o0r5ut5y0d" path="res://lvl/map/map.tscn" id="1_eaefr"]
 [ext_resource type="Script" uid="uid://d1pnprmds7e2g" path="res://ui/zoom_slider.gd" id="2_di6be"]
+[ext_resource type="Script" uid="uid://dux36j0de66s0" path="res://ui/question_history.gd" id="4_xw7mw"]
 
-[node name="RightPanel" type="VBoxContainer"]
+[node name="RightPanel" type="Control"]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = 840.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_di6be")
@@ -16,6 +19,11 @@ script = ExtResource("1_di6be")
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 1080)
 layout_mode = 2
+anchors_preset = 0
+anchor_left = 0.0101852
+anchor_top = 0.00833333
+anchor_right = 1.01019
+anchor_bottom = 0.570833
 metadata/_edit_use_anchors_ = true
 
 [node name="HSlider" type="HSlider" parent="."]
@@ -33,12 +41,32 @@ metadata/_edit_use_anchors_ = true
 unique_name_in_owner = true
 custom_minimum_size = Vector2(216, 216)
 layout_mode = 2
+anchor_left = 0.0101852
+anchor_top = 0.567187
+anchor_right = 0.232407
+anchor_bottom = 0.679688
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 1
 disabled = true
 action_mode = 0
 text = "GO!"
+metadata/_edit_use_anchors_ = true
+
+[node name="ItemList" type="ItemList" parent="."]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+anchor_left = 0.263889
+anchor_top = 0.571354
+anchor_right = 0.978704
+anchor_bottom = 0.967188
+size_flags_vertical = 3
+max_text_lines = 2
+auto_height = true
+item_count = 2
+item_0/text = "TEST"
+item_1/text = "TEST"
+script = ExtResource("4_xw7mw")
 metadata/_edit_use_anchors_ = true
 
 [connection signal="value_changed" from="HSlider" to="HSlider" method="_on_value_changed"]

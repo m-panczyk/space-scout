@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends Control
 
 func _enter_tree() -> void:
 	EventBus.subscribe('target_selected', restore_btn)
