@@ -5,6 +5,7 @@ class_name Weapon
 @export var consumption:int = 1
 @export var bullet = preload("res://actors/bullets/basic.tscn")
 @export var sprite_name = ""
+@export var damage = 1
 
 func _ready() -> void:
 	if sprite_name != "":
@@ -18,4 +19,5 @@ func fire() -> void:
 	new_bullet.speed = speed
 	new_bullet.position = get_parent().position
 	new_bullet.scale = get_parent().scale
+	new_bullet.damage = damage
 	get_parent().get_parent().add_child(new_bullet)

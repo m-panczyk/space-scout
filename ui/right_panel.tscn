@@ -19,6 +19,7 @@ layout_mode = 2
 metadata/_edit_use_anchors_ = true
 
 [node name="HSlider" type="HSlider" parent="."]
+visible = false
 layout_mode = 2
 focus_mode = 1
 min_value = 0.1
@@ -39,11 +40,6 @@ disabled = true
 action_mode = 0
 text = "GO!"
 metadata/_edit_use_anchors_ = true
-
-[node name="ProgressBar" type="ProgressBar" parent="."]
-layout_mode = 2
-step = 1.0
-value = 100.0
 
 [connection signal="value_changed" from="HSlider" to="HSlider" method="_on_value_changed"]
 [connection signal="pressed" from="StartLevelButton" to="." method="_on_start_level_button_pressed"]

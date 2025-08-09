@@ -17,6 +17,10 @@ var weapon_name:
 		return _weapon_name
 	set(value):
 		_weapon_name = value
+		var load_weapon = load("res://actors/weapons/"+weapon_name+".tscn")
+		weapon = load_weapon.instantiate()
+		if value == SaveData.weapon_name:
+			weapon.consumption = SaveData.weapon_cost
 		SaveData.weapon_name = value
 
 var energy:int:
@@ -41,9 +45,15 @@ var energy_production:
 	set(value):
 		_energy_production = value
 		SaveData.energy_production = value
+var weapon:Weapon
+var weapon_cost:
+	get:
+		return weapon.consumption
+	set(value):
+		weapon.consumption = value
+		SaveData.weapon_cost = value
 
 var energy_production_timer: Timer
-var weapon:Weapon
 
 func _init() -> void:
 	if skin_path == "":
@@ -85,9 +95,12 @@ func _ready() -> void:
 		weapon = load_weapon.instantiate()
 		add_child(weapon)
 		EventBus.subscribe("player_fire",fire_weapon)
-		EventBus.subscribe("gameplay_clicked", _on_gameplay_clicked)
-		EventBus.subscribe("gameplay_click_released", _on_gameplay_click_released)
-		EventBus.subscribe("gameplay_double_clicked", _on_gameplay_double_clicked)
+	EventBus.subscribe("gameplay_clicked", _on_gameplay_clicked)
+	EventBus.subscribe("gameplay_click_released", _on_gameplay_click_released)
+	EventBus.subscribe("gameplay_double_clicked", _on_gameplay_double_clicked)
+	var upgrade_manager = UpgradeManager.new()
+	upgrade_manager.player = self
+	add_child(upgrade_manager)
 
 func _exit_tree() -> void:
 	EventBus.unsubscribe("player_fire",fire_weapon)
@@ -98,7 +111,8 @@ func _exit_tree() -> void:
 func _on_energy_production_timer_timeout():
 	if energy < energy_max:
 		energy += energy_production[0]
-		# No need to update SaveData.energy here as the setter handles it
+	elif GameState.game_on:
+		EventBus.emit("sulprus_energy",energy_production[0])
 
 func process_clamping():
 	var screen_size = GlobalSettings.virtual_resolution
@@ -168,7 +182,7 @@ func fire_weapon():
 	if energy >= weapon.consumption:
 		weapon.fire()
 		energy -= weapon.consumption
-		# No need to update SaveData.energy here as the setter handles it
+
 
 func died():
 	health = max_health

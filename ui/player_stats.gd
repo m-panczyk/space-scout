@@ -1,0 +1,24 @@
+extends GridContainer
+var player: Player
+var weapon_name
+
+func _ready() -> void:
+	find_player()
+	EventBus.subscribe("stats_update",update_values)
+
+func _exit_tree() -> void:
+	EventBus.unsubscribe("stats_update",update_values)
+
+func find_player() -> void:
+	player = get_tree().get_first_node_in_group("PLAYER")
+	if player:
+		update_values()
+	else:
+		# Retry on the next frame
+		call_deferred("find_player")
+	
+func update_values(_arg=null) -> void:
+	$LifeValue.text = str(player.max_health)
+	$EnergyValue.text = str(player.energy_max)
+	$ProductionValue.text = str(player.energy_production[0])+'/s'
+	$SpeedValue.text = str(player.speed)

@@ -6,7 +6,23 @@ var current_correct_answer_index: int = 0
 var shuffled_answers: Array = []
 var question_text = ''
 var question_data
+var game_on = false
+var job_cost = 30
 
+func _ready() -> void:
+	EventBus.subscribe('start_lvl',start_lvl)
+	EventBus.subscribe("end_lvl",end_lvl)
+	
+func _exit_tree() -> void:
+	EventBus.unsubscribe("end_lvl",end_lvl)
+	EventBus.unsubscribe('start_lvl',start_lvl)
+	
+func start_lvl(_punished:bool):
+	game_on = true
+	
+func end_lvl(_punished:bool):
+	game_on = false
+	
 func set_question():
 	question_data = QGen.generate_question_from_subject(SaveData.difficulty_level,SaveData.current_subject)
 	# Pobierz tekst pytania (pierwszy element)

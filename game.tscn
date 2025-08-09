@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cgwlalfbkx2s5"]
+[gd_scene load_steps=18 format=3 uid="uid://cgwlalfbkx2s5"]
 
 [ext_resource type="Script" uid="uid://dffi65ighf0tu" path="res://game.gd" id="1_vef74"]
 [ext_resource type="Script" uid="uid://d27w00i7wny55" path="res://ui/three_way_camera.gd" id="2_af5le"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://knh3ligoqkyo" path="res://ui/three_way_panel.gd" id="3_af5le"]
 [ext_resource type="Shader" uid="uid://bst1invixnai2" path="res://retrowave_sky.gdshader" id="3_mfdv2"]
 [ext_resource type="PackedScene" uid="uid://bs1hu7lpdivca" path="res://lvl/lvl.tscn" id="4_p50ye"]
+[ext_resource type="PackedScene" uid="uid://b870o03o3viu0" path="res://ui/left_panel.tscn" id="5_hve3p"]
 [ext_resource type="PackedScene" uid="uid://co3tagyt0d0k0" path="res://ui/HUD/game_hud.tscn" id="7_hve3p"]
 [ext_resource type="PackedScene" uid="uid://d18kp6hplfcve" path="res://ui/right_panel.tscn" id="8_vef74"]
 [ext_resource type="PackedScene" uid="uid://c5qw6ssdl0lxr" path="res://ui/nine_patch_rect.tscn" id="12_lc2xo"]
@@ -89,7 +90,8 @@ metadata/_custom_type_script = "uid://knh3ligoqkyo"
 transparent_bg = true
 size = Vector2i(1080, 1920)
 
-[node name="NinePatchRect2" parent="Panels/LeftPanel/PanelViewport" instance=ExtResource("12_lc2xo")]
+[node name="LeftPanel" parent="Panels/LeftPanel/PanelViewport" instance=ExtResource("5_hve3p")]
+offset_bottom = 0.0
 
 [node name="PanelSprite" type="Sprite3D" parent="Panels/LeftPanel"]
 texture = SubResource("ViewportTexture_p50ye")

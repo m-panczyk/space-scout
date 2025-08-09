@@ -30,7 +30,7 @@ func end_lvl_check(new_points:int):
 func start_lvl(punished:bool):
 	if env != null:
 		env.queue_free()
-	max_level_points = lerp(100,20,(GameState.game_progress/20))
+	max_level_points = lerp(50,10,(GameState.game_progress/20))
 	EventBus.emit("max_lvl_set",max_level_points)
 	if punished:
 		bg.lvl = 0

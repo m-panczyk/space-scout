@@ -48,7 +48,7 @@ func process_clamping() -> void:
 func _on_area_entered(other_area) -> void:
 	if other_area.has_method("get_damage"):
 		print(other_area.name, " fucks ", name)
-		health = health - other_area.get_damage()
+		health -= other_area.get_damage()
 		health_changed()
 	if health <= 0 :
 		died()
