@@ -3,7 +3,13 @@ class_name Actor
 
 const DEFAULT_SPEED = 100
 @export var damage = 99999
-@export var health = 1
+@export var health: int = 1:
+	set(value):
+		print("Parent setter")
+		health = value
+	get:
+		print("Parent getter")
+		return health
 @export var max_health = 1
 @export var speed = DEFAULT_SPEED
 @export var direction = Vector2.ZERO

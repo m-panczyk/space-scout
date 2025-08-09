@@ -7,6 +7,7 @@ var shuffled_answers: Array = []
 var question_text = ''
 var question_data
 var game_on = false
+var died = false
 var job_cost = 30
 
 func _ready() -> void:

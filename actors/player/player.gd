@@ -121,6 +121,8 @@ func process_clamping():
 func health_changed():
 	SaveData.health = health
 	EventBus.emit("health_changed", [health,max_health])
+	SaveData.health = health
+	SaveData.health_max = max_health
 func _on_gameplay_clicked(click_position: Vector2):
 	target_position = click_position
 	move_to_target = true
@@ -183,7 +185,9 @@ func fire_weapon():
 		weapon.fire()
 		energy -= weapon.consumption
 
-
 func died():
-	health = max_health
-	#EventBus.emit("game_over",false)
+	GameState.died = true
+	get_tree().change_scene_to_file("res://lvl/endgame.tscn")
+
+func _on_screen_exited() -> void:
+	pass

@@ -1,6 +1,10 @@
 extends ColorRect
 
 func _ready() -> void:
+	if GameState.died:
+		$Stats.text += "[b][color=red]PRZEGRANA[/color][/b]\n"
+	else:
+		$Stats.text += "[b][color=green]ZWYCIĘSTWO[/color][/b]\n"
 	$Stats.text += SaveData.get_pretty_stats()
 func _input(event: InputEvent) -> void:
 	if event.is_action_type():

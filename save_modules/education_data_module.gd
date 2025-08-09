@@ -214,19 +214,19 @@ func get_pretty_stats() -> String:
 	bbtext += "\n[color=#00ff00]--- Historia Pytań ---[/color]\n"
 	bbtext += "[color=#ffff00]wszystkich_pytań:[/color] [b]" + str(history_stats["total_questions"]) + "[/b]\n"
 	bbtext += "[color=#ffff00]dokładność_ogólna:[/color] [b]" + str(int(history_stats["accuracy"])) + "%[/b]\n"
-	bbtext += "[color=#ffff00]dokładność_ostatnich_20:[/color] [b]" + str(int(history_stats["recent_accuracy"])) + "%[/b]\n"
-	
-	# Add statistics for current subject
-	var current_subject_name = get_subject_name_from_enum(current_subject)
-	if subject_progress.has(current_subject_name):
-		var progress = subject_progress[current_subject_name]
-		var accuracy = get_subject_accuracy(current_subject)
-		
-		bbtext += "\n[color=#00ff00]--- " + current_subject_name + " ---[/color]\n"
-		bbtext += "[color=#ffff00]pytania:[/color] [b]" + str(progress["questions_answered"]) + "[/b]\n"
-		bbtext += "[color=#ffff00]poprawne:[/color] [b]" + str(progress["correct_answers"]) + "[/b] (" + str(int(accuracy)) + "%)\n"
-		bbtext += "[color=#ffff00]najlepszy_streak:[/color] [b]" + str(progress["best_streak"]) + "[/b]\n"
-		bbtext += "[color=#ffff00]aktualny_streak:[/color] [b]" + str(progress["current_streak"]) + "[/b]\n"
+	#bbtext += "[color=#ffff00]dokładność_ostatnich_20:[/color] [b]" + str(int(history_stats["recent_accuracy"])) + "%[/b]\n"
+	#
+	## Add statistics for current subject
+	#var current_subject_name = get_subject_name_from_enum(current_subject)
+	#if subject_progress.has(current_subject_name):
+		#var progress = subject_progress[current_subject_name]
+		#var accuracy = get_subject_accuracy(current_subject)
+		#
+		#bbtext += "\n[color=#00ff00]--- " + current_subject_name + " ---[/color]\n"
+		#bbtext += "[color=#ffff00]pytania:[/color] [b]" + str(progress["questions_answered"]) + "[/b]\n"
+		#bbtext += "[color=#ffff00]poprawne:[/color] [b]" + str(progress["correct_answers"]) + "[/b] (" + str(int(accuracy)) + "%)\n"
+		#bbtext += "[color=#ffff00]najlepszy_streak:[/color] [b]" + str(progress["best_streak"]) + "[/b]\n"
+		#bbtext += "[color=#ffff00]aktualny_streak:[/color] [b]" + str(progress["current_streak"]) + "[/b]\n"
 
 	return bbtext
 

@@ -241,10 +241,13 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="Lab/Jobs"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "BADANIA"
+horizontal_alignment = 1
 
 [node name="Hull" type="RichTextLabel" parent="Lab/Jobs"]
 layout_mode = 2
+theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[b]Ulepszenie Kadłubа[/b]
 [color=#4CAF50][b]+1 Wytrzymałość[/b][/color]
@@ -264,6 +267,7 @@ script = ExtResource("7_hpryw")
 
 [node name="EnergyStore" type="RichTextLabel" parent="Lab/Jobs"]
 layout_mode = 2
+theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[b]Rozbudowa Magazynu Energii[/b]
 [color=#2196F3][b]+5 Magazyn energii [/b][/color]
@@ -283,6 +287,7 @@ script = ExtResource("7_hpryw")
 
 [node name="EnergyProduction" type="RichTextLabel" parent="Lab/Jobs"]
 layout_mode = 2
+theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[b]Rozbudowa Reaktora[/b]
 [color=#FF9800][b]+1/s Energii[/b][/color]
@@ -302,6 +307,7 @@ script = ExtResource("7_hpryw")
 
 [node name="Speed" type="RichTextLabel" parent="Lab/Jobs"]
 layout_mode = 2
+theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[b]Ulepszenie Silników[/b]
 [color=#E91E63][b]+10 Prędkość[/b][/color]
@@ -320,6 +326,7 @@ script = ExtResource("7_hpryw")
 
 [node name="Consumption" type="RichTextLabel" parent="Lab/Jobs"]
 layout_mode = 2
+theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[b]Optymalizacja Działa[/b]
 [color=#9C27B0][b]-1 Koszt Energii[/b][/color]
@@ -342,4 +349,6 @@ script = ExtResource("8_8stfj")
 
 [node name="Label" type="Label" parent="Lab/Queue"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "KOLEJKA"
+horizontal_alignment = 1
