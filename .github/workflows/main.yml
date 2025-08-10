@@ -88,9 +88,10 @@ jobs:
           path: build/windows/
           retention-days: 5
 
-  export-mac:
-    name: Export Mac
-    runs-on: macos-latest  # Changed from ubuntu-latest
+  # Stage 1: Export the .app bundle on Linux (more memory available)
+  export-mac-stage1:
+    name: Export Mac (Stage 1 - App Bundle on Linux)
+    runs-on: ubuntu-latest
     if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
@@ -106,21 +107,56 @@ jobs:
       - name: Setup Build Directories
         run: mkdir -p build/mac
 
-      - name: Export Mac Build
+      - name: Export macOS App Bundle on Linux
         run: |
-          godot --headless --verbose --export-release "macOS" "./build/mac/$EXPORT_NAME.app"
+          # Export .app bundle using Linux runner (more memory available)
+          godot --headless --disable-render-loop --verbose \
+            --export-release "macOS" "./build/mac/$EXPORT_NAME.app"
+        env:
+          # Can use more aggressive settings on Linux
+          GODOT_MEMORY_LIMIT: 16384
 
-      - name: Debug - Verify .app bundle
+      - name: Verify App Bundle Creation
         run: |
           echo "Contents of build/mac:"
           ls -la build/mac/ || echo "Directory doesn't exist"
           if [ -d "build/mac/$EXPORT_NAME.app" ]; then
-            echo "✅ .app bundle created successfully!"
-            ls -la "build/mac/$EXPORT_NAME.app/"
+            echo "✅ .app bundle created successfully on Linux!"
+            find "build/mac/$EXPORT_NAME.app" -type f | head -10
+            # Check bundle size
+            du -sh "build/mac/$EXPORT_NAME.app"
           else
             echo "❌ No .app bundle found"
             exit 1
           fi
+
+      - name: Upload App Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-app-bundle
+          path: build/mac/${{ env.EXPORT_NAME }}.app/
+          retention-days: 5
+
+  # Stage 2: Create DMG package on macOS (lightweight operation)
+  export-mac-stage2:
+    name: Export Mac (Stage 2 - DMG Package on macOS)
+    runs-on: macos-latest
+    needs: export-mac-stage1
+    if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Download App Bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: mac-app-bundle
+          path: app-bundle/
+
+      - name: Setup DMG Build Environment
+        run: |
+          mkdir -p build/mac
+          # Move app bundle to build directory
+          mv "app-bundle" "build/mac/$EXPORT_NAME.app"
+          echo "App bundle moved to build directory:"
+          ls -la "build/mac/$EXPORT_NAME.app/"
 
       - name: Create DMG Package
         run: |
@@ -133,21 +169,28 @@ jobs:
           # Create Applications symlink for easy installation
           ln -s /Applications dmg_temp/Applications
           
-          # Create the DMG
+          # Create the DMG with better compression
           hdiutil create -volname "Space Scout" \
                          -srcfolder dmg_temp \
                          -ov \
                          -format UDZO \
+                         -imagekey zlib-level=9 \
                          "build/mac/$EXPORT_NAME.dmg"
           
           # Clean up temp directory
           rm -rf dmg_temp
           
-          # Verify DMG was created
-          echo "DMG created:"
-          ls -la "build/mac/$EXPORT_NAME.dmg"
+          # Verify DMG was created and show size
+          if [ -f "build/mac/$EXPORT_NAME.dmg" ]; then
+            echo "✅ DMG created successfully:"
+            ls -la "build/mac/$EXPORT_NAME.dmg"
+            du -sh "build/mac/$EXPORT_NAME.dmg"
+          else
+            echo "❌ DMG creation failed"
+            exit 1
+          fi
 
-      - name: Upload Mac Artifact
+      - name: Upload Mac DMG
         uses: actions/upload-artifact@v4
         with:
           name: mac-build
@@ -229,7 +272,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: [export-web, export-linux, export-windows, export-mac, export-android]
+    needs: [export-web, export-linux, export-windows, export-mac-stage2, export-android]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
