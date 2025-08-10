@@ -108,7 +108,7 @@ jobs:
 
       - name: Export Mac Build
         run: |
-          godot --headless --verbose --export-release "macOS" "./build/mac/$EXPORT_NAME.app"
+          godot --headless --disable-render-loop --verbose --export-release "macOS" "./build/mac/$EXPORT_NAME.app"
 
       - name: Debug - Verify .app bundle
         run: |
