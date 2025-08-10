@@ -88,12 +88,11 @@ jobs:
           path: build/windows/
           retention-days: 5
 
-  # Stage 1: Export the basic .app bundle with memory optimizations
+  # Stage 1: Export the .app bundle on Linux (more memory available)
   export-mac-stage1:
-    name: Export Mac (Stage 1 - App Bundle)
-    runs-on: macos-latest
-    # Only run macOS build on manual trigger for free tier users
-    if: github.event_name == 'workflow_dispatch' && (contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/pc')
+    name: Export Mac (Stage 1 - App Bundle on Linux)
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -105,44 +104,25 @@ jobs:
           use-dotnet: false
           include-templates: true
 
-      - name: Optimize Memory Before Export
-        run: |
-          # Clear system memory cache
-          sudo purge
-          # Remove any existing Godot cache
-          rm -rf ~/.local/share/godot 2>/dev/null || true
-          rm -rf ~/.cache/godot 2>/dev/null || true
-          # Show memory status
-          echo "Memory status before export:"
-          vm_stat | head -5
-
       - name: Setup Build Directories
         run: mkdir -p build/mac
 
-      - name: Export Mac Build (Memory Optimized)
-        timeout-minutes: 25  # GitHub Actions timeout (25 minutes)
+      - name: Export macOS App Bundle on Linux
         run: |
-          # Show available memory
-          echo "Available memory before export:"
-          vm_stat | head -5
-          
-          # Try minimal export approach
+          # Export .app bundle using Linux runner (more memory available)
           godot --headless --disable-render-loop --verbose \
             --export-release "macOS" "./build/mac/$EXPORT_NAME.app"
         env:
-          # Force minimal memory usage
-          GODOT_MEMORY_LIMIT: 2048
-          GODOT_GC_AGGRESSIVE: true
-          # Disable unnecessary features
-          GODOT_DISABLE_CRASH_HANDLER: true
+          # Can use more aggressive settings on Linux
+          GODOT_MEMORY_LIMIT: 16384
 
       - name: Verify App Bundle Creation
         run: |
           echo "Contents of build/mac:"
           ls -la build/mac/ || echo "Directory doesn't exist"
           if [ -d "build/mac/$EXPORT_NAME.app" ]; then
-            echo "✅ .app bundle created successfully!"
-            ls -la "build/mac/$EXPORT_NAME.app/"
+            echo "✅ .app bundle created successfully on Linux!"
+            find "build/mac/$EXPORT_NAME.app" -type f | head -10
             # Check bundle size
             du -sh "build/mac/$EXPORT_NAME.app"
           else
@@ -157,13 +137,12 @@ jobs:
           path: build/mac/${{ env.EXPORT_NAME }}.app/
           retention-days: 5
 
-  # Stage 2: Create DMG package from the app bundle (separate job for memory isolation)
+  # Stage 2: Create DMG package on macOS (lightweight operation)
   export-mac-stage2:
-    name: Export Mac (Stage 2 - DMG Package)
+    name: Export Mac (Stage 2 - DMG Package on macOS)
     runs-on: macos-latest
     needs: export-mac-stage1
-    # Only run macOS build on manual trigger for free tier users
-    if: github.event_name == 'workflow_dispatch' && (contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/pc')
+    if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Download App Bundle
         uses: actions/download-artifact@v4
@@ -293,9 +272,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    # Updated dependencies - mac builds only run on manual trigger now
-    needs: [export-web, export-linux, export-windows, export-android]
-    if: always()  # Deploy even if mac build is skipped
+    needs: [export-web, export-linux, export-windows, export-mac-stage2, export-android]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -321,14 +298,12 @@ jobs:
           # Create downloads directory for other builds
           mkdir -p deploy/downloads
           
-          # Copy other builds to downloads directory (including mac if available)
+          # Copy other builds to downloads directory
           for dir in linux windows mac android; do
             if [ -d "artifacts/${dir}-build" ]; then
               echo "Copying ${dir} build..."
               mkdir -p deploy/downloads/${dir}
               cp -r artifacts/${dir}-build/* deploy/downloads/${dir}/
-            else
-              echo "⚠️ ${dir} build not found (may be skipped)"
             fi
           done
           
