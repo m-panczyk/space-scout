@@ -92,7 +92,8 @@ jobs:
   export-mac-stage1:
     name: Export Mac (Stage 1 - App Bundle)
     runs-on: macos-latest
-    if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
+    # Only run macOS build on manual trigger for free tier users
+    if: github.event_name == 'workflow_dispatch' && (contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/pc')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -121,20 +122,16 @@ jobs:
       - name: Export Mac Build (Memory Optimized)
         timeout-minutes: 25  # GitHub Actions timeout (25 minutes)
         run: |
-          # Try export with ulimit memory restriction
-          # Limit virtual memory to 12GB (12582912 KB)
-          ulimit -v 12582912
+          # Show available memory
+          echo "Available memory before export:"
+          vm_stat | head -5
           
-          # Show current limits
-          echo "Current memory limits:"
-          ulimit -a | grep memory
-          
-          # Export with minimal flags
+          # Try minimal export approach
           godot --headless --disable-render-loop --verbose \
             --export-release "macOS" "./build/mac/$EXPORT_NAME.app"
         env:
           # Force minimal memory usage
-          GODOT_MEMORY_LIMIT: 4096
+          GODOT_MEMORY_LIMIT: 2048
           GODOT_GC_AGGRESSIVE: true
           # Disable unnecessary features
           GODOT_DISABLE_CRASH_HANDLER: true
@@ -165,7 +162,8 @@ jobs:
     name: Export Mac (Stage 2 - DMG Package)
     runs-on: macos-latest
     needs: export-mac-stage1
-    if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
+    # Only run macOS build on manual trigger for free tier users
+    if: github.event_name == 'workflow_dispatch' && (contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/pc')
     steps:
       - name: Download App Bundle
         uses: actions/download-artifact@v4
@@ -295,8 +293,9 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    # Updated dependencies - only requires stage 2 for mac, not stage 1
-    needs: [export-web, export-linux, export-windows, export-mac-stage2, export-android]
+    # Updated dependencies - mac builds only run on manual trigger now
+    needs: [export-web, export-linux, export-windows, export-android]
+    if: always()  # Deploy even if mac build is skipped
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -322,12 +321,14 @@ jobs:
           # Create downloads directory for other builds
           mkdir -p deploy/downloads
           
-          # Copy other builds to downloads directory
+          # Copy other builds to downloads directory (including mac if available)
           for dir in linux windows mac android; do
             if [ -d "artifacts/${dir}-build" ]; then
               echo "Copying ${dir} build..."
               mkdir -p deploy/downloads/${dir}
               cp -r artifacts/${dir}-build/* deploy/downloads/${dir}/
+            else
+              echo "⚠️ ${dir} build not found (may be skipped)"
             fi
           done
           
