@@ -39,7 +39,8 @@ const LANGUAGE_EMOJI = [
   '🇸🇦',#ar
   '🇧🇦' #bs
 ];
-
+var virtual_navigation: bool = false
+var gesture_navigation: bool = false
 enum TouchControlType {
 	JOYPAD_TOUCH,
 	POINT
@@ -69,6 +70,16 @@ func set_user_dpi_scale(scale:float) -> void:
 	user_dpi_scale = clamp(scale, 0.5, 2.0)
 	adjust_viewport_scale()
 
+# Add these setter functions with your other setters
+func set_virtual_navigation(enabled: bool) -> void:
+	virtual_navigation = enabled
+	var navigation = get_node_or_null("../Game/Navigation")
+	if navigation :
+		navigation.visible = virtual_navigation
+
+func set_gesture_navigation(enabled: bool) -> void:
+	gesture_navigation = enabled
+
 
 func load_settings() -> void:
 	print_debug("loading settings")
@@ -77,12 +88,16 @@ func load_settings() -> void:
 		set_landscape(config.get_value('video_settings', 'landscape', false))
 		set_touch_controls(config.get_value('control_settings', 'touch_type', TouchControlType.JOYPAD_TOUCH))
 		set_user_dpi_scale(config.get_value('video_settings', 'user_dpi_scale', 1.0))
+		set_virtual_navigation(config.get_value('control_settings', 'virtual_navigation', false))
+		set_gesture_navigation(config.get_value('control_settings', 'gesture_navigation', false))
 	
 func save_settings() -> void:
 	config.set_value('game_settings', 'language', language)
 	config.set_value('video_settings', 'landscape', landscape)
 	config.set_value('control_settings', 'touch_type', touch_controls)
 	config.set_value('video_settings', 'user_dpi_scale', user_dpi_scale)
+	config.set_value('control_settings', 'virtual_navigation', virtual_navigation)
+	config.set_value('control_settings', 'gesture_navigation', gesture_navigation)
 	
 	print_debug(config.to_string())
 	config.save("user://config.cfg")

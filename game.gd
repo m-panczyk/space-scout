@@ -4,6 +4,7 @@ var game_paused_by_transition: bool = false
 
 func _ready():
 	super()
+	$Navigation.visible = GlobalSettings.virtual_navigation
 	# Connect to transition signals
 	camera.transition_started.connect(_on_transition_started)
 	transition_complete.connect(_on_transition_complete)
@@ -19,7 +20,7 @@ func _input(event: InputEvent) -> void:
 		return
 	
 	# Handle all gestures and input in one place
-	if event is InputEventPanGesture:
+	if event is InputEventPanGesture and GlobalSettings.gesture_navigation:
 		handle_pan_gesture(event)
 		return
 	

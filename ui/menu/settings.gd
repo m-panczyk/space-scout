@@ -13,7 +13,8 @@ func _ready() -> void:
 	%DPIScale.value = GlobalSettings.user_dpi_scale
 	%DPIScale.visible = !(%DPIScale.value == 1.0)
 	%DPIAuto.button_pressed = %DPIScale.value == 1.0
-	
+	%NavOption.button_pressed = GlobalSettings.virtual_navigation
+	%GesturesOption.button_pressed = GlobalSettings.gesture_navigation
 
 func _on_landscape_option_toggled(toggled_on: bool) -> void:
 	GlobalSettings.set_landscape(toggled_on)
@@ -48,3 +49,11 @@ func _on_save_settings_pressed() -> void:
 
 func _on_tree_exited() -> void:
 	GlobalSettings.load_settings()
+
+
+func _on_nav_option_toggled(toggled_on: bool) -> void:
+	GlobalSettings.set_virtual_navigation(toggled_on)
+
+
+func _on_gestures_option_toggled(toggled_on: bool) -> void:
+	GlobalSettings.gesture_navigation = toggled_on
