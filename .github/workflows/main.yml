@@ -88,9 +88,10 @@ jobs:
           path: build/windows/
           retention-days: 5
 
-  export-mac:
-    name: Export Mac
-    runs-on: macos-latest  # Changed from ubuntu-latest
+  # Stage 1: Export the basic .app bundle with memory optimizations
+  export-mac-stage1:
+    name: Export Mac (Stage 1 - App Bundle)
+    runs-on: macos-latest
     if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
@@ -103,24 +104,72 @@ jobs:
           use-dotnet: false
           include-templates: true
 
+      - name: Optimize Memory Before Export
+        run: |
+          # Clear system memory cache
+          sudo purge
+          # Remove any existing Godot cache
+          rm -rf ~/.local/share/godot 2>/dev/null || true
+          rm -rf ~/.cache/godot 2>/dev/null || true
+          # Show memory status
+          echo "Memory status before export:"
+          vm_stat | head -5
+
       - name: Setup Build Directories
         run: mkdir -p build/mac
 
-      - name: Export Mac Build
+      - name: Export Mac Build (Memory Optimized)
         run: |
-          godot --headless --disable-render-loop --verbose --export-release "macOS" "./build/mac/$EXPORT_NAME.app"
+          # Export with timeout and memory constraints
+          timeout 1800 godot --headless --disable-render-loop --verbose \
+            --export-release "macOS" "./build/mac/$EXPORT_NAME.app"
+        env:
+          # Limit memory usage
+          GODOT_MEMORY_LIMIT: 8192
+          # More aggressive garbage collection
+          GODOT_GC_AGGRESSIVE: true
 
-      - name: Debug - Verify .app bundle
+      - name: Verify App Bundle Creation
         run: |
           echo "Contents of build/mac:"
           ls -la build/mac/ || echo "Directory doesn't exist"
           if [ -d "build/mac/$EXPORT_NAME.app" ]; then
             echo "✅ .app bundle created successfully!"
             ls -la "build/mac/$EXPORT_NAME.app/"
+            # Check bundle size
+            du -sh "build/mac/$EXPORT_NAME.app"
           else
             echo "❌ No .app bundle found"
             exit 1
           fi
+
+      - name: Upload App Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-app-bundle
+          path: build/mac/${{ env.EXPORT_NAME }}.app/
+          retention-days: 5
+
+  # Stage 2: Create DMG package from the app bundle (separate job for memory isolation)
+  export-mac-stage2:
+    name: Export Mac (Stage 2 - DMG Package)
+    runs-on: macos-latest
+    needs: export-mac-stage1
+    if: contains(github.event.head_commit.modified, 'pc') || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/pc' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Download App Bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: mac-app-bundle
+          path: app-bundle/
+
+      - name: Setup DMG Build Environment
+        run: |
+          mkdir -p build/mac
+          # Move app bundle to build directory
+          mv "app-bundle" "build/mac/$EXPORT_NAME.app"
+          echo "App bundle moved to build directory:"
+          ls -la "build/mac/$EXPORT_NAME.app/"
 
       - name: Create DMG Package
         run: |
@@ -133,21 +182,28 @@ jobs:
           # Create Applications symlink for easy installation
           ln -s /Applications dmg_temp/Applications
           
-          # Create the DMG
+          # Create the DMG with better compression
           hdiutil create -volname "Space Scout" \
                          -srcfolder dmg_temp \
                          -ov \
                          -format UDZO \
+                         -imagekey zlib-level=9 \
                          "build/mac/$EXPORT_NAME.dmg"
           
           # Clean up temp directory
           rm -rf dmg_temp
           
-          # Verify DMG was created
-          echo "DMG created:"
-          ls -la "build/mac/$EXPORT_NAME.dmg"
+          # Verify DMG was created and show size
+          if [ -f "build/mac/$EXPORT_NAME.dmg" ]; then
+            echo "✅ DMG created successfully:"
+            ls -la "build/mac/$EXPORT_NAME.dmg"
+            du -sh "build/mac/$EXPORT_NAME.dmg"
+          else
+            echo "❌ DMG creation failed"
+            exit 1
+          fi
 
-      - name: Upload Mac Artifact
+      - name: Upload Mac DMG
         uses: actions/upload-artifact@v4
         with:
           name: mac-build
@@ -229,7 +285,8 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: [export-web, export-linux, export-windows, export-mac, export-android]
+    # Updated dependencies - only requires stage 2 for mac, not stage 1
+    needs: [export-web, export-linux, export-windows, export-mac-stage2, export-android]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
