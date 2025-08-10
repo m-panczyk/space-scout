@@ -25,6 +25,7 @@ func hide_question():
 	
 
 func _ready() -> void:
+	$CollisionShape2D.disabled = true
 	area_entered.connect(got_answer)
 	text = find_child("Text")
 func got_answer(other_area):

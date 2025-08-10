@@ -186,6 +186,7 @@ func fire_weapon():
 		energy -= weapon.consumption
 
 func died():
+	queue_free()
 	GameState.died = true
 	get_tree().change_scene_to_file("res://lvl/endgame.tscn")
 
