@@ -119,15 +119,25 @@ jobs:
         run: mkdir -p build/mac
 
       - name: Export Mac Build (Memory Optimized)
+        timeout-minutes: 25  # GitHub Actions timeout (25 minutes)
         run: |
-          # Export without timeout (macOS doesn't have timeout command)
+          # Try export with ulimit memory restriction
+          # Limit virtual memory to 12GB (12582912 KB)
+          ulimit -v 12582912
+          
+          # Show current limits
+          echo "Current memory limits:"
+          ulimit -a | grep memory
+          
+          # Export with minimal flags
           godot --headless --disable-render-loop --verbose \
             --export-release "macOS" "./build/mac/$EXPORT_NAME.app"
         env:
-          # Limit memory usage
-          GODOT_MEMORY_LIMIT: 8192
-          # More aggressive garbage collection
+          # Force minimal memory usage
+          GODOT_MEMORY_LIMIT: 4096
           GODOT_GC_AGGRESSIVE: true
+          # Disable unnecessary features
+          GODOT_DISABLE_CRASH_HANDLER: true
 
       - name: Verify App Bundle Creation
         run: |
