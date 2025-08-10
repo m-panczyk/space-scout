@@ -1,7 +1,6 @@
-[gd_scene load_steps=16 format=4 uid="uid://bh5o0r5ut5y0d"]
+[gd_scene load_steps=14 format=4 uid="uid://bh5o0r5ut5y0d"]
 
 [ext_resource type="Script" uid="uid://c1svmg0ms4pti" path="res://lvl/map/hex_tile_controller.gd" id="1_xsbyp"]
-[ext_resource type="Shader" uid="uid://b14vnphluvjnh" path="res://lvl/map/galaxy.gdshader" id="2_3qakr"]
 [ext_resource type="Texture2D" uid="uid://cerg7u1qsjtgq" path="res://lvl/map/img/black.png" id="2_aemh6"]
 [ext_resource type="Shader" uid="uid://bc1mou2tmldex" path="res://hyper.gdshader" id="2_xsbyp"]
 [ext_resource type="Texture2D" uid="uid://cjr6me1gol8wb" path="res://lvl/map/img/highlighted.png" id="3_fvr80"]
@@ -89,11 +88,6 @@ sources/0 = SubResource("TileSetAtlasSource_xsbyp")
 sources/2 = SubResource("TileSetAtlasSource_3qakr")
 sources/3 = SubResource("TileSetAtlasSource_n1f8j")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xsbyp"]
-shader = ExtResource("2_3qakr")
-shader_parameter/paused = false
-shader_parameter/pause_time = 0.0
-
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3qakr"]
 
 [node name="HexTileController" type="SubViewportContainer"]
@@ -127,7 +121,6 @@ visible = false
 
 [node name="Sprite2D" type="Sprite2D" parent="SubViewport/ParallaxBg/ParallaxLayer"]
 texture_repeat = 2
-material = SubResource("ShaderMaterial_xsbyp")
 scale = Vector2(15, 15)
 texture = SubResource("NoiseTexture2D_3qakr")
 

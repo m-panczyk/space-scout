@@ -3,3 +3,4 @@
 .godot/
 /android/
 /addons/DualEditor
+export_presets.cfg
