@@ -9,7 +9,12 @@ var ship_position:
 		SaveData.ship_position = value
 var target = null
 var last_pressed = null
-var endgame = Vector2i(0, 0)
+var _endgame = SaveData.endgame
+var endgame:
+	get: return _endgame
+	set(value):
+		_endgame = value
+		SaveData.endgame = value
 var _explored = SaveData.explored_tiles
 var explored:
 	get:
@@ -22,6 +27,8 @@ var lock = false
 
 # Reference to the background color layer
 var background_layer: TileMapLayer
+# Dictionary to store label nodes for each explored tile
+var tile_labels: Dictionary = {}
 
 func _ready() -> void:
 	# Ensure we have the latest data from SaveData
@@ -30,13 +37,127 @@ func _ready() -> void:
 	
 	# Create or get background layer
 	setup_background_layer()
-	
+	# Check if this is a new game (no explored tiles)
+	if explored.size() == 0:
+		initialize_new_game_positions()
 	# Generate the background color grid
 	generate_background_colors()
-	
 	for cell in explored:
 		reset_cell(cell)
+		create_distance_label(cell)
 	set_ship_position(ship_position)
+
+func create_distance_label(cell: Vector2i) -> void:
+	"""Create a distance label for the given cell"""
+	var distance = calculate_hex_distance(cell, endgame)
+	
+	# Remove existing label if it exists
+	if tile_labels.has(cell):
+		tile_labels[cell].queue_free()
+	
+	# Create new label
+	var label = Label.new()
+	label.text = str(distance)
+	label.add_theme_font_size_override("font_size", 24)
+	label.add_theme_color_override("font_color", Color.WHITE)
+	label.add_theme_color_override("font_shadow_color", Color.BLACK)
+	label.add_theme_constant_override("shadow_offset_x", 2)
+	label.add_theme_constant_override("shadow_offset_y", 2)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	
+	# Position the label at the tile's world position
+	var world_pos = map_to_local(cell)
+	label.position = world_pos - Vector2(12, 12)  # Center the label (adjust based on font size)
+	label.size = Vector2(24, 24)
+	
+	# Add label to the scene
+	add_child(label)
+	tile_labels[cell] = label
+
+func update_distance_label(cell: Vector2i) -> void:
+	"""Update the distance label for the given cell"""
+	if tile_labels.has(cell):
+		var distance = calculate_hex_distance(cell, endgame)
+		tile_labels[cell].text = str(distance)
+
+func remove_distance_label(cell: Vector2i) -> void:
+	"""Remove the distance label for the given cell"""
+	if tile_labels.has(cell):
+		tile_labels[cell].queue_free()
+		tile_labels.erase(cell)
+
+func initialize_new_game_positions() -> void:
+	"""Initialize new ship and endgame positions when no tiles are explored"""
+	if explored.size() > 0:
+		return  # Only run if no tiles are explored
+	
+	# Define the 10x10 grid bounds (adjust these based on your actual grid)
+	var grid_min = Vector2i(0, 0)
+	var grid_max = Vector2i(9, 9)
+	
+	# Generate random ship position within the grid
+	var new_ship_pos = Vector2i(
+		randi_range(grid_min.x, grid_max.x),
+		randi_range(grid_min.y, grid_max.y)
+	)
+	
+	# Find all valid positions exactly 5 tiles away from ship
+	var valid_endgame_positions = []
+	
+	# Check all positions in the grid
+	for x in range(grid_min.x, grid_max.x + 1):
+		for y in range(grid_min.y, grid_max.y + 1):
+			var potential_endgame = Vector2i(x, y)
+			var distance = calculate_hex_distance(new_ship_pos, potential_endgame)
+			
+			if distance == 5:
+				valid_endgame_positions.append(potential_endgame)
+	
+	# If no valid positions found (shouldn't happen on 10x10 grid), 
+	# try a different ship position
+	var max_attempts = 50
+	var attempts = 0
+	
+	while valid_endgame_positions.size() == 0 and attempts < max_attempts:
+		attempts += 1
+		new_ship_pos = Vector2i(
+			randi_range(grid_min.x, grid_max.x),
+			randi_range(grid_min.y, grid_max.y)
+		)
+		
+		valid_endgame_positions.clear()
+		for x in range(grid_min.x, grid_max.x + 1):
+			for y in range(grid_min.y, grid_max.y + 1):
+				var potential_endgame = Vector2i(x, y)
+				var distance = calculate_hex_distance(new_ship_pos, potential_endgame)
+				
+				if distance == 5:
+					valid_endgame_positions.append(potential_endgame)
+	
+	# Select random endgame position from valid options
+	if valid_endgame_positions.size() > 0:
+		var new_endgame_pos = valid_endgame_positions[randi() % valid_endgame_positions.size()]
+		
+		# Set the new positions
+		ship_position = new_ship_pos
+		endgame = new_endgame_pos
+		
+		# Update the display
+		set_ship_position(ship_position)
+		set_endgame_position(endgame)
+		
+		# Clear explored tiles since this is a new game
+		explored.clear()
+		SaveData.explored_tiles = explored
+		
+		print("New game initialized:")
+		print("Ship position: ", ship_position)
+		print("Endgame position: ", endgame)
+		print("Distance: ", calculate_hex_distance(ship_position, endgame))
+	else:
+		print("Error: Could not find valid endgame position 5 tiles away from ship")
+
 
 func setup_background_layer() -> void:
 	# Check if background layer already exists
@@ -56,7 +177,7 @@ func setup_background_layer() -> void:
 func generate_background_colors() -> void:
 	# Generate colors for a reasonable area around the game world
 	# Adjust this range based on your game world size
-	var world_size = 20  # Generate colors for 20x20 area around center
+	var world_size = 10  # Generate colors for 20x20 area around center
 	
 	for x in range(-world_size, world_size + 1):
 		for y in range(-world_size, world_size + 1):
@@ -106,6 +227,9 @@ func set_ship_position(new_ship_position: Vector2i = Vector2i(5, 5)) -> void:
 	ship_position = new_ship_position
 	set_cell(ship_position, 3, Vector2i(0, 0))  # Set ship visual
 	
+	# Create or update distance label for ship position
+	create_distance_label(ship_position)
+	
 	# Update camera position
 	%Camera2D.position = map_to_local(ship_position)
 	GameState.game_progress = calculate_hex_distance(ship_position,endgame)
@@ -114,9 +238,14 @@ func reset_cell(cell: Vector2i) -> void:
 	if explored.has(cell):
 		# For explored cells, use transparent tile to reveal background color
 		set_cell(cell, 2, Vector2i(0, 0), get_tile_id_from_distance(calculate_hex_distance(cell,endgame)))  # Transparent/explored tile
+		# Ensure distance label exists for explored cells
+		if not tile_labels.has(cell):
+			create_distance_label(cell)
 	else:
 		# For unexplored cells, use opaque tile to hide background
 		set_cell(cell, 0, Vector2i.ZERO, 1)  # Opaque/unexplored tile
+		# Remove distance label for unexplored cells
+		remove_distance_label(cell)
 
 func screen_to_global(screen_pos: Vector2, _camera: Camera2D) -> Vector2:
 	# Get the viewport and its transformation
@@ -170,7 +299,7 @@ func move_to_target() -> void:
 		# Move ship to new position
 		set_ship_position(target)
 		
-		# Update explored cells to reveal background colors
+		# Update explored cells to reveal background colors and ensure labels exist
 		for cell in explored:
 			if cell != ship_position:  # Don't override ship visual
 				reset_cell(cell)
@@ -189,6 +318,11 @@ func _enter_tree() -> void:
 func _exit_tree() -> void:
 	EventBus.unsubscribe('end_lvl',end_lvl)
 	EventBus.unsubscribe('start_lvl',prepare_lvl)
+	# Clean up labels
+	for label in tile_labels.values():
+		if is_instance_valid(label):
+			label.queue_free()
+	tile_labels.clear()
 
 func end_lvl(success:bool):
 	if success:
@@ -209,6 +343,10 @@ func handle_endgame() -> void:
 func set_endgame_position(new_endgame: Vector2i) -> void:
 	endgame = new_endgame
 	generate_background_colors()
+	
+	# Update all existing distance labels with new distances
+	for cell in tile_labels.keys():
+		update_distance_label(cell)
 
 # Optional: Update a specific area of background colors (for performance)
 func update_background_area(center: Vector2i, radius: int = 5) -> void:
@@ -218,3 +356,7 @@ func update_background_area(center: Vector2i, radius: int = 5) -> void:
 			var distance = calculate_hex_distance(cell, endgame)
 			var tile_id = get_tile_id_from_distance(distance)
 			background_layer.set_cell(cell, 1, Vector2i(0, 0), tile_id)
+			
+			# Update distance label if it exists
+			if tile_labels.has(cell):
+				update_distance_label(cell)

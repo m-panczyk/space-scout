@@ -76,7 +76,7 @@ func _ready() -> void:
 	health_changed()
 	if speed == Actor.DEFAULT_SPEED:
 		speed = 400
-	var _scale = (GlobalSettings.virtual_resolution.x/5)/get_size().x
+	var _scale = (GlobalSettings.virtual_resolution.x/7)/get_size().x
 	scale = Vector2(_scale,_scale)
 	collision_layer = 1
 	collision_mask = 2

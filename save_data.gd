@@ -51,7 +51,9 @@ var points:
 var explored_tiles:
 	get: return game_module.explored_tiles
 	set(value): game_module.explored_tiles = value
-
+var endgame:
+	get: return game_module.endgame
+	set(value): game_module.endgame = value
 var ship_position:
 	get: return game_module.ship_position
 	set(value): game_module.ship_position = value

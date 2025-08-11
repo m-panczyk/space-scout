@@ -8,6 +8,7 @@ var bg_speed = null
 var fall_speed = null
 var points: int = 0
 var explored_tiles: Array = []
+var endgame: Vector2i = Vector2i(0,0)
 var ship_position: Vector2i = Vector2i(5, 5)
 
 func reset_to_defaults() -> void:
@@ -17,6 +18,7 @@ func reset_to_defaults() -> void:
 	fall_speed = null
 	points = 0
 	explored_tiles = []
+	endgame = Vector2i(0,0)
 	ship_position = Vector2i(5, 5)
 
 func to_dict() -> Dictionary:
@@ -37,6 +39,10 @@ func to_dict() -> Dictionary:
 		"fall_speed": fall_speed,
 		"points": points,
 		"explored_tiles": serialized_tiles,
+		"endgame": {
+			"x": endgame.x,
+			"y": endgame.y
+		},
 		"ship_position": {
 			"x": ship_position.x,
 			"y": ship_position.y
@@ -63,7 +69,8 @@ func from_dict(data: Dictionary) -> void:
 			if parts.size() == 2:
 				explored_tiles.append(Vector2i(int(parts[0]), int(parts[1])))
 	
-	# Convert ship position from dictionary back to Vector2i
+	var end_pos = data.get("endgame", {"x": 0, "y": 0})
+	endgame = Vector2i(end_pos.get("x", 0), end_pos.get("y", 0))
 	var pos_dict = data.get("ship_position", {"x": 5, "y": 5})
 	ship_position = Vector2i(pos_dict.get("x", 5), pos_dict.get("y", 5))
 
@@ -75,5 +82,6 @@ func _to_string() -> String:
 	output += "fall_speed: " + str(fall_speed) + "\n"
 	output += "points: " + str(points) + "\n"
 	output += "explored_tiles: " + str(explored_tiles.size()) + " tiles\n"
+	output += "endgame: " + str(endgame) + "\n"
 	output += "ship_position: " + str(ship_position) + "\n"
 	return output

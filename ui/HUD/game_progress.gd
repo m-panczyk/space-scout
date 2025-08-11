@@ -14,4 +14,4 @@ func progress_setup(max_lvl):
 	
 func progress_update(points):
 	get_parent().value = get_parent().value + points
-	text = str(get_parent().value)
+	text = str(int(get_parent().value))

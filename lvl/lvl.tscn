@@ -173,6 +173,8 @@ drag_and_drop_selection_enabled = false
 
 [node name="Player" type="Area2D" parent="."]
 position = Vector2(540, 960)
-scale = Vector2(0.75, 0.75)
 script = ExtResource("7_li318")
 metadata/_custom_type_script = "uid://dinieicrygcfm"
+
+[node name="HUD_move" type="Area2D" parent="."]
+position = Vector2(540, 960)

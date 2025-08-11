@@ -6,18 +6,18 @@ var weapon_name: String = 'basic'
 var energy: int = 0
 var energy_max: int = 10
 var energy_production: Array = [1, 1]
-var health: int = 10
-var health_max: int = 10
-var weapon_cost: int = 1
+var health: int = 5
+var health_max: int = 5
+var weapon_cost: int = 10
 
 func reset_to_defaults() -> void:
 	weapon_name = 'basic'
 	energy = 0
 	energy_max = 10
 	energy_production = [1, 1]
-	health = 1
-	health_max = 1
-	weapon_cost = 1
+	health = 5
+	health_max = 5
+	weapon_cost = 10
 
 func to_dict() -> Dictionary:
 	return {
