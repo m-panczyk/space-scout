@@ -188,7 +188,7 @@ func fire_weapon():
 func died():
 	queue_free()
 	GameState.died = true
-	get_tree().change_scene_to_file("res://lvl/endgame.tscn")
+	get_tree().call_deferred("change_scene_to_file","res://lvl/endgame.tscn")
 
 func _on_screen_exited() -> void:
 	pass

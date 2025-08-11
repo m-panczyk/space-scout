@@ -268,19 +268,17 @@ func screen_to_global(screen_pos: Vector2, _camera: Camera2D) -> Vector2:
 	
 	return global_pos
 
-# Calculate the distance between two hex grid cells
+# Calculate the distance between two hex grid cells using offset coordinates
 func calculate_hex_distance(cell1: Vector2i, cell2: Vector2i) -> int:
-	# Using cube coordinates for hex distance calculation
-	# Convert axial to cube coordinates
-	var x1 = cell1.x
-	var z1 = cell1.y
-	var y1 = -x1 - z1
-	var x2 = cell2.x
-	var z2 = cell2.y
-	var y2 = -x2 - z2
+	# Convert offset coordinates to axial coordinates
+	# Godot uses odd-r offset by default for hexagonal tilemaps
+	var q1 = cell1.x - (cell1.y - (cell1.y & 1)) / 2
+	var r1 = cell1.y
+	var q2 = cell2.x - (cell2.y - (cell2.y & 1)) / 2
+	var r2 = cell2.y
 	
-	# Calculate distance in cube coordinates
-	return (abs(x1 - x2) + abs(y1 - y2) + abs(z1 - z2)) / 2
+	# Calculate distance using axial coordinates
+	return (abs(q1 - q2) + abs(q1 + r1 - q2 - r2) + abs(r1 - r2)) / 2
 
 # Get tile ID based on distance from endgame (for background colors)
 func get_tile_id_from_distance(distance: int) -> int:

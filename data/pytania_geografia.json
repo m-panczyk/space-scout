@@ -1,0 +1,322 @@
+{
+  "geografia": {
+    "10-11lat": {
+      "mapa_swiata": [
+        {
+          "pytanie": "Który kontynent jest największy?",
+          "poprawna": "Azja",
+          "bledne": ["Afryka", "Ameryka Północna"]
+        },
+        {
+          "pytanie": "Na którym kontynencie leży Polska?",
+          "poprawna": "Europa",
+          "bledne": ["Azja", "Ameryka"]
+        },
+        {
+          "pytanie": "Który ocean jest największy?",
+          "poprawna": "Spokojny",
+          "bledne": ["Atlantycki", "Indyjski"]
+        },
+        {
+          "pytanie": "Ile kontynentów jest na Ziemi?",
+          "poprawna": "7",
+          "bledne": ["5", "6"]
+        },
+        {
+          "pytanie": "Które morze znajduje się na północ od Polski?",
+          "poprawna": "Bałtyckie",
+          "bledne": ["Czarne", "Północne"]
+        },
+        {
+          "pytanie": "Jaka jest stolica Francji?",
+          "poprawna": "Paryż",
+          "bledne": ["Londyn", "Berlin"]
+        },
+        {
+          "pytanie": "Które państwo ma kształt buta?",
+          "poprawna": "Włochy",
+          "bledne": ["Hiszpania", "Grecja"]
+        },
+        {
+          "pytanie": "Na którym kontynencie leży Egipt?",
+          "poprawna": "Afryka",
+          "bledne": ["Azja", "Europa"]
+        },
+        {
+          "pytanie": "Które państwo ma najwięcej mieszkańców?",
+          "poprawna": "Chiny",
+          "bledne": ["Indie", "USA"]
+        },
+        {
+          "pytanie": "Jaka jest stolica Niemiec?",
+          "poprawna": "Berlin",
+          "bledne": ["Monachium", "Hamburg"]
+        }
+      ],
+      "uksztaltowanie_terenu": [
+        {
+          "pytanie": "Jak nazywa się najwyższy szczyt świata?",
+          "poprawna": "Mount Everest",
+          "bledne": ["K2", "Kilimandżaro"]
+        },
+        {
+          "pytanie": "Co to jest półwysep?",
+          "poprawna": "Ląd otoczony wodą z trzech stron",
+          "bledne": ["Ląd otoczony wodą całkowicie", "Woda otoczona lądem"]
+        },
+        {
+          "pytanie": "Jak nazywa się ujście rzeki do morza?",
+          "poprawna": "Delta",
+          "bledne": ["Źródło", "Dopływ"]
+        },
+        {
+          "pytanie": "Co to jest wyspa?",
+          "poprawna": "Ląd otoczony wodą ze wszystkich stron",
+          "bledne": ["Ląd połączony z morzem", "Część kontynentu"]
+        },
+        {
+          "pytanie": "Jak nazywa się najdłuższa rzeka świata?",
+          "poprawna": "Nil",
+          "bledne": ["Amazonka", "Jangcy"]
+        },
+        {
+          "pytanie": "Co to jest dolina?",
+          "poprawna": "Obniżenie terenu między wzniesieniami",
+          "bledne": ["Najwyższy punkt góry", "Płaski teren"]
+        },
+        {
+          "pytanie": "Jak nazywa się największa pustynia świata?",
+          "poprawna": "Sahara",
+          "bledne": ["Gobi", "Atacama"]
+        },
+        {
+          "pytanie": "Co to jest jezioro?",
+          "poprawna": "Zbiornik wodny otoczony lądem",
+          "bledne": ["Płynąca woda", "Woda w oceanie"]
+        },
+        {
+          "pytanie": "Jak nazywa się pas gór w Polsce?",
+          "poprawna": "Karpaty",
+          "bledne": ["Alpy", "Pireneje"]
+        },
+        {
+          "pytanie": "Co to jest równina?",
+          "poprawna": "Płaski lub lekko pofałdowany teren",
+          "bledne": ["Bardzo wysoki teren", "Głębokie obniżenie"]
+        }
+      ]
+    },
+    "12-13lat": {
+      "klimat": [
+        {
+          "pytanie": "Który typ klimatu panuje w Polsce?",
+          "poprawna": "Umiarkowany",
+          "bledne": ["Tropikalny", "Arktyczny"]
+        },
+        {
+          "pytanie": "Co wpływa na klimat danego miejsca?",
+          "poprawna": "Szerokość geograficzna",
+          "bledne": ["Długość geograficzna", "Nazwa miejscowości"]
+        },
+        {
+          "pytanie": "Gdzie panuje klimat równikowy?",
+          "poprawna": "Przy równiku",
+          "bledne": ["Przy biegunach", "W górach"]
+        },
+        {
+          "pytanie": "Jak nazywa się okres bez opadów?",
+          "poprawna": "Susza",
+          "bledne": ["Powódź", "Mróz"]
+        },
+        {
+          "pytanie": "Który wiatr przynosi ciepłe powietrze do Polski?",
+          "poprawna": "Południowo-zachodni",
+          "bledne": ["Północno-wschodni", "Północny"]
+        },
+        {
+          "pytanie": "Co to jest strefa klimatyczna?",
+          "poprawna": "Obszar o podobnym klimacie",
+          "bledne": ["Mapa pogody", "Prognoza na jutro"]
+        },
+        {
+          "pytanie": "Gdzie jest najcieplej na Ziemi?",
+          "poprawna": "Przy równiku",
+          "bledne": ["Przy biegunach", "W górach"]
+        },
+        {
+          "pytanie": "Co to są opady atmosferyczne?",
+          "poprawna": "Deszcz, śnieg, grad",
+          "bledne": ["Wiatr i temperatura", "Słońce i chmury"]
+        },
+        {
+          "pytanie": "Jaki klimat panuje w Afryce Środkowej?",
+          "poprawna": "Równikowy",
+          "bledne": ["Arktyczny", "Umiarkowany"]
+        },
+        {
+          "pytanie": "Co powoduje pory roku?",
+          "poprawna": "Nachylenie osi Ziemi",
+          "bledne": ["Odległość od Słońca", "Ruchy księżyca"]
+        }
+      ],
+      "geografia_polski": [
+        {
+          "pytanie": "Jaka jest stolica Polski?",
+          "poprawna": "Warszawa",
+          "bledne": ["Kraków", "Gdańsk"]
+        },
+        {
+          "pytanie": "Która rzeka przepływa przez Warszawę?",
+          "poprawna": "Wisła",
+          "bledne": ["Odra", "Warta"]
+        },
+        {
+          "pytanie": "Jak nazywa się najwyższy szczyt Polski?",
+          "poprawna": "Rysy",
+          "bledne": ["Śnieżka", "Babia Góra"]
+        },
+        {
+          "pytanie": "Z iloma państwami graniczy Polska?",
+          "poprawna": "7",
+          "bledne": ["5", "9"]
+        },
+        {
+          "pytanie": "Które miasto jest największe w Polsce?",
+          "poprawna": "Warszawa",
+          "bledne": ["Kraków", "Łódź"]
+        },
+        {
+          "pytanie": "Jak nazywa się największe jezioro w Polsce?",
+          "poprawna": "Śniardwy",
+          "bledne": ["Mamry", "Wigry"]
+        },
+        {
+          "pytanie": "W których górach leży szczyt Rysy?",
+          "poprawna": "Tatry",
+          "bledne": ["Karkonosze", "Bieszczady"]
+        },
+        {
+          "pytanie": "Które województwo ma największą powierzchnię?",
+          "poprawna": "Mazowieckie",
+          "bledne": ["Wielkopolskie", "Podlaskie"]
+        },
+        {
+          "pytanie": "Jak nazywa się wybrzeże Polski?",
+          "poprawna": "Wybrzeże Bałtyckie",
+          "bledne": ["Wybrzeże Atlantyckie", "Wybrzeże Północne"]
+        },
+        {
+          "pytanie": "Która rzeka jest druga co do długości w Polsce?",
+          "poprawna": "Odra",
+          "bledne": ["Warta", "San"]
+        }
+      ]
+    },
+    "14-15lat": {
+      "geologia": [
+        {
+          "pytanie": "Z czego składa się skorupa ziemska?",
+          "poprawna": "Z płyt tektonicznych",
+          "bledne": ["Z warstw atmosfery", "Z oceanów"]
+        },
+        {
+          "pytanie": "Jak powstają góry fałdowe?",
+          "poprawna": "Przez kolizję płyt tektonicznych",
+          "bledne": ["Przez erupcje wulkanów", "Przez erozję"]
+        },
+        {
+          "pytanie": "Co to jest magma?",
+          "poprawna": "Stopiona skała w wnętrzu Ziemi",
+          "bledne": ["Zimna skała", "Woda podziemna"]
+        },
+        {
+          "pytanie": "Które skały powstają z osadów?",
+          "poprawna": "Skały osadowe",
+          "bledne": ["Skały magmowe", "Skały metamorficzne"]
+        },
+        {
+          "pytanie": "Co powoduje trzęsienia ziemi?",
+          "poprawna": "Ruch płyt tektonicznych",
+          "bledne": ["Wiatr", "Deszcz"]
+        },
+        {
+          "pytanie": "Jak nazywa się nauka o skałach?",
+          "poprawna": "Petrologia",
+          "bledne": ["Meteorologia", "Biologia"]
+        },
+        {
+          "pytanie": "Co to jest eras geologiczna?",
+          "poprawna": "Długi okres w historii Ziemi",
+          "bledne": ["Rodzaj skały", "Typ klimatu"]
+        },
+        {
+          "pytanie": "Które skały powstają pod wpływem ciśnienia i temperatury?",
+          "poprawna": "Skały metamorficzne",
+          "bledne": ["Skały osadowe", "Skały magmowe"]
+        },
+        {
+          "pytanie": "Co to są minerały?",
+          "poprawna": "Naturalne związki chemiczne",
+          "bledne": ["Sztuczne materiały", "Rodzaje roślin"]
+        },
+        {
+          "pytanie": "Jak nazywa się centrum Ziemi?",
+          "poprawna": "Jądro",
+          "bledne": ["Płaszcz", "Skorupa"]
+        }
+      ],
+      "geografia_gospodarki": [
+        {
+          "pytanie": "Co to jest sektor pierwotny gospodarki?",
+          "poprawna": "Rolnictwo, leśnictwo, rybołówstwo",
+          "bledne": ["Przemysł", "Usługi"]
+        },
+        {
+          "pytanie": "Który kraj jest największym producentem ropy naftowej?",
+          "poprawna": "Arabia Saudyjska",
+          "bledne": ["Rosja", "USA"]
+        },
+        {
+          "pytanie": "Co to są surowce energetyczne?",
+          "poprawna": "Węgiel, ropa, gaz ziemny",
+          "bledne": ["Złoto, srebro, miedź", "Drewno, bawełna, wełna"]
+        },
+        {
+          "pytanie": "Gdzie rozwija się przemysł high-tech?",
+          "poprawna": "W rozwiniętych krajach",
+          "bledne": ["Tylko w Azji", "Tylko w Europie"]
+        },
+        {
+          "pytanie": "Co to jest globalizacja?",
+          "poprawna": "Proces łączenia gospodarek świata",
+          "bledne": ["Podział na kraje", "Izolacja ekonomiczna"]
+        },
+        {
+          "pytanie": "Który sektor dominuje w krajach rozwiniętych?",
+          "poprawna": "Sektor usług",
+          "bledne": ["Rolnictwo", "Przemysł ciężki"]
+        },
+        {
+          "pytanie": "Co to są zasoby odnawialne?",
+          "poprawna": "Energia słoneczna, wiatrowa, wodna",
+          "bledne": ["Węgiel, ropa, gaz", "Złoto, srebro, platyna"]
+        },
+        {
+          "pytanie": "Gdzie koncentruje się przemysł w Polsce?",
+          "poprawna": "Na Śląsku i w aglomeracjach",
+          "bledne": ["Tylko na wsi", "Równomiernie w kraju"]
+        },
+        {
+          "pytanie": "Co to jest PKB?",
+          "poprawna": "Produkt krajowy brutto",
+          "bledne": ["Podział krajowych bogactw", "Program krajowej budowy"]
+        },
+        {
+          "pytanie": "Który region świata jest najbogatszy?",
+          "poprawna": "Ameryka Północna i Europa",
+          "bledne": ["Azja Południowa", "Afryka"]
+        }
+      ]
+    }
+  }
+}
