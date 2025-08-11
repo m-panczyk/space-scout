@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://caqaqo08a1mgq"]
+[gd_scene load_steps=3 format=3 uid="uid://caqaqo08a1mgq"]
 
 [ext_resource type="Script" uid="uid://bm311m6rg1nhm" path="res://ui/menu/settings.gd" id="1_7kwmf"]
+[ext_resource type="Script" uid="uid://byvkeojabk7bs" path="res://ui/menu/grid_size_adjustment.gd" id="2_7f5uh"]
 
 [node name="Settings" type="Control"]
 layout_mode = 3
@@ -24,112 +25,113 @@ tab_alignment = 1
 current_tab = 0
 clip_tabs = false
 
-[node name="MENU_OPTIONS_GRAPHICS" type="PanelContainer" parent="TabContainer"]
+[node name="Grafika" type="PanelContainer" parent="TabContainer"]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Panel2" type="MarginContainer" parent="TabContainer/MENU_OPTIONS_GRAPHICS"]
+[node name="Panel2" type="MarginContainer" parent="TabContainer/Grafika"]
 layout_mode = 2
 theme_override_constants/margin_left = 100
 theme_override_constants/margin_top = 100
 theme_override_constants/margin_right = 100
 theme_override_constants/margin_bottom = 100
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="TabContainer/Grafika/Panel2"]
 layout_mode = 2
 size_flags_horizontal = 2
 theme_override_constants/separation = 50
 
-[node name="Landscape" type="HBoxContainer" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2"]
+[node name="Landscape" type="HBoxContainer" parent="TabContainer/Grafika/Panel2/VBoxContainer2"]
 layout_mode = 2
 theme_override_constants/separation = 50
 alignment = 1
 
-[node name="LandscapeLabel" type="Label" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/Landscape"]
+[node name="LandscapeLabel" type="Label" parent="TabContainer/Grafika/Panel2/VBoxContainer2/Landscape"]
 layout_mode = 2
 text = "MENU_LABEL_LANDSCAPE_ORIENTATION"
 
-[node name="LandscapeOption" type="CheckButton" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/Landscape"]
+[node name="LandscapeOption" type="CheckButton" parent="TabContainer/Grafika/Panel2/VBoxContainer2/Landscape"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 expand_icon = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Grafika/Panel2/VBoxContainer2"]
 layout_mode = 2
 
-[node name="DPILabel" type="Label" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/HBoxContainer"]
+[node name="DPILabel" type="Label" parent="TabContainer/Grafika/Panel2/VBoxContainer2/HBoxContainer"]
 layout_mode = 2
 text = "DPI"
 
-[node name="DPIAuto" type="CheckBox" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/HBoxContainer"]
+[node name="DPIAuto" type="CheckBox" parent="TabContainer/Grafika/Panel2/VBoxContainer2/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "auto
 "
 
-[node name="DPIScale" type="SpinBox" parent="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/HBoxContainer"]
+[node name="DPIScale" type="SpinBox" parent="TabContainer/Grafika/Panel2/VBoxContainer2/HBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 step = 0.1
 
-[node name="MENU_OPTIONS_GAMEPLAY" type="PanelContainer" parent="TabContainer"]
+[node name="Język" type="PanelContainer" parent="TabContainer"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="Panel" type="MarginContainer" parent="TabContainer/MENU_OPTIONS_GAMEPLAY"]
+[node name="Panel" type="MarginContainer" parent="TabContainer/Język"]
 layout_mode = 2
 theme_override_constants/margin_left = 100
 theme_override_constants/margin_top = 100
 theme_override_constants/margin_right = 100
 theme_override_constants/margin_bottom = 100
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/MENU_OPTIONS_GAMEPLAY/Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Język/Panel"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_constants/separation = 50
 alignment = 1
 
-[node name="Lang" type="HBoxContainer" parent="TabContainer/MENU_OPTIONS_GAMEPLAY/Panel/VBoxContainer"]
+[node name="Lang" type="HBoxContainer" parent="TabContainer/Język/Panel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_constants/separation = 50
 alignment = 1
 
-[node name="LangLabel" type="Label" parent="TabContainer/MENU_OPTIONS_GAMEPLAY/Panel/VBoxContainer/Lang"]
+[node name="LangLabel" type="Label" parent="TabContainer/Język/Panel/VBoxContainer/Lang"]
 layout_mode = 2
 text = "MENU_LABEL_LANGUAGE"
 
-[node name="LangOption" type="OptionButton" parent="TabContainer/MENU_OPTIONS_GAMEPLAY/Panel/VBoxContainer/Lang"]
+[node name="LangOption" type="OptionButton" parent="TabContainer/Język/Panel/VBoxContainer/Lang"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="MENU_OPTIONS_CONTROLS" type="PanelContainer" parent="TabContainer"]
+[node name="Sterowanie" type="PanelContainer" parent="TabContainer"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="Panel" type="MarginContainer" parent="TabContainer/MENU_OPTIONS_CONTROLS"]
+[node name="Panel" type="MarginContainer" parent="TabContainer/Sterowanie"]
 layout_mode = 2
 theme_override_constants/margin_left = 100
 theme_override_constants/margin_top = 100
 theme_override_constants/margin_right = 100
 theme_override_constants/margin_bottom = 100
 
-[node name="VBoxContainer" type="GridContainer" parent="TabContainer/MENU_OPTIONS_CONTROLS/Panel"]
+[node name="VBoxContainer" type="GridContainer" parent="TabContainer/Sterowanie/Panel"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 columns = 2
+script = ExtResource("2_7f5uh")
 
-[node name="TouchLabel" type="Label" parent="TabContainer/MENU_OPTIONS_CONTROLS/Panel/VBoxContainer"]
+[node name="TouchLabel" type="Label" parent="TabContainer/Sterowanie/Panel/VBoxContainer"]
 layout_mode = 2
 text = "MENU_OPTIONS_TOUCH_CONTROL"
 
-[node name="TouchOption" type="OptionButton" parent="TabContainer/MENU_OPTIONS_CONTROLS/Panel/VBoxContainer"]
+[node name="TouchOption" type="OptionButton" parent="TabContainer/Sterowanie/Panel/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 item_count = 2
@@ -138,19 +140,19 @@ popup/item_0/id = 0
 popup/item_1/text = "TOUCH_CONTROL_POINT"
 popup/item_1/id = 1
 
-[node name="NavLabel" type="Label" parent="TabContainer/MENU_OPTIONS_CONTROLS/Panel/VBoxContainer"]
+[node name="NavLabel" type="Label" parent="TabContainer/Sterowanie/Panel/VBoxContainer"]
 layout_mode = 2
 text = "Wirtualna Nawigacja"
 
-[node name="NavOption" type="CheckBox" parent="TabContainer/MENU_OPTIONS_CONTROLS/Panel/VBoxContainer"]
+[node name="NavOption" type="CheckBox" parent="TabContainer/Sterowanie/Panel/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="GesturesLabel" type="Label" parent="TabContainer/MENU_OPTIONS_CONTROLS/Panel/VBoxContainer"]
+[node name="GesturesLabel" type="Label" parent="TabContainer/Sterowanie/Panel/VBoxContainer"]
 layout_mode = 2
 text = "Nawigacja Gestami"
 
-[node name="GesturesOption" type="CheckBox" parent="TabContainer/MENU_OPTIONS_CONTROLS/Panel/VBoxContainer"]
+[node name="GesturesOption" type="CheckBox" parent="TabContainer/Sterowanie/Panel/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
@@ -171,12 +173,12 @@ disabled = true
 text = "MENU_IO_SAVE"
 
 [connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
-[connection signal="toggled" from="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/Landscape/LandscapeOption" to="." method="_on_landscape_option_toggled"]
-[connection signal="toggled" from="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/HBoxContainer/DPIAuto" to="." method="_on_dpi_auto_toggled"]
-[connection signal="changed" from="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/HBoxContainer/DPIScale" to="." method="_on_dpi_scale_changed"]
-[connection signal="value_changed" from="TabContainer/MENU_OPTIONS_GRAPHICS/Panel2/VBoxContainer2/HBoxContainer/DPIScale" to="." method="_on_dpi_scale_value_changed"]
-[connection signal="item_selected" from="TabContainer/MENU_OPTIONS_GAMEPLAY/Panel/VBoxContainer/Lang/LangOption" to="." method="_on_lang_option_item_selected"]
-[connection signal="item_selected" from="TabContainer/MENU_OPTIONS_CONTROLS/Panel/VBoxContainer/TouchOption" to="." method="_on_touch_option_item_selected"]
-[connection signal="toggled" from="TabContainer/MENU_OPTIONS_CONTROLS/Panel/VBoxContainer/NavOption" to="." method="_on_nav_option_toggled"]
-[connection signal="toggled" from="TabContainer/MENU_OPTIONS_CONTROLS/Panel/VBoxContainer/GesturesOption" to="." method="_on_gestures_option_toggled"]
+[connection signal="toggled" from="TabContainer/Grafika/Panel2/VBoxContainer2/Landscape/LandscapeOption" to="." method="_on_landscape_option_toggled"]
+[connection signal="toggled" from="TabContainer/Grafika/Panel2/VBoxContainer2/HBoxContainer/DPIAuto" to="." method="_on_dpi_auto_toggled"]
+[connection signal="changed" from="TabContainer/Grafika/Panel2/VBoxContainer2/HBoxContainer/DPIScale" to="." method="_on_dpi_scale_changed"]
+[connection signal="value_changed" from="TabContainer/Grafika/Panel2/VBoxContainer2/HBoxContainer/DPIScale" to="." method="_on_dpi_scale_value_changed"]
+[connection signal="item_selected" from="TabContainer/Język/Panel/VBoxContainer/Lang/LangOption" to="." method="_on_lang_option_item_selected"]
+[connection signal="item_selected" from="TabContainer/Sterowanie/Panel/VBoxContainer/TouchOption" to="." method="_on_touch_option_item_selected"]
+[connection signal="toggled" from="TabContainer/Sterowanie/Panel/VBoxContainer/NavOption" to="." method="_on_nav_option_toggled"]
+[connection signal="toggled" from="TabContainer/Sterowanie/Panel/VBoxContainer/GesturesOption" to="." method="_on_gestures_option_toggled"]
 [connection signal="pressed" from="SaveSettings" to="." method="_on_save_settings_pressed"]

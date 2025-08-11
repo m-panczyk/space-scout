@@ -112,4 +112,8 @@ func adjust_viewport_scale() -> void:
 	print("User DPI scale: ", user_dpi_scale)
 	print("Applied scale factor: ", scale_factor)
 	
-	get_tree().root.content_scale_factor = scale_factor
+	call_deferred("_apply_scale_factor")
+
+func _apply_scale_factor():
+	if get_tree() and get_tree().root:
+		get_tree().root.content_scale_factor = scale_factor

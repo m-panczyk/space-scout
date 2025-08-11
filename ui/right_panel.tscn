@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://d18kp6hplfcve"]
+[gd_scene load_steps=8 format=3 uid="uid://d18kp6hplfcve"]
 
 [ext_resource type="Script" uid="uid://dj7j4ku1hfx5l" path="res://ui/right_panel.gd" id="1_di6be"]
 [ext_resource type="PackedScene" uid="uid://bh5o0r5ut5y0d" path="res://lvl/map/map.tscn" id="1_eaefr"]
+[ext_resource type="Texture2D" uid="uid://dbcbprxmyl5ik" path="res://ui/img/frame.png" id="2_12su7"]
 [ext_resource type="Script" uid="uid://d1pnprmds7e2g" path="res://ui/zoom_slider.gd" id="2_di6be"]
+[ext_resource type="Texture2D" uid="uid://c3abnhspn7616" path="res://ui/img/frame_empty.png" id="4_12su7"]
 [ext_resource type="Script" uid="uid://dux36j0de66s0" path="res://ui/question_history.gd" id="4_xw7mw"]
+[ext_resource type="Theme" uid="uid://3b6jfloh1m1l" path="res://ui/themes/black_and_white_theme/black_and_white.tres" id="6_2be4n"]
 
 [node name="RightPanel" type="Control"]
 layout_mode = 3
@@ -15,16 +18,37 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_di6be")
 
-[node name="HexTileController" parent="." instance=ExtResource("1_eaefr")]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 1080)
-layout_mode = 2
-anchors_preset = 0
-anchor_left = 0.0101852
-anchor_top = 0.00833333
-anchor_right = 1.01019
-anchor_bottom = 0.570833
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+clip_children = 2
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.521354
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_12su7")
+patch_margin_left = 230
+patch_margin_top = 188
+patch_margin_right = 232
+patch_margin_bottom = 177
 metadata/_edit_use_anchors_ = true
+
+[node name="HexTileController" parent="NinePatchRect" instance=ExtResource("1_eaefr")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_12su7")
+patch_margin_left = 230
+patch_margin_top = 188
+patch_margin_right = 232
+patch_margin_bottom = 177
 
 [node name="HSlider" type="HSlider" parent="."]
 visible = false
@@ -39,27 +63,46 @@ metadata/_edit_use_anchors_ = true
 
 [node name="StartLevelButton" type="Button" parent="."]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(216, 216)
 layout_mode = 2
-anchor_left = 0.0101852
-anchor_top = 0.567187
-anchor_right = 0.232407
-anchor_bottom = 0.679688
+anchor_left = 0.12963
+anchor_top = 0.395833
+anchor_right = 0.246296
+anchor_bottom = 0.455208
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 1
+theme = ExtResource("6_2be4n")
 disabled = true
 action_mode = 0
-text = "GO!"
+text = "START"
 metadata/_edit_use_anchors_ = true
 
-[node name="ItemList" type="ItemList" parent="."]
+[node name="NinePatchRect3" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1001.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_12su7")
+patch_margin_left = 230
+patch_margin_top = 188
+patch_margin_right = 232
+patch_margin_bottom = 177
+
+[node name="ItemList" type="ItemList" parent="NinePatchRect3"]
 custom_minimum_size = Vector2(500, 0)
-layout_mode = 2
-anchor_left = 0.263889
-anchor_top = 0.571354
-anchor_right = 0.978704
-anchor_bottom = 0.967188
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 79.0
+offset_top = 116.0
+offset_right = -104.0
+offset_bottom = -124.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 3
 max_text_lines = 2
 auto_height = true
@@ -67,7 +110,6 @@ item_count = 2
 item_0/text = "TEST"
 item_1/text = "TEST"
 script = ExtResource("4_xw7mw")
-metadata/_edit_use_anchors_ = true
 
 [connection signal="value_changed" from="HSlider" to="HSlider" method="_on_value_changed"]
 [connection signal="pressed" from="StartLevelButton" to="." method="_on_start_level_button_pressed"]

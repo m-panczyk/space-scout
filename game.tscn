@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cgwlalfbkx2s5"]
+[gd_scene load_steps=17 format=3 uid="uid://cgwlalfbkx2s5"]
 
 [ext_resource type="Script" uid="uid://dffi65ighf0tu" path="res://game.gd" id="1_vef74"]
 [ext_resource type="Script" uid="uid://d27w00i7wny55" path="res://ui/three_way_camera.gd" id="2_af5le"]
@@ -9,7 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://b870o03o3viu0" path="res://ui/left_panel.tscn" id="5_hve3p"]
 [ext_resource type="PackedScene" uid="uid://co3tagyt0d0k0" path="res://ui/HUD/game_hud.tscn" id="7_hve3p"]
 [ext_resource type="PackedScene" uid="uid://d18kp6hplfcve" path="res://ui/right_panel.tscn" id="8_vef74"]
-[ext_resource type="PackedScene" uid="uid://c5qw6ssdl0lxr" path="res://ui/nine_patch_rect.tscn" id="12_lc2xo"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_p50ye"]
 viewport_path = NodePath("Panels/LeftPanel/PanelViewport")
@@ -54,23 +53,6 @@ fog_sky_affect = 0.0
 [node name="Game" type="Node3D"]
 script = ExtResource("1_vef74")
 metadata/_custom_type_script = "uid://cf61d3xem4xv5"
-
-[node name="PausePanel" type="ColorRect" parent="."]
-unique_name_in_owner = true
-process_mode = 3
-visible = false
-top_level = true
-z_index = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.352941)
-
-[node name="MenuContainer" parent="PausePanel" instance=ExtResource("3_215e1")]
-layout_mode = 1
-offset_bottom = -112.0
 
 [node name="ThreeWayCamera3D" type="Camera3D" parent="."]
 current = true
@@ -139,10 +121,7 @@ transparent_bg = true
 size = Vector2i(1080, 1920)
 size_2d_override_stretch = true
 
-[node name="NinePatchRect" parent="Panels/RightPanel/PanelViewport" instance=ExtResource("12_lc2xo")]
-
-[node name="FlowContainer" parent="Panels/RightPanel/PanelViewport/NinePatchRect" instance=ExtResource("8_vef74")]
-layout_mode = 1
+[node name="FlowContainer" parent="Panels/RightPanel/PanelViewport" instance=ExtResource("8_vef74")]
 offset_left = 100.0
 offset_top = 100.0
 offset_right = -100.0
@@ -155,37 +134,56 @@ texture = SubResource("ViewportTexture_1ya7t")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_hve3p")
 
-[node name="Navigation" type="HBoxContainer" parent="."]
-custom_minimum_size = Vector2(0, 100)
-anchors_preset = 12
-anchor_top = 1.0
+[node name="PausePanel" type="ColorRect" parent="."]
+unique_name_in_owner = true
+process_mode = 3
+visible = false
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -100.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.352941)
+
+[node name="MenuContainer" parent="PausePanel" instance=ExtResource("3_215e1")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0666667
+anchor_top = 0.0740741
+anchor_right = 0.931481
+anchor_bottom = 0.896296
+metadata/_edit_use_anchors_ = true
+
+[node name="Navigation" type="HBoxContainer" parent="."]
+anchors_preset = -1
+anchor_top = 0.958333
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+metadata/_edit_use_anchors_ = true
 
 [node name="left" type="Button" parent="Navigation"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 32
 text = "<<"
 
 [node name="pause" type="Button" parent="Navigation"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 32
 text = "|||"
 
 [node name="right" type="Button" parent="Navigation"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 32
 text = ">>"
 
 [connection signal="pressed" from="Navigation/left" to="." method="switch_to_panel_to_the_left"]

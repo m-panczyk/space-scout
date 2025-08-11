@@ -62,13 +62,11 @@ func _on_saves_container_item_selected(index: int) -> void:
 	var details = """
 [b]{save_name}[/b]
 Poziom trudności: [color=#ffcc00]{difficulty}[/color]
-Punkty: [color=#00ccff]{points}[/color]
 Utworzono: {creation}
 Ostatni Zapis: {datetime}
 """.format({
 		"save_name": save.get("save_name", "Unknown"),
 		"difficulty": save.get("difficulty_name", "Normal"),
-		"points": str(save.get("points", 0)),
 		"creation": formatted_creation,
 		"datetime": formatted_datetime,
 	})

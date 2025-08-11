@@ -53,6 +53,7 @@ PORTALS=""
 
 [gui]
 
+theme/custom="uid://3b6jfloh1m1l"
 theme/custom_font="uid://6thpkwss56vn"
 
 [importer_defaults]
