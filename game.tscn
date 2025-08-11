@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cgwlalfbkx2s5"]
+[gd_scene load_steps=18 format=3 uid="uid://cgwlalfbkx2s5"]
 
 [ext_resource type="Script" uid="uid://dffi65ighf0tu" path="res://game.gd" id="1_vef74"]
 [ext_resource type="Script" uid="uid://d27w00i7wny55" path="res://ui/three_way_camera.gd" id="2_af5le"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://b870o03o3viu0" path="res://ui/left_panel.tscn" id="5_hve3p"]
 [ext_resource type="PackedScene" uid="uid://co3tagyt0d0k0" path="res://ui/HUD/game_hud.tscn" id="7_hve3p"]
 [ext_resource type="PackedScene" uid="uid://d18kp6hplfcve" path="res://ui/right_panel.tscn" id="8_vef74"]
+[ext_resource type="Script" uid="uid://cpu2p4fufbfh" path="res://addons/scripts/touch_screen_joystick.gd" id="10_hve3p"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_p50ye"]
 viewport_path = NodePath("Panels/LeftPanel/PanelViewport")
@@ -133,6 +134,23 @@ texture = SubResource("ViewportTexture_1ya7t")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_hve3p")
+
+[node name="TouchScreenJoystick" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(540, 540)
+mouse_filter = 1
+script = ExtResource("10_hve3p")
+mode = 1
+change_opacity_when_touched = true
+from_opacity = 0.0
+use_input_actions = true
+draw_debugs = true
+metadata/_custom_type_script = "uid://cpu2p4fufbfh"
 
 [node name="PausePanel" type="ColorRect" parent="."]
 unique_name_in_owner = true

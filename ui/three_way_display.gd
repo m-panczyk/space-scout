@@ -105,6 +105,8 @@ func _on_panel_touched(panel: ThreeWayPanel):
 	if camera.is_camera_transitioning():
 		return
 	
+	if GameState.game_on:
+		return
 	# Determine which panel was touched and switch to it
 	var target_panel_type: PanelType
 	if panel == left_panel:

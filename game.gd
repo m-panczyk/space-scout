@@ -5,6 +5,7 @@ var game_paused_by_transition: bool = false
 func _ready():
 	super()
 	$Navigation.visible = GlobalSettings.virtual_navigation
+	$TouchScreenJoystick.visible = (GlobalSettings.touch_controls == GlobalSettings.TouchControlType.JOYPAD_TOUCH)
 	# Connect to transition signals
 	camera.transition_started.connect(_on_transition_started)
 	transition_complete.connect(_on_transition_complete)
@@ -115,8 +116,10 @@ func pause_game():
 	%GameLevel.process_mode = Node.PROCESS_MODE_DISABLED
 	%GameLevel.hide()
 	%PausePanel.show()
+	$TouchScreenJoystick.visible = false
 
 func resume_game():
 	%GameLevel.show()
 	%PausePanel.hide()
 	%GameLevel.process_mode = Node.PROCESS_MODE_INHERIT
+	$TouchScreenJoystick.visible = (GlobalSettings.touch_controls == GlobalSettings.TouchControlType.JOYPAD_TOUCH)

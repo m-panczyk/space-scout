@@ -141,22 +141,8 @@ func process_move(delta: float):
 	if Input.is_action_pressed("game_fire"):
 		fire_weapon()
 	
-	# Handle move-to-target from click
-	if move_to_target:
-		var direction_to_target = (target_position - global_position).normalized()
-		var distance_to_target = global_position.distance_to(target_position)
-		
-		# Stop moving when close enough
-		if distance_to_target < 10.0:  # Adjust threshold as needed
-			move_to_target = false
-			animation.frame = 0
-		else:
-			velocity = direction_to_target
-			# Set animation based on direction
-			if abs(direction_to_target.x) > abs(direction_to_target.y):
-				animation.frame = 2 if direction_to_target.x > 0 else 1
-			else:
-				animation.frame = 0
+	if GlobalSettings.touch_controls == GlobalSettings.TouchControlType.POINT:
+		velocity = move_to_target_processing()
 	else:
 		# Standard keyboard input (only when not moving to target)
 		if Input.is_action_pressed("ui_left"):
@@ -179,7 +165,24 @@ func process_move(delta: float):
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
 	position += velocity * delta
-
+func move_to_target_processing() -> Vector2:
+		# Handle move-to-target from click
+	if move_to_target:
+		var direction_to_target = (target_position - global_position).normalized()
+		var distance_to_target = global_position.distance_to(target_position)
+		
+		# Stop moving when close enough
+		if distance_to_target < 10.0:  # Adjust threshold as needed
+			move_to_target = false
+			animation.frame = 0
+		else:
+			# Set animation based on direction
+			if abs(direction_to_target.x) > abs(direction_to_target.y):
+				animation.frame = 2 if direction_to_target.x > 0 else 1
+			else:
+				animation.frame = 0
+			return direction_to_target
+	return Vector2.ZERO
 func fire_weapon():
 	if energy >= weapon.consumption:
 		weapon.fire()
