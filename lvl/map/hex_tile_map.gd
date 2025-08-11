@@ -35,13 +35,24 @@ func _ready() -> void:
 	_explored = SaveData.explored_tiles
 	_ship_position = SaveData.ship_position
 	
-	# Create or get background layer
+	# Start the setup chain
+	call_deferred("complete_setup")
+
+func complete_setup() -> void:
+	# Create or get background layer first
 	setup_background_layer()
+	
+	# Then generate background colors after layer is created
+	call_deferred("finish_setup")
+
+func finish_setup() -> void:
 	# Check if this is a new game (no explored tiles)
 	if explored.size() == 0:
 		initialize_new_game_positions()
-	# Generate the background color grid
+	
+	# Generate the background color grid (now background_layer exists)
 	generate_background_colors()
+	
 	for cell in explored:
 		reset_cell(cell)
 		create_distance_label(cell)
@@ -337,7 +348,7 @@ func prepare_lvl(punished:bool):
 
 # Handle endgame logic
 func handle_endgame() -> void:
-	get_tree().change_scene_to_file("res://lvl/endgame.tscn")
+	get_tree().call_deferred("change_scene_to_file", "res://lvl/endgame.tscn")
 
 # Optional: Regenerate background colors if endgame position changes
 func set_endgame_position(new_endgame: Vector2i) -> void:

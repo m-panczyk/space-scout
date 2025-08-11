@@ -28,8 +28,9 @@ func _ready() -> void:
 	$CollisionShape2D.disabled = true
 	area_entered.connect(got_answer)
 	text = find_child("Text")
+
 func got_answer(other_area):
 	if other_area is Player:
 		EventBus.emit("end_lvl",GameState.is_correct_answer(answer))
 		if is_inside_tree():
-			get_tree().call_group('PORTALS','hide_question')
+			get_tree().call_deferred("call_group", 'PORTALS', 'hide_question')
