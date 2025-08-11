@@ -41,15 +41,30 @@ jobs:
         with:
           version: ${{ env.GODOT_VERSION }}
           use-dotnet: false
-          include-templates: true  # This will download export templates
+          include-templates: true
       
       - name: Setup Build Directories
         run: |
           mkdir -p build/linux
       
-      - name: Export Linux Build
+      - name: Export Linux Build (with embedded PCK)
         run: |
-          godot --headless --verbose --export-release "Linux" "./build/linux/$EXPORT_NAME.x86_64"
+          godot --headless --verbose --export-release "Linux" "./build/linux/$EXPORT_NAME.x86_64" --embed-pck
+      
+      - name: Verify Linux Build
+        run: |
+          echo "Linux build contents:"
+          ls -la build/linux/
+          # Check if executable exists and is reasonably sized (should be larger with embedded pck)
+          if [ -f "build/linux/$EXPORT_NAME.x86_64" ]; then
+            file_size=$(stat -f%z "build/linux/$EXPORT_NAME.x86_64" 2>/dev/null || stat -c%s "build/linux/$EXPORT_NAME.x86_64")
+            echo "Executable size: $file_size bytes"
+            if [ $file_size -lt 10000000 ]; then  # Less than 10MB might indicate missing pck
+              echo "⚠️  Warning: Executable seems small, pck might not be embedded"
+            else
+              echo "✅ Executable size looks good"
+            fi
+          fi
       
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
@@ -77,9 +92,24 @@ jobs:
         run: |
           mkdir -p build/windows
       
-      - name: Export Windows Build
+      - name: Export Windows Build (with embedded PCK)
         run: |
-          godot --headless --verbose --export-release "Windows Desktop" "./build/windows/$EXPORT_NAME.exe"
+          godot --headless --verbose --export-release "Windows Desktop" "./build/windows/$EXPORT_NAME.exe" --embed-pck
+      
+      - name: Verify Windows Build
+        run: |
+          echo "Windows build contents:"
+          ls -la build/windows/
+          # Check if executable exists and is reasonably sized
+          if [ -f "build/windows/$EXPORT_NAME.exe" ]; then
+            file_size=$(stat -f%z "build/windows/$EXPORT_NAME.exe" 2>/dev/null || stat -c%s "build/windows/$EXPORT_NAME.exe")
+            echo "Executable size: $file_size bytes"
+            if [ $file_size -lt 10000000 ]; then
+              echo "⚠️  Warning: Executable seems small, pck might not be embedded"
+            else
+              echo "✅ Executable size looks good"
+            fi
+          fi
       
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v4
@@ -107,11 +137,11 @@ jobs:
       - name: Setup Build Directories
         run: mkdir -p build/mac
 
-      - name: Export macOS App Bundle on Linux
+      - name: Export macOS App Bundle on Linux (with embedded PCK)
         run: |
           # Export .app bundle using Linux runner (more memory available)
           godot --headless --disable-render-loop --verbose \
-            --export-release "macOS" "./build/mac/$EXPORT_NAME.app"
+            --export-release "macOS" "./build/mac/$EXPORT_NAME.app" --embed-pck
         env:
           # Can use more aggressive settings on Linux
           GODOT_MEMORY_LIMIT: 16384
@@ -225,7 +255,7 @@ jobs:
         run: |
           mkdir -p build/android
       
-      # Fix the export path to match export_presets.cfg
+      # Android APKs automatically include assets, no need for --embed-pck
       - name: Export Android Build
         run: |
           godot --headless --verbose --export-debug "Android" "./build/android/$EXPORT_NAME.apk"
@@ -255,6 +285,7 @@ jobs:
         run: |
           mkdir -p build/web
       
+      # Web exports automatically bundle everything, no need for --embed-pck
       - name: Export Web Build
         run: |
           godot --headless --verbose --export-release "Web" "./build/web/index.html"
@@ -356,8 +387,8 @@ jobs:
           <body>
               <h1>Space Scout Downloads</h1>
               <ul class="build-list">
-                  <li>🐧 <a href="linux/$EXPORT_NAME.x86_64">Linux Build</a><span class="file-size">(.x86_64)</span></li>
-                  <li>🪟 <a href="windows/$EXPORT_NAME.exe">Windows Build</a><span class="file-size">(.exe)</span></li>
+                  <li>🐧 <a href="linux/$EXPORT_NAME.x86_64">Linux Build</a><span class="file-size">(.x86_64 - Self-contained)</span></li>
+                  <li>🪟 <a href="windows/$EXPORT_NAME.exe">Windows Build</a><span class="file-size">(.exe - Self-contained)</span></li>
                   <li>🍎 <a href="mac/$EXPORT_NAME.dmg">macOS Build</a><span class="file-size">(.dmg)</span></li>
                   <li>📱 <a href="android/$EXPORT_NAME.apk">Android Build</a><span class="file-size">(.apk)</span></li>
               </ul>
