@@ -13,8 +13,8 @@ var ready_to_free = false
 var max_items_per_type_per_point = 3  # Maximum number of items of the same type per spawn point
 
 # Difficulty scaling parameters
-var min_spawn_rate = 0.1  # Easiest level spawn rate (level 20)
-var max_spawn_rate = 5.0  # Hardest level spawn rate (level 0)
+var min_spawn_rate = 0.5  # Easiest level spawn rate (level 20)
+var max_spawn_rate = 3.0  # Hardest level spawn rate (level 0)
 var min_base_speed = 50.0  # Easiest level speed (level 20)
 var max_base_speed = 300.0  # Hardest level speed (level 0)
 
@@ -118,10 +118,10 @@ func setup_spawn_timer() -> void:
 
 func update_difficulty_from_progress() -> void:
 	# Clamp game_progress to valid range
-	var progress = clamp(GameState.game_progress, 0, 20)
+	var progress = clamp(GameState.game_progress, 0, 10)
 	
 	# Calculate difficulty factor (0.0 = hardest, 1.0 = easiest)
-	var difficulty_factor = progress / 20.0
+	var difficulty_factor = progress / 10
 	
 	# Update spawn rate (inverse: easier = slower spawn, harder = faster spawn)
 	spawn_rate = lerp(max_spawn_rate, min_spawn_rate, difficulty_factor)

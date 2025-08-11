@@ -10,6 +10,7 @@ var points: int = 0
 var explored_tiles: Array = []
 var endgame: Vector2i = Vector2i(0,0)
 var ship_position: Vector2i = Vector2i(5, 5)
+var job_value: int = 30
 
 func reset_to_defaults() -> void:
 	is_new = true
@@ -20,6 +21,7 @@ func reset_to_defaults() -> void:
 	explored_tiles = []
 	endgame = Vector2i(0,0)
 	ship_position = Vector2i(5, 5)
+	job_value = 30
 
 func to_dict() -> Dictionary:
 	var serialized_tiles = []
@@ -46,7 +48,8 @@ func to_dict() -> Dictionary:
 		"ship_position": {
 			"x": ship_position.x,
 			"y": ship_position.y
-		}
+		},
+		"job_value": job_value
 	}
 
 func from_dict(data: Dictionary) -> void:
@@ -55,6 +58,7 @@ func from_dict(data: Dictionary) -> void:
 	bg_speed = data.get("bg_speed", null)
 	fall_speed = data.get("fall_speed", null)
 	points = data.get("points", 0)
+	job_value = data.get("job_value", 0)
 	
 	# Handle explored_tiles properly
 	var raw_explored_tiles = data.get("explored_tiles", [])
@@ -84,4 +88,5 @@ func _to_string() -> String:
 	output += "explored_tiles: " + str(explored_tiles.size()) + " tiles\n"
 	output += "endgame: " + str(endgame) + "\n"
 	output += "ship_position: " + str(ship_position) + "\n"
+	output += "job_value: " + str(job_value) + "\n"
 	return output

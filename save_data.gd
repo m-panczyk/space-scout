@@ -61,7 +61,9 @@ var ship_position:
 var weapon_name:
 	get: return player_module.weapon_name
 	set(value): player_module.weapon_name = value
-
+var job_value:
+	get: return game_module.job_value
+	set(value): game_module.job_value = value
 var energy:
 	get: return player_module.energy
 	set(value): player_module.energy = value

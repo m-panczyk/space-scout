@@ -8,7 +8,13 @@ var question_text = ''
 var question_data
 var game_on = false
 var died = false
-var job_cost = 30
+var job_cost:
+	set(value):
+		return
+	get:
+		var value = SaveData.job_value
+		SaveData.job_value = int(value * 1.2)
+		return value
 
 func _ready() -> void:
 	EventBus.subscribe('start_lvl',start_lvl)
