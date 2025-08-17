@@ -7,6 +7,7 @@ var scale_factor
 var user_dpi_scale:float = 1.0
 var language = 0
 var landscape:bool = false
+var tutorial_done:bool = false
 const LANDSCAPE =[DisplayServer.ScreenOrientation.SCREEN_PORTRAIT,DisplayServer.ScreenOrientation.SCREEN_LANDSCAPE]
 const LANGUAGE = ['pl','en','fr','es','de','it','pt_br','pt_pt','ru','el','tr','da','nb','sv','nl','fi','ja','zh_cn','zh_tw','ko','cs','hu','ro','th','bg','he','ar','bs']
 const LANGUAGE_EMOJI = [
@@ -70,6 +71,9 @@ func set_user_dpi_scale(scale:float) -> void:
 	user_dpi_scale = clamp(scale, 0.5, 2.0)
 	adjust_viewport_scale()
 
+func set_tutorial_done(completed:bool) -> void:
+	tutorial_done = completed
+
 # Add these setter functions with your other setters
 func set_virtual_navigation(enabled: bool) -> void:
 	virtual_navigation = enabled
@@ -80,6 +84,24 @@ func set_virtual_navigation(enabled: bool) -> void:
 func set_gesture_navigation(enabled: bool) -> void:
 	gesture_navigation = enabled
 
+func reset_to_defaults() -> void:
+	print_debug("Resetowanie ustawień do wartości domyślnych")
+	
+	# Usuń istniejący plik konfiguracyjny
+	if FileAccess.file_exists(config_path):
+		DirAccess.remove_absolute(config_path)
+		print_debug("Plik konfiguracyjny został usunięty")
+	
+	# Ustaw domyślne wartości
+	set_language(0)  # polski jako domyślny
+	set_landscape(false)  # portret jako domyślny
+	set_touch_controls(TouchControlType.JOYPAD_TOUCH)  # domyślny typ kontrolek
+	set_user_dpi_scale(1.0)  # domyślna skala DPI
+	set_virtual_navigation(false)  # wyłączona wirtualna nawigacja
+	set_gesture_navigation(false)  # wyłączona nawigacja gestów
+	set_tutorial_done(false)  # tutorial nie ukończony
+	
+	print_debug("Ustawienia zostały zresetowane do wartości domyślnych")
 
 func load_settings() -> void:
 	print_debug("loading settings")
@@ -90,6 +112,7 @@ func load_settings() -> void:
 		set_user_dpi_scale(config.get_value('video_settings', 'user_dpi_scale', 1.0))
 		set_virtual_navigation(config.get_value('control_settings', 'virtual_navigation', false))
 		set_gesture_navigation(config.get_value('control_settings', 'gesture_navigation', false))
+		set_tutorial_done(config.get_value('game_settings', 'tutorial_done', false))
 	
 func save_settings() -> void:
 	config.set_value('game_settings', 'language', language)
@@ -98,6 +121,7 @@ func save_settings() -> void:
 	config.set_value('video_settings', 'user_dpi_scale', user_dpi_scale)
 	config.set_value('control_settings', 'virtual_navigation', virtual_navigation)
 	config.set_value('control_settings', 'gesture_navigation', gesture_navigation)
+	config.set_value('game_settings', 'tutorial_done', tutorial_done)
 	
 	print_debug(config.to_string())
 	config.save("user://config.cfg")

@@ -1,7 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://u83wwivbovfd"]
+[gd_scene load_steps=5 format=3 uid="uid://u83wwivbovfd"]
 
 [ext_resource type="Script" uid="uid://bdeivwwoxfq3s" path="res://ui/menu/menu_container.gd" id="1_fd2q0"]
 [ext_resource type="PackedScene" uid="uid://dpo40s8065wkx" path="res://ui/menu/main_menu.tscn" id="2_t42sx"]
+
+[sub_resource type="InputEventAction" id="InputEventAction_f70j1"]
+action = &"ui_cancel"
+
+[sub_resource type="Shortcut" id="Shortcut_1blgw"]
+events = [SubResource("InputEventAction_f70j1")]
 
 [node name="MenuContainer" type="VBoxContainer"]
 anchors_preset = 15
@@ -21,6 +27,7 @@ unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
+shortcut = SubResource("Shortcut_1blgw")
 text = "MENU_LABEL_BACK"
 
 [node name="Title" type="Label" parent="HBoxContainer"]

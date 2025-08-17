@@ -1,4 +1,5 @@
 extends TileMapLayer
+class_name HexTileMap
 
 var _ship_position = SaveData.ship_position
 var ship_position:
@@ -169,7 +170,6 @@ func initialize_new_game_positions() -> void:
 	else:
 		print("Error: Could not find valid endgame position 5 tiles away from ship")
 
-
 func setup_background_layer() -> void:
 	# Check if background layer already exists
 	var parent = get_parent()
@@ -200,6 +200,7 @@ func generate_background_colors() -> void:
 			background_layer.set_cell(cell, 1, Vector2i(0, 0), tile_id)
 
 func _input(event: InputEvent) -> void:
+	print("direct_map_input:"+str(event))
 	if lock:
 		return
 	if event is InputEventMouse || event is InputEventScreenTouch:
@@ -215,6 +216,22 @@ func _input(event: InputEvent) -> void:
 		var clicked_cell = local_to_map(local_pos)
 		# Handle cell selection
 		handle_cell_selection(clicked_cell, event.is_pressed(),false)
+	# Handle directional movement input actions
+	if Input.is_action_just_pressed("ui_up"):
+		print("up")
+		move_target_direction("up")
+	elif Input.is_action_just_pressed("ui_down"):
+		print("down")
+		move_target_direction("down")
+	elif Input.is_action_just_pressed("ui_left"):
+		move_target_direction("left")
+		print("left")
+	elif Input.is_action_just_pressed("ui_right"):
+		print("right")
+		move_target_direction("right")
+	elif event.is_action("ui_accept"):
+		EventBus.emit("start_lvl",false)
+
 
 func handle_cell_selection(clicked_cell: Vector2i, is_pressed: bool, is_synth: bool) -> void:
 	# Initialize last_pressed if it's the first click
@@ -296,6 +313,36 @@ func get_tile_id_from_distance(distance: int) -> int:
 	else:
 		return 0  # Dark blue - very far
 
+func move_target_direction(direction: String) -> void:
+	"""Move target with intuitive directional behavior"""
+	var new_target:Vector2i
+	if lock:
+		return
+	if target != null:
+		var cell_options = get_surrounding_cells(ship_position).filter(func(x): return get_surrounding_cells(target).has(x))
+		match direction:
+			"down":
+				new_target = cell_options.reduce(func(a, b): return a if a.y > b.y else b)
+			"up":
+				new_target = cell_options.reduce(func(a, b): return a if a.y < b.y else b)
+			"right":
+				new_target = cell_options.reduce(func(a, b): return a if a.x > b.x else b)
+			"left":
+				new_target = cell_options.reduce(func(a, b): return a if a.x < b.x else b)
+	else:
+		match direction:
+			"down":
+				new_target = Vector2i(ship_position.x, ship_position.y + 1)
+			"up":
+				new_target = Vector2i(ship_position.x, ship_position.y - 1)
+			"right":
+				new_target = Vector2i(ship_position.x + 1, ship_position.y)
+			"left":
+				new_target = Vector2i(ship_position.x - 1, ship_position.y)
+	
+	handle_cell_selection(new_target,true,true)
+
+
 # Move ship to target cell and update game state
 func move_to_target() -> void:
 	if target != null:
@@ -369,3 +416,40 @@ func update_background_area(center: Vector2i, radius: int = 5) -> void:
 			# Update distance label if it exists
 			if tile_labels.has(cell):
 				update_distance_label(cell)
+
+# Get all valid target positions (for UI or AI purposes)
+func get_valid_targets() -> Array:
+	"""Return array of all valid target positions"""
+	return get_surrounding_cells(ship_position)
+
+# Cycle through valid targets
+func cycle_target(forward: bool = true) -> void:
+	"""Cycle through all valid target positions"""
+	if lock:
+		return
+	
+	var valid_targets = get_valid_targets()
+	if valid_targets.size() == 0:
+		return
+	
+	var current_index = 0
+	if target != null and valid_targets.has(target):
+		current_index = valid_targets.find(target)
+	
+	# Move to next/previous target
+	if forward:
+		current_index = (current_index + 1) % valid_targets.size()
+	else:
+		current_index = (current_index - 1 + valid_targets.size()) % valid_targets.size()
+	
+	var new_target = valid_targets[current_index]
+	handle_cell_selection(new_target, true, true)
+
+# Confirm current target selection
+func confirm_target() -> void:
+	"""Confirm the current target selection"""
+	if lock:
+		return
+		
+	if target != null:
+		EventBus.emit('target_selected', target)

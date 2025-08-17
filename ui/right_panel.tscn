@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://d18kp6hplfcve"]
+[gd_scene load_steps=10 format=3 uid="uid://d18kp6hplfcve"]
 
 [ext_resource type="Script" uid="uid://dj7j4ku1hfx5l" path="res://ui/right_panel.gd" id="1_di6be"]
 [ext_resource type="PackedScene" uid="uid://bh5o0r5ut5y0d" path="res://lvl/map/map.tscn" id="1_eaefr"]
@@ -7,6 +7,12 @@
 [ext_resource type="Texture2D" uid="uid://c3abnhspn7616" path="res://ui/img/frame_empty.png" id="4_12su7"]
 [ext_resource type="Script" uid="uid://dux36j0de66s0" path="res://ui/question_history.gd" id="4_xw7mw"]
 [ext_resource type="Theme" uid="uid://3b6jfloh1m1l" path="res://ui/themes/black_and_white_theme/black_and_white.tres" id="6_2be4n"]
+
+[sub_resource type="InputEventAction" id="InputEventAction_12su7"]
+action = &"ui_confirm"
+
+[sub_resource type="Shortcut" id="Shortcut_2be4n"]
+events = [SubResource("InputEventAction_12su7")]
 
 [node name="RightPanel" type="Control"]
 layout_mode = 3
@@ -70,10 +76,10 @@ anchor_right = 0.246296
 anchor_bottom = 0.455208
 size_flags_horizontal = 0
 size_flags_vertical = 4
-focus_mode = 1
 theme = ExtResource("6_2be4n")
 disabled = true
 action_mode = 0
+shortcut = SubResource("Shortcut_2be4n")
 text = "START"
 metadata/_edit_use_anchors_ = true
 

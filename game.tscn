@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cgwlalfbkx2s5"]
+[gd_scene load_steps=19 format=3 uid="uid://cgwlalfbkx2s5"]
 
 [ext_resource type="Script" uid="uid://dffi65ighf0tu" path="res://game.gd" id="1_vef74"]
 [ext_resource type="Script" uid="uid://d27w00i7wny55" path="res://ui/three_way_camera.gd" id="2_af5le"]
@@ -51,6 +51,8 @@ fog_light_color = Color(0, 0, 0, 1)
 fog_sun_scatter = 1.0
 fog_sky_affect = 0.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iotsf"]
+
 [node name="Game" type="Node3D"]
 script = ExtResource("1_vef74")
 metadata/_custom_type_script = "uid://cf61d3xem4xv5"
@@ -64,13 +66,15 @@ metadata/_custom_type_script = "uid://d27w00i7wny55"
 
 [node name="Panels" type="Node3D" parent="."]
 
-[node name="LeftPanel" type="Node3D" parent="Panels"]
+[node name="LeftPanel" type="Node3D" parent="Panels" node_paths=PackedStringArray("focus_node")]
 transform = Transform3D(0.5, 0, 0.866026, 0, 1, 0, -0.866026, 0, 0.5, -8.187, 0, -4.727)
 script = ExtResource("3_af5le")
 panel_type = 0
+focus_node = NodePath("PanelViewport/LeftPanel")
 metadata/_custom_type_script = "uid://knh3ligoqkyo"
 
 [node name="PanelViewport" type="SubViewport" parent="Panels/LeftPanel"]
+disable_3d = true
 transparent_bg = true
 size = Vector2i(1080, 1920)
 
@@ -80,23 +84,26 @@ offset_bottom = 0.0
 [node name="PanelSprite" type="Sprite3D" parent="Panels/LeftPanel"]
 texture = SubResource("ViewportTexture_p50ye")
 
-[node name="CenterPanel" type="Node3D" parent="Panels"]
+[node name="CenterPanel" type="Node3D" parent="Panels" node_paths=PackedStringArray("focus_node", "sprite3d", "viewport")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.453)
 script = ExtResource("3_af5le")
 panel_size = Vector2i(1140, 1980)
+focus_node = NodePath("PanelViewport/NinePatchRect")
+sprite3d = NodePath("game")
+viewport = NodePath("GameViewport")
 metadata/_custom_type_script = "uid://knh3ligoqkyo"
 
 [node name="PanelSprite" type="Sprite3D" parent="Panels/CenterPanel"]
 texture = SubResource("ViewportTexture_uu7im")
 
-[node name="game" type="Sprite3D" parent="Panels/CenterPanel/PanelSprite"]
+[node name="game" type="Sprite3D" parent="Panels/CenterPanel"]
 texture = SubResource("ViewportTexture_mfdv2")
 
 [node name="GameViewport" type="SubViewport" parent="Panels/CenterPanel"]
 disable_3d = true
-transparent_bg = true
 size = Vector2i(1080, 1920)
+size_2d_override_stretch = true
 
 [node name="GameLevel" parent="Panels/CenterPanel/GameViewport" instance=ExtResource("4_p50ye")]
 unique_name_in_owner = true
@@ -111,10 +118,11 @@ size_2d_override_stretch = true
 [node name="NinePatchRect" parent="Panels/CenterPanel/PanelViewport" instance=ExtResource("7_hve3p")]
 offset_bottom = 0.0
 
-[node name="RightPanel" type="Node3D" parent="Panels"]
+[node name="RightPanel" type="Node3D" parent="Panels" node_paths=PackedStringArray("focus_node")]
 transform = Transform3D(0.5, 0, -0.866026, 0, 1, 0, 0.866026, 0, 0.5, 8.187, 0, -4.727)
 script = ExtResource("3_af5le")
 panel_type = 2
+focus_node = NodePath("PanelViewport/FlowContainer")
 metadata/_custom_type_script = "uid://knh3ligoqkyo"
 
 [node name="PanelViewport" type="SubViewport" parent="Panels/RightPanel"]
@@ -145,17 +153,19 @@ grow_vertical = 2
 pivot_offset = Vector2(540, 540)
 mouse_filter = 1
 script = ExtResource("10_hve3p")
+knob_radius = 41.4
 mode = 1
 change_opacity_when_touched = true
 from_opacity = 0.0
+to_opacity = 50.0
 use_input_actions = true
-draw_debugs = true
 metadata/_custom_type_script = "uid://cpu2p4fufbfh"
 
 [node name="PausePanel" type="ColorRect" parent="."]
 unique_name_in_owner = true
 process_mode = 3
 visible = false
+material = SubResource("ShaderMaterial_iotsf")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

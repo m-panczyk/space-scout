@@ -9,8 +9,15 @@ var save_game = preload("res://ui/menu/save_game.tscn")
 func _ready() -> void:
 	if SaveData.get_all_save_files():
 		$ContinueGame.disabled = false
+	_on_focus()
 	EventBus.subscribe('end_lvl',end_lvl)
 	EventBus.subscribe('start_lvl',prepare_lvl)
+func _on_focus() -> void:
+	if visible:
+		if $ContinueGame.visible:
+			$ContinueGame.grab_focus()
+		else :
+			$NewGame.grab_focus()
 func _exit_tree() -> void:
 	EventBus.unsubscribe('end_lvl',end_lvl)
 	EventBus.unsubscribe('start_lvl',prepare_lvl)
@@ -35,7 +42,6 @@ func _on_settings_button_down() -> void:
 
 
 func _on_save_game_pressed() -> void:
-	#SaveData.show_save_dialog()
 	get_parent().get_parent().replace_current_scene(save_game)
 
 

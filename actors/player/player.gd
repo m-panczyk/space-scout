@@ -10,7 +10,10 @@ var _energy_production = SaveData.energy_production
 # Public properties with getters/setters
 var animation:AnimatedSprite2D
 var target_position: Vector2
+var target_sprite: Sprite2D
 var move_to_target: bool = false
+
+var freeze:bool = false
 
 var weapon_name:
 	get:
@@ -98,6 +101,7 @@ func _ready() -> void:
 	EventBus.subscribe("gameplay_clicked", _on_gameplay_clicked)
 	EventBus.subscribe("gameplay_click_released", _on_gameplay_click_released)
 	EventBus.subscribe("gameplay_double_clicked", _on_gameplay_double_clicked)
+	
 	var upgrade_manager = UpgradeManager.new()
 	upgrade_manager.player = self
 	add_child(upgrade_manager)
@@ -107,6 +111,38 @@ func _exit_tree() -> void:
 	EventBus.unsubscribe("gameplay_clicked", _on_gameplay_clicked)
 	EventBus.unsubscribe("gameplay_click_released", _on_gameplay_click_released)
 	EventBus.unsubscribe("gameplay_double_clicked", _on_gameplay_double_clicked)
+
+func _physics_process(delta: float) -> void:
+	# Handle continuous movement and position updates
+	var velocity = Vector2.ZERO
+	
+	if GlobalSettings.touch_controls == GlobalSettings.TouchControlType.POINT:
+		velocity = move_to_target_processing()
+	
+	if !freeze:
+		if Input.is_action_pressed("ui_left"):
+			animation.frame = 1
+			velocity.x -= 1
+		if Input.is_action_pressed("ui_right"):
+			animation.frame = 2
+			velocity.x += 1
+		if velocity.x == 0:
+			animation.frame = 0
+		if Input.is_action_pressed("ui_up"):
+			velocity.y -= 1
+		if Input.is_action_pressed("ui_down"):
+			velocity.y += 1
+		
+	if velocity.length() > 0:
+		velocity = velocity.normalized() * speed
+	position += velocity * delta
+	
+	process_clamping()
+
+func _input(event: InputEvent) -> void:
+
+	if event.is_action_pressed("game_fire"):
+		fire_weapon()
 	
 func _on_energy_production_timer_timeout():
 	if energy < energy_max:
@@ -123,50 +159,22 @@ func health_changed():
 	EventBus.emit("health_changed", [health,max_health])
 	SaveData.health = health
 	SaveData.health_max = max_health
+
 func _on_gameplay_clicked(click_position: Vector2):
 	target_position = click_position
 	move_to_target = true
+	target_sprite = (func(): var s = Sprite2D.new(); s.texture = get_animation().sprite_frames.get_frame_texture(get_animation().animation, get_animation().frame); s.scale = scale; s.modulate.a = 0.5; get_parent().add_child(s); s.global_position = target_position; return s).call()
 
 func _on_gameplay_click_released(_click_posiotion: Vector2):
 	move_to_target = false
-	animation.frame = 0  # Reset to idle animation
+	if target_sprite: target_sprite.queue_free(); target_sprite = null
 
 func _on_gameplay_double_clicked(click_position: Vector2):
 	# Double-click fires weapon instead of moving
 	fire_weapon()
-	
-func process_move(delta: float):
-	var velocity = Vector2.ZERO
-	
-	if Input.is_action_pressed("game_fire"):
-		fire_weapon()
-	
-	if GlobalSettings.touch_controls == GlobalSettings.TouchControlType.POINT:
-		velocity = move_to_target_processing()
-	else:
-		# Standard keyboard input (only when not moving to target)
-		if Input.is_action_pressed("ui_left"):
-			animation.frame = 1
-			velocity.x -= 1
-		if Input.is_action_pressed("ui_right"):
-			animation.frame = 2
-			velocity.x += 1
-		if velocity.x == 0:
-			animation.frame = 0
-		if Input.is_action_pressed("ui_up"):
-			velocity.y -= 1
-		if Input.is_action_pressed("ui_down"):
-			velocity.y += 1
-		
-		# Allow keyboard input to override click movement
-		if velocity.length() > 0:
-			move_to_target = false
-	
-	if velocity.length() > 0:
-		velocity = velocity.normalized() * speed
-	position += velocity * delta
+
 func move_to_target_processing() -> Vector2:
-		# Handle move-to-target from click
+	# Handle move-to-target from click
 	if move_to_target:
 		var direction_to_target = (target_position - global_position).normalized()
 		var distance_to_target = global_position.distance_to(target_position)
@@ -183,6 +191,7 @@ func move_to_target_processing() -> Vector2:
 				animation.frame = 0
 			return direction_to_target
 	return Vector2.ZERO
+
 func fire_weapon():
 	if energy >= weapon.consumption:
 		weapon.fire()

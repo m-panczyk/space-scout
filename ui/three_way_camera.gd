@@ -62,8 +62,11 @@ func switch_to_panel_index(index: int, animate: bool = true):
 		animate_to_panel(target_panel)
 	else:
 		frame_panel_instant(target_panel)
-	
+	var focus_node = target_panel.get_parent().focus_node
+	if focus_node.has_method("pass_focus"):
+		focus_node.pass_focus()
 	panel_changed.emit(current_panel_index)
+	get_tree().get_first_node_in_group("PLAYER").freeze = current_panel_index != 1
 
 func switch_to_panel_to_the_right():
 	"""Switch to panel to the right (left->center->right, stop at right)"""

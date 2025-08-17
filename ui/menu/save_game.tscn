@@ -32,6 +32,7 @@ anchor_right = 0.972222
 anchor_bottom = 0.0564815
 grow_horizontal = 2
 grow_vertical = 2
+focus_neighbor_bottom = NodePath("../NewSave")
 theme_override_colors/font_color = Color(41.5294, 0.0666667, 0, 1)
 theme_override_colors/font_focus_color = Color(41.5294, 0.0666667, 0, 1)
 disabled = true
@@ -60,6 +61,8 @@ anchor_bottom = 0.598149
 offset_bottom = -12.0
 grow_horizontal = 2
 grow_vertical = 0
+focus_neighbor_top = NodePath("../DelSave")
+focus_neighbor_bottom = NodePath("../Button")
 text = "Nowy Zapis"
 metadata/_edit_use_anchors_ = true
 
@@ -70,6 +73,7 @@ anchor_left = 0.631481
 anchor_top = 0.890741
 anchor_right = 0.972222
 anchor_bottom = 0.972222
+focus_neighbor_top = NodePath("../NewSave")
 disabled = true
 metadata/_edit_use_anchors_ = true
 
@@ -82,10 +86,10 @@ size = Vector2i(360, 100)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 356.0
-offset_bottom = 96.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 348.0
+offset_bottom = 88.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -127,3 +131,4 @@ text = "Anuluj"
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="popup_hide" from="NewSavePopup" to="." method="_on_new_save_popup_popup_hide"]
 [connection signal="pressed" from="NewSavePopup/Panel/NewSaveButton" to="." method="_on_new_save_button_pressed"]
+[connection signal="pressed" from="NewSavePopup/Panel/Cancel" to="." method="_on_cancel_pressed"]

@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://b870o03o3viu0"]
+[gd_scene load_steps=15 format=3 uid="uid://b870o03o3viu0"]
 
 [ext_resource type="Texture2D" uid="uid://dbcbprxmyl5ik" path="res://ui/img/frame.png" id="1_bxjat"]
 [ext_resource type="Texture2D" uid="uid://begh4gq22mypo" path="res://actors/player/img/base_0.png" id="2_nhvjh"]
 [ext_resource type="Shader" uid="uid://n0ti8kntmo5c" path="res://ui/gb_look.gdshader" id="2_plfjc"]
+[ext_resource type="Script" uid="uid://d0fjd2teuwx8k" path="res://ui/left_panel.gd" id="2_rbyhp"]
 [ext_resource type="Script" uid="uid://chlwd48a0xecw" path="res://ui/player_stats.gd" id="4_plfjc"]
 [ext_resource type="Texture2D" uid="uid://bmp252mh8po2a" path="res://actors/bullets/laser/11.png" id="5_nwrdf"]
 [ext_resource type="Script" uid="uid://ddl1w34xui1o3" path="res://ui/weapon_stats.gd" id="6_hpryw"]
@@ -74,6 +75,7 @@ patch_margin_left = 230
 patch_margin_top = 188
 patch_margin_right = 232
 patch_margin_bottom = 177
+script = ExtResource("2_rbyhp")
 
 [node name="PlayerStats" type="Control" parent="."]
 layout_mode = 1
@@ -263,6 +265,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+focus_neighbor_bottom = NodePath("../../EnergyStore/Button")
 script = ExtResource("7_hpryw")
 
 [node name="EnergyStore" type="RichTextLabel" parent="Lab/Jobs"]
@@ -283,6 +286,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+focus_neighbor_top = NodePath("../../Hull/Button")
+focus_neighbor_bottom = NodePath("../../EnergyProduction/Button")
 script = ExtResource("7_hpryw")
 
 [node name="EnergyProduction" type="RichTextLabel" parent="Lab/Jobs"]
@@ -303,6 +308,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+focus_neighbor_top = NodePath("../../EnergyStore/Button")
+focus_neighbor_bottom = NodePath("../../Speed/Button")
 script = ExtResource("7_hpryw")
 
 [node name="Speed" type="RichTextLabel" parent="Lab/Jobs"]
@@ -322,6 +329,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+focus_neighbor_top = NodePath("../../EnergyProduction/Button")
+focus_neighbor_bottom = NodePath("../../Consumption/Button")
 script = ExtResource("7_hpryw")
 
 [node name="Consumption" type="RichTextLabel" parent="Lab/Jobs"]
@@ -341,6 +350,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+focus_neighbor_top = NodePath("../../Speed/Button")
 script = ExtResource("7_hpryw")
 
 [node name="Queue" type="VBoxContainer" parent="Lab"]
@@ -352,3 +362,6 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "KOLEJKA"
 horizontal_alignment = 1
+
+[connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_focus_exited"]

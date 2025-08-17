@@ -18,10 +18,12 @@ func _ready() -> void:
 		$Button.text = tr("MENU_IO_LOAD_GAME")
 	for save in saves:
 		$SavesContainer.add_item(save["save_name"])
+	connect("draw",_on_draw)
+
+func _on_draw():
+	$SavesContainer.grab_focus()
 
 func format_datetime(datetime_str: String) -> String:
-	# Expected input format: "YYYY-MM-DD_hh-mm-ss" or timestamp format
-	# Output format: "YYYY-MM-DD hh:mm"
 	
 	if datetime_str == "Unknown":
 		return "Unknown"
@@ -92,7 +94,9 @@ func _on_button_pressed() -> void:
 
 func _on_new_save_pressed() -> void:
 	$NewSavePopup.show()
-	$SaveDetails/NewSave.disabled = true
+	%NewSaveName.text = Time.get_datetime_string_from_system()
+	$NewSavePopup/Panel/NewSaveButton.grab_focus()
+	$NewSave.disabled = true
 	$Button.disabled = true
 	$DelSave.disabled = true
 
@@ -185,4 +189,9 @@ func _on_del_save_pressed() -> void:
 
 
 func _on_new_save_popup_popup_hide() -> void:
-	$SaveDetails/NewSave.disabled = false
+	$NewSave.disabled = false
+
+
+func _on_cancel_pressed() -> void:
+	$NewSavePopup.hide()
+	$SavesContainer.grab_focus()
