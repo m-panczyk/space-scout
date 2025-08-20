@@ -1,0 +1,305 @@
+[gd_scene load_steps=11 format=3 uid="uid://bw7t0lr5wg58p"]
+
+[ext_resource type="Script" uid="uid://cbtwuc61nveys" path="res://lvl/tutorial.gd" id="1_ld8km"]
+[ext_resource type="PackedScene" uid="uid://c5qw6ssdl0lxr" path="res://ui/nine_patch_rect.tscn" id="2_hf2or"]
+[ext_resource type="Script" uid="uid://cpob7p7nl2icq" path="res://ui/option_button.gd" id="3_on6a6"]
+[ext_resource type="Script" uid="uid://dga454ix3877i" path="res://lvl/nine_patch_margin.gd" id="3_vtpxm"]
+[ext_resource type="Script" uid="uid://8cuk5heejxcx" path="res://ui/input_test.gd" id="4_y4ra0"]
+[ext_resource type="PackedScene" uid="uid://dhwg35w4fje4x" path="res://ui/tutorial/Keyboard.tscn" id="5_on6a6"]
+[ext_resource type="PackedScene" uid="uid://cl2wsn8at376i" path="res://ui/tutorial/Gamepad.tscn" id="6_y4ra0"]
+[ext_resource type="PackedScene" uid="uid://de2cw4cllaxuq" path="res://ui/tutorial/Touch.tscn" id="7_y4ra0"]
+[ext_resource type="PackedScene" uid="uid://xahgccewq6oc" path="res://ui/tutorial/UIControlTest.tscn" id="9_vtpxm"]
+[ext_resource type="Script" uid="uid://cfvom2733qvoo" path="res://ui/tutorial/gesture_button.gd" id="10_s7y8t"]
+
+[node name="Tutorial" type="Control" node_paths=PackedStringArray("ok_button", "back_button", "presentation")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+script = ExtResource("1_ld8km")
+ok_button = NodePath("Ok")
+back_button = NodePath("Back")
+presentation = [NodePath("0"), NodePath("1"), NodePath("2")]
+
+[node name="0" parent="." instance=ExtResource("2_hf2or")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0324074
+anchor_top = 0.0289855
+anchor_right = 0.963889
+anchor_bottom = 0.898551
+metadata/_edit_use_anchors_ = true
+
+[node name="NinePatchMargin" type="MarginContainer" parent="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_vtpxm")
+metadata/_custom_type_script = "uid://dga454ix3877i"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="0/NinePatchMargin"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="0/NinePatchMargin/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b]Zagubiony w nieznanym sektorze kosmosu musisz znaleźć drogę do domu.[/b] 
+
+Ze względu na ogromne odległości w odnalezieniu drogi pomaga ci [color=cyan]sztuczna inteligencja[/color]. Jednak doświadczenie pracy ze sztuczną inteligencją nauczyło nas, że potrafi się [i]„kosmicznie\"[/i] mylić. 
+
+Dlatego razem z obliczeniami generowane są odpowiedzi na [u]pytania kontrolne[/u]. 
+
+[b]Twoim zadaniem jako pilota jest:[/b]
+- Sterowanie statkiem do czasu, gdy SI skończy obliczenia
+- Weryfikacja poprawnej odpowiedzi na pytanie kontrolne
+
+[b][color=green]Powodzenia![/color][/b]"
+fit_content = true
+metadata/_edit_use_anchors_ = true
+
+[node name="1" parent="." instance=ExtResource("2_hf2or")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0324074
+anchor_top = 0.0289855
+anchor_right = 0.963889
+anchor_bottom = 0.898551
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_vtpxm")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="1/MarginContainer"]
+layout_mode = 2
+
+[node name="VSplitContainer" type="VSplitContainer" parent="1/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+split_offset = 200
+
+[node name="RichTextLabel" type="RichTextLabel" parent="1/MarginContainer/ScrollContainer/VSplitContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[b]Schemt sterowania[/b] 
+
+Zanim przejdziemy do lotu, przetestuj i wybierz swój preferowany schemat sterowania:"
+fit_content = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="1/MarginContainer/ScrollContainer/VSplitContainer/RichTextLabel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.68
+anchor_right = 1.0
+anchor_bottom = 0.835
+grow_horizontal = 2
+grow_vertical = 2
+text = "DOMYŚLNY SCHEMAT:"
+metadata/_edit_use_anchors_ = true
+
+[node name="Label2" type="Label" parent="1/MarginContainer/ScrollContainer/VSplitContainer/RichTextLabel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.845
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="FlowContainer" type="FlowContainer" parent="1/MarginContainer/ScrollContainer/VSplitContainer"]
+layout_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Button" type="Button" parent="1/MarginContainer/ScrollContainer/VSplitContainer/FlowContainer" node_paths=PackedStringArray("label")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+focus_neighbor_top = NodePath("Button")
+toggle_mode = true
+text = "Klawiatura i mysz"
+script = ExtResource("3_on6a6")
+label = NodePath("../../RichTextLabel/Label2")
+
+[node name="Button" type="Button" parent="1/MarginContainer/ScrollContainer/VSplitContainer/FlowContainer/Button" node_paths=PackedStringArray("parent_to_hide", "parent_for_test")]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 8.25342
+offset_right = 76.0
+offset_bottom = 38.2534
+focus_neighbor_bottom = NodePath("..")
+text = "TEST"
+script = ExtResource("4_y4ra0")
+parent_to_hide = NodePath("../../../../../../..")
+parent_for_test = NodePath("../../../../../../..")
+test_scene = ExtResource("5_on6a6")
+
+[node name="Button2" type="Button" parent="1/MarginContainer/ScrollContainer/VSplitContainer/FlowContainer" node_paths=PackedStringArray("label")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+focus_neighbor_top = NodePath("Button")
+toggle_mode = true
+text = "Gamepad"
+script = ExtResource("3_on6a6")
+label = NodePath("../../RichTextLabel/Label2")
+
+[node name="Button" type="Button" parent="1/MarginContainer/ScrollContainer/VSplitContainer/FlowContainer/Button2" node_paths=PackedStringArray("parent_to_hide", "parent_for_test")]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 8.25342
+offset_right = 76.0
+offset_bottom = 38.2534
+focus_neighbor_bottom = NodePath("..")
+text = "TEST"
+script = ExtResource("4_y4ra0")
+parent_to_hide = NodePath("../../../../../../..")
+parent_for_test = NodePath("../../../../../../..")
+test_scene = ExtResource("6_y4ra0")
+
+[node name="Button3" type="Button" parent="1/MarginContainer/ScrollContainer/VSplitContainer/FlowContainer" node_paths=PackedStringArray("label")]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+focus_neighbor_top = NodePath("Button")
+toggle_mode = true
+text = "Dotyk"
+script = ExtResource("3_on6a6")
+label = NodePath("../../RichTextLabel/Label2")
+
+[node name="Button" type="Button" parent="1/MarginContainer/ScrollContainer/VSplitContainer/FlowContainer/Button3" node_paths=PackedStringArray("parent_to_hide", "parent_for_test")]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 8.25342
+offset_right = 76.0
+offset_bottom = 38.2534
+focus_neighbor_bottom = NodePath("..")
+text = "TEST"
+script = ExtResource("4_y4ra0")
+parent_to_hide = NodePath("../../../../../../..")
+parent_for_test = NodePath("../../../../../../..")
+test_scene = ExtResource("7_y4ra0")
+
+[node name="2" parent="." instance=ExtResource("2_hf2or")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0324074
+anchor_top = 0.0289855
+anchor_right = 0.963889
+anchor_bottom = 0.898551
+metadata/_edit_use_anchors_ = true
+
+[node name="NinePatchMargin" type="MarginContainer" parent="2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_vtpxm")
+metadata/_custom_type_script = "uid://dga454ix3877i"
+
+[node name="Container" type="VBoxContainer" parent="2/NinePatchMargin"]
+layout_mode = 2
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="2/NinePatchMargin/Container"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[b]Schemt sterowania[/b] 
+
+Zanim przejdziemy do lotu, przetestuj i wybierz swój preferowany schemat sterowania:"
+fit_content = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Button" type="Button" parent="2/NinePatchMargin/Container" node_paths=PackedStringArray("parent_to_hide", "parent_for_test")]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("..")
+text = "TEST"
+script = ExtResource("4_y4ra0")
+parent_to_hide = NodePath("../../../..")
+parent_for_test = NodePath("../../../..")
+test_scene = ExtResource("9_vtpxm")
+
+[node name="FlowContainer2" type="FlowContainer" parent="2/NinePatchMargin/Container"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/_edit_use_anchors_ = true
+
+[node name="GestureLabel" type="Label" parent="2/NinePatchMargin/Container/FlowContainer2"]
+layout_mode = 2
+text = "
+dwa palce w góre: pauza
+dwa palce w  bok: ekran"
+
+[node name="GestureButton" type="CheckButton" parent="2/NinePatchMargin/Container/FlowContainer2/GestureLabel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 30.0
+grow_horizontal = 2
+text = "Gesty"
+alignment = 2
+script = ExtResource("10_s7y8t")
+metadata/_custom_type_script = "uid://cfvom2733qvoo"
+
+[node name="NavigationLabel" type="Label" parent="2/NinePatchMargin/Container/FlowContainer2"]
+layout_mode = 2
+text = "
+[lewy ekran][menu pauzy][prawy ekran]"
+metadata/_edit_use_anchors_ = true
+
+[node name="NavigationButton" type="CheckButton" parent="2/NinePatchMargin/Container/FlowContainer2/NavigationLabel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = -0.5
+offset_right = 0.5
+offset_bottom = 30.0
+grow_horizontal = 2
+text = "Przyciski u dołu ekranu"
+alignment = 2
+script = ExtResource("10_s7y8t")
+setting = 1
+metadata/_custom_type_script = "uid://cfvom2733qvoo"
+
+[node name="Ok" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.637963
+anchor_top = 0.89372
+anchor_right = 0.730555
+anchor_bottom = 0.990338
+grow_horizontal = 2
+grow_vertical = 0
+text = "OK"
+metadata/_edit_use_anchors_ = true
+
+[node name="Back" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.268519
+anchor_top = 0.89372
+anchor_right = 0.361111
+anchor_bottom = 0.990338
+grow_horizontal = 2
+grow_vertical = 0
+text = "Wstecz"
+metadata/_edit_use_anchors_ = true
+
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]

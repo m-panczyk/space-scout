@@ -66,7 +66,19 @@ func set_language(lang_id:int) -> void:
 
 func set_touch_controls(control_type:TouchControlType) -> void:
 	touch_controls = control_type
-
+	add_touch_control()
+func add_touch_control() -> void:
+	var game = get_tree().current_scene
+	if touch_controls == TouchControlType.JOYPAD_TOUCH and game != null:
+		if game.get_child(0).is_class("TouchScreenJoystick"):
+			var gamepad = load("res://ui/TouchScreenJoystick.tscn")
+			gamepad = gamepad.instantiate()
+			game.add_child(gamepad)
+			game.move_child(gamepad, 0)
+	elif game != null:
+		var gamepad = game.get_child(0)
+		if gamepad.is_class("TouchScreenJoystick"):
+			gamepad.queue_free()
 func set_user_dpi_scale(scale:float) -> void:
 	user_dpi_scale = clamp(scale, 0.5, 2.0)
 	adjust_viewport_scale()
@@ -129,14 +141,30 @@ func save_settings() -> void:
 func adjust_viewport_scale() -> void:
 	var screen_dpi = DisplayServer.screen_get_dpi()
 	var reference_dpi = 96.0
-	scale_factor = (screen_dpi / reference_dpi) * user_dpi_scale
-	scale_factor = clamp(scale_factor, 0.5, 3.0)
+	#var reference_dpi = 160.0
+	# Calculate initial scale factor
+	var linear_scale = (screen_dpi / reference_dpi) * user_dpi_scale
+	
+	# Apply logarithmic scaling
+	scale_factor = apply_logarithmic_scale(linear_scale)
 	
 	print("Screen DPI: ", screen_dpi)
 	print("User DPI scale: ", user_dpi_scale)
 	print("Applied scale factor: ", scale_factor)
 	
 	call_deferred("_apply_scale_factor")
+
+func apply_logarithmic_scale(linear_value: float) -> float:
+	var base_scale = 1.0
+	
+	if linear_value <= base_scale:
+		return linear_value  # Don't modify scales at or below 1.0
+	
+	# For scales above 1.0, apply logarithmic compression
+	var excess = linear_value - base_scale
+	var log_excess = log(excess + 1) / log(3)  # Adjust divisor to change compression
+	
+	return base_scale + log_excess
 
 func _apply_scale_factor():
 	if get_tree() and get_tree().root:

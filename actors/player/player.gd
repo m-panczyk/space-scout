@@ -1,6 +1,11 @@
 extends Actor
 class_name Player
 
+# Signal emitted when player reaches the target position
+signal move_target_reached(target_pos: Vector2)
+# Signal emitted when player fires weapon
+signal weapon_fired(weapon_name: String, energy_consumed: int)
+
 # Private backing fields
 var _weapon_name = SaveData.weapon_name
 var _energy:int = SaveData.energy
@@ -161,9 +166,10 @@ func health_changed():
 	SaveData.health_max = max_health
 
 func _on_gameplay_clicked(click_position: Vector2):
-	target_position = click_position
-	move_to_target = true
-	target_sprite = (func(): var s = Sprite2D.new(); s.texture = get_animation().sprite_frames.get_frame_texture(get_animation().animation, get_animation().frame); s.scale = scale; s.modulate.a = 0.5; get_parent().add_child(s); s.global_position = target_position; return s).call()
+	if GlobalSettings.touch_controls == GlobalSettings.TouchControlType.POINT:
+		target_position = click_position
+		move_to_target = true
+		target_sprite = (func(): var s = Sprite2D.new(); s.texture = get_animation().sprite_frames.get_frame_texture(get_animation().animation, get_animation().frame); s.scale = scale; s.modulate.a = 0.5; get_parent().add_child(s); s.global_position = target_position; return s).call()
 
 func _on_gameplay_click_released(_click_posiotion: Vector2):
 	move_to_target = false
@@ -183,6 +189,12 @@ func move_to_target_processing() -> Vector2:
 		if distance_to_target < 10.0:  # Adjust threshold as needed
 			move_to_target = false
 			animation.frame = 0
+			# Emit signal when target is reached due to distance
+			move_target_reached.emit(target_position)
+			# Clean up target sprite
+			if target_sprite: 
+				target_sprite.queue_free()
+				target_sprite = null
 		else:
 			# Set animation based on direction
 			if abs(direction_to_target.x) > abs(direction_to_target.y):
@@ -194,8 +206,11 @@ func move_to_target_processing() -> Vector2:
 
 func fire_weapon():
 	if energy >= weapon.consumption:
+		var energy_consumed = weapon.consumption
 		weapon.fire()
-		energy -= weapon.consumption
+		energy -= energy_consumed
+		# Emit signal when weapon is fired
+		weapon_fired.emit(weapon_name, energy_consumed)
 
 func died():
 	queue_free()

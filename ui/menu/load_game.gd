@@ -4,7 +4,7 @@ var title = tr("MENU_IO_LOAD_GAME")
 
 @export var save_menu:bool = false
 @onready var saves = SaveData.get_all_save_files()
-var game_scene = "res://game.tscn"
+var game_scene = "res://Game.tscn"
 
 
 func new_game() -> void:

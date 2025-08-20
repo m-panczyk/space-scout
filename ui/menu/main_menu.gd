@@ -47,7 +47,7 @@ func _on_save_game_pressed() -> void:
 
 func _on_continue_game_pressed() -> void:
 	SaveData.load_latest_save()
-	get_tree().change_scene_to_packed(load("res://game.tscn"))
+	get_tree().change_scene_to_packed(load("res://Game.tscn"))
 
 
 func _on_load_game_pressed() -> void:

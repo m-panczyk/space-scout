@@ -146,7 +146,7 @@ func find_components():
 	viewport_texture = viewport.get_texture()
 	
 	# Set initial properties
-	viewport.size = panel_size
+	#viewport.size = panel_size
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	sprite3d.pixel_size = pixel_size
 	sprite3d.billboard = BaseMaterial3D.BILLBOARD_DISABLED

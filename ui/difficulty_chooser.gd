@@ -6,29 +6,31 @@ var title = "Nowa Gra"
 var selected_subject: QGen.Przedmiot = QGen.Przedmiot.MATEMATYKA
 
 # Referencje do istniejących elementów UI
-@onready var easy_button: Button
-@onready var normal_button: Button  
-@onready var hard_button: Button
-@onready var easy_description: RichTextLabel
-@onready var normal_description: RichTextLabel
-@onready var hard_description: RichTextLabel
-@onready var item_list_container: BoxContainer
+@export var easy_button: Button
+@export var normal_button: Button  
+@export var hard_button: Button
+@export var easy_description: RichTextLabel
+@export var normal_description: RichTextLabel
+@export var hard_description: RichTextLabel
+@export var item_list_container: BoxContainer
 
 # Nowe elementy dla wyboru przedmiotu
-var subject_container: VBoxContainer
-var subject_label: Label
-var subject_option_button: OptionButton
-var stats_label: RichTextLabel
+@export var subject_container: VBoxContainer
+@export var subject_label: Label
+@export var subject_option_button: OptionButton
+@export var stats_label: RichTextLabel
+var tutorial_check = true:
+	get:
+		return GlobalSettings.tutorial_done
+	set(value):
+		pass
 
 func _ready() -> void:
-	get_ui_references()
-	add_subject_selection()
 	setup_subject_descriptions()
 	update_difficulty_descriptions()
 	update_layout()
-	
-	# Połącz signal zmiany rozmiaru ekranu
 	get_viewport().connect("size_changed", _on_viewport_size_changed)
+	$ItemList/Easy.grab_focus()
 
 func update_layout():
 	# Sprawdź orientację ekranu
@@ -241,29 +243,14 @@ func _on_subject_selected(index: int):
 	
 	print("Wybrano przedmiot: ", QGen.get_subject_name(selected_subject))
 
-# Oryginalne funkcje przycisków - rozszerzone o obsługę przedmiotów
-func _on_easy_pressed() -> void:
-	SaveData.difficulty_level = 0
+func launch_game(difficulty_level) -> void:
+	SaveData.difficulty_level = difficulty_level
 	SaveData.current_subject = selected_subject
-
-	
-	print("Rozpoczynam grę - Przedmiot: ", QGen.get_subject_name(selected_subject), ", Poziom: 10-11 lat")
-	get_tree().change_scene_to_packed(load("res://game.tscn"))
-
-func _on_normal_pressed() -> void:
-	SaveData.difficulty_level = 1
-	SaveData.current_subject = selected_subject
-	
-	print("Rozpoczynam grę - Przedmiot: ", QGen.get_subject_name(selected_subject), ", Poziom: 12-13 lat")
-	get_tree().change_scene_to_packed(load("res://game.tscn"))
-
-func _on_hard_pressed() -> void:
-	SaveData.difficulty_level = 2
-	SaveData.current_subject = selected_subject
-	
-	print("Rozpoczynam grę - Przedmiot: ", QGen.get_subject_name(selected_subject), ", Poziom: 14-15 lat")
-	get_tree().change_scene_to_packed(load("res://game.tscn"))
-
+	print("Rozpoczynam grę - Przedmiot: ", QGen.get_subject_name(selected_subject), ", Poziom trudności", str(difficulty_level))
+	if tutorial_check:
+		get_tree().change_scene_to_packed(load("res://Game.tscn"))
+	else:
+		$TutorialPopup.show()
 # Funkcje pomocnicze
 func get_selected_subject_name() -> String:
 	return QGen.get_subject_name(selected_subject)

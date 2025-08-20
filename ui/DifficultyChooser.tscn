@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://sat6qxf0xi7d"]
+[gd_scene load_steps=3 format=3 uid="uid://sat6qxf0xi7d"]
 
 [ext_resource type="Script" uid="uid://2y3ta5ax35gc" path="res://ui/difficulty_chooser.gd" id="1_adeqp"]
+[ext_resource type="Script" uid="uid://dt1xtapua8002" path="res://ui/tutorial_popup.gd" id="2_bvxk1"]
 
-[node name="DifficultyChooser" type="Control"]
+[node name="DifficultyChooser" type="Control" node_paths=PackedStringArray("easy_button", "normal_button", "hard_button", "easy_description", "normal_description", "hard_description", "item_list_container", "subject_container", "subject_label", "subject_option_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,6 +13,16 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_adeqp")
+easy_button = NodePath("ItemList/Easy")
+normal_button = NodePath("ItemList/Normal")
+hard_button = NodePath("ItemList/Hard")
+easy_description = NodePath("ItemList/Easy/RichTextLabel")
+normal_description = NodePath("ItemList/Normal/RichTextLabel2")
+hard_description = NodePath("ItemList/Hard/RichTextLabel3")
+item_list_container = NodePath("ItemList")
+subject_container = NodePath("ItemList/VBoxContainer")
+subject_label = NodePath("ItemList/VBoxContainer/Label")
+subject_option_button = NodePath("ItemList/VBoxContainer/OptionButton")
 
 [node name="ItemList" type="BoxContainer" parent="."]
 layout_mode = 1
@@ -23,17 +34,43 @@ grow_vertical = 2
 theme_override_constants/separation = 15
 alignment = 1
 
+[node name="VBoxContainer" type="VBoxContainer" parent="ItemList"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="ItemList/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "🎓 Wybierz przedmiot:"
+horizontal_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="ItemList/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_right = NodePath("../../Easy")
+focus_neighbor_bottom = NodePath("../../Easy")
+focus_next = NodePath("../../Easy")
+
 [node name="Easy" type="Button" parent="ItemList"]
 layout_mode = 2
 size_flags_horizontal = 3
+focus_neighbor_left = NodePath("../VBoxContainer/OptionButton")
+focus_neighbor_top = NodePath("../VBoxContainer/OptionButton")
+focus_neighbor_right = NodePath("../Normal")
+focus_neighbor_bottom = NodePath("../Normal")
+focus_next = NodePath("../Normal")
+focus_previous = NodePath("../VBoxContainer/OptionButton")
 theme_override_font_sizes/font_size = 32
 autowrap_mode = 3
 
 [node name="RichTextLabel" type="RichTextLabel" parent="ItemList/Easy"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 14
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 0.5
+offset_top = -54.0
+offset_bottom = 54.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
@@ -49,14 +86,23 @@ vertical_alignment = 1
 [node name="Normal" type="Button" parent="ItemList"]
 layout_mode = 2
 size_flags_horizontal = 3
+focus_neighbor_left = NodePath("../Easy")
+focus_neighbor_top = NodePath("../Easy")
+focus_neighbor_right = NodePath("../Hard")
+focus_neighbor_bottom = NodePath("../Hard")
+focus_next = NodePath("../Hard")
+focus_previous = NodePath("../Easy")
 theme_override_font_sizes/font_size = 32
 autowrap_mode = 3
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="ItemList/Normal"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 14
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 0.5
+offset_top = -34.0
+offset_bottom = 34.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
@@ -72,14 +118,20 @@ vertical_alignment = 1
 [node name="Hard" type="Button" parent="ItemList"]
 layout_mode = 2
 size_flags_horizontal = 3
+focus_neighbor_left = NodePath("../Normal")
+focus_neighbor_top = NodePath("../Normal")
+focus_previous = NodePath(".")
 theme_override_font_sizes/font_size = 32
 autowrap_mode = 3
 
 [node name="RichTextLabel3" type="RichTextLabel" parent="ItemList/Hard"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 14
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 0.5
+offset_top = -34.0
+offset_bottom = 34.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
@@ -92,6 +144,91 @@ scroll_active = false
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="pressed" from="ItemList/Easy" to="." method="_on_easy_pressed"]
-[connection signal="pressed" from="ItemList/Normal" to="." method="_on_normal_pressed"]
-[connection signal="pressed" from="ItemList/Hard" to="." method="_on_hard_pressed"]
+[node name="TutorialPopup" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_bvxk1")
+
+[node name="CheckButton" type="CheckButton" parent="TutorialPopup"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -159.5
+offset_top = 34.0
+offset_right = 159.5
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_left = NodePath("../HBoxContainer/YES")
+focus_neighbor_top = NodePath("../HBoxContainer/YES")
+focus_neighbor_right = NodePath("../HBoxContainer/NO")
+focus_neighbor_bottom = NodePath("../HBoxContainer/NO")
+focus_next = NodePath("../HBoxContainer/NO")
+focus_previous = NodePath("../HBoxContainer/YES")
+button_pressed = true
+text = "NIE POKAZUJ PONOWNIE"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TutorialPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -15.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="YES" type="Button" parent="TutorialPopup/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+focus_neighbor_left = NodePath("../NO")
+focus_neighbor_top = NodePath("../NO")
+focus_neighbor_right = NodePath("../../CheckButton")
+focus_neighbor_bottom = NodePath("../../CheckButton")
+focus_next = NodePath("../../CheckButton")
+focus_previous = NodePath("../NO")
+text = "TAK
+"
+
+[node name="NO" type="Button" parent="TutorialPopup/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../CheckButton")
+focus_neighbor_top = NodePath("../../CheckButton")
+focus_neighbor_right = NodePath("../YES")
+focus_neighbor_bottom = NodePath("../YES")
+focus_next = NodePath("../YES")
+focus_previous = NodePath("../../CheckButton")
+text = "NIE"
+
+[node name="Label" type="Label" parent="TutorialPopup"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.462963
+grow_horizontal = 2
+grow_vertical = 2
+text = "Czy chcesz wprowadznie przed grą?"
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 3
+metadata/_edit_use_anchors_ = true
+
+[connection signal="item_selected" from="ItemList/VBoxContainer/OptionButton" to="." method="_on_subject_selected"]
+[connection signal="ready" from="ItemList/VBoxContainer/OptionButton" to="." method="populate_subjects"]
+[connection signal="pressed" from="ItemList/Easy" to="." method="launch_game" binds= [0]]
+[connection signal="pressed" from="ItemList/Normal" to="." method="launch_game" binds= [1]]
+[connection signal="pressed" from="ItemList/Hard" to="." method="launch_game" binds= [2]]
+[connection signal="visibility_changed" from="TutorialPopup" to="TutorialPopup" method="_on_visibility_changed"]
+[connection signal="pressed" from="TutorialPopup/HBoxContainer/YES" to="TutorialPopup" method="_on_yes_pressed"]
+[connection signal="pressed" from="TutorialPopup/HBoxContainer/NO" to="TutorialPopup" method="_on_no_pressed"]

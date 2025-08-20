@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://3wpc4vknew35"]
+
+[ext_resource type="Script" uid="uid://cpu2p4fufbfh" path="res://addons/scripts/touch_screen_joystick.gd" id="1_mx6px"]
+
+[node name="TouchScreenJoystick" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(540, 540)
+mouse_filter = 1
+script = ExtResource("1_mx6px")
+knob_radius = 41.4
+mode = 1
+deadzone = 20.0
+change_opacity_when_touched = true
+from_opacity = 0.0
+to_opacity = 0.0
+use_input_actions = true
+metadata/_custom_type_script = "uid://cpu2p4fufbfh"

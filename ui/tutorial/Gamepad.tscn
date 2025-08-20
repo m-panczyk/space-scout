@@ -1,0 +1,161 @@
+[gd_scene load_steps=9 format=3 uid="uid://cl2wsn8at376i"]
+
+[ext_resource type="Script" uid="uid://ba7ngdrfty3vp" path="res://ui/tutorial/control_test.gd" id="1_oke0b"]
+[ext_resource type="Texture2D" uid="uid://b31tgjeeabvy0" path="res://ui/tutorial/input_sprites/Source/XGamepad/Default/T_X_L_UP.png" id="2_yang4"]
+[ext_resource type="Texture2D" uid="uid://bgbxghufrsc55" path="res://ui/tutorial/input_sprites/Source/XGamepad/Default/T_X_L_Down.png" id="3_7oioi"]
+[ext_resource type="Texture2D" uid="uid://bml8qel7qtm4f" path="res://ui/tutorial/input_sprites/Source/XGamepad/Default/T_X_L_Right.png" id="4_rp663"]
+[ext_resource type="Texture2D" uid="uid://cissjsetos46u" path="res://ui/tutorial/input_sprites/Source/XGamepad/Default/T_X_L_Left.png" id="5_vxw2r"]
+[ext_resource type="Texture2D" uid="uid://b6ecww45tlsls" path="res://ui/tutorial/input_sprites/Source/XGamepad/Default/T_X_RT.png" id="6_p2a6c"]
+[ext_resource type="Texture2D" uid="uid://75nier8ykghq" path="res://ui/tutorial/input_sprites/Source/XGamepad/Default/T_X_LB.png" id="7_kc3f4"]
+[ext_resource type="Texture2D" uid="uid://b2cpafmwhff41" path="res://ui/tutorial/input_sprites/Source/XGamepad/Default/T_X_RB.png" id="8_7shdq"]
+
+[node name="Gamepad" type="Control" node_paths=PackedStringArray("visual_clues")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oke0b")
+visual_clues = [NodePath("move"), NodePath("game_fire"), NodePath("ui")]
+
+[node name="Command" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -305.0
+offset_top = 49.0
+offset_right = 305.0
+offset_bottom = 123.0
+grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 32
+text = "Przetestujmy poruszanie się"
+horizontal_alignment = 1
+
+[node name="move" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -192.0
+offset_top = -491.0
+offset_right = 206.0
+offset_bottom = -103.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ui_up" type="TextureRect" parent="move"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -64.0
+offset_right = 64.0
+offset_bottom = 128.0
+grow_horizontal = 2
+texture = ExtResource("2_yang4")
+
+[node name="ui_down" type="TextureRect" parent="move"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -27.5
+offset_top = -78.0
+offset_right = 27.5
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("3_7oioi")
+
+[node name="ui_right" type="TextureRect" parent="move"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = -51.5
+offset_bottom = 51.5
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("4_rp663")
+
+[node name="ui_left" type="TextureRect" parent="move"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -51.5
+offset_right = 72.0
+offset_bottom = 51.5
+grow_vertical = 2
+texture = ExtResource("5_vxw2r")
+
+[node name="game_fire" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -109.5
+offset_top = -328.0
+offset_right = 109.5
+offset_bottom = -225.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("6_p2a6c")
+stretch_mode = 5
+
+[node name="ui" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -431.0
+offset_top = 96.0
+offset_right = 431.0
+offset_bottom = 177.0
+grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 24
+text = "Przełączanie pomiędzy ekranami intefejsu
+(naciśnij dwa razy, żeby pominąć animację)"
+horizontal_alignment = 1
+
+[node name="panel_left" type="TextureRect" parent="ui"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = 40.0
+offset_bottom = 20.0
+grow_vertical = 2
+texture = ExtResource("7_kc3f4")
+
+[node name="panel_right" type="TextureRect" parent="ui"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -64.0
+offset_bottom = 64.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("8_7shdq")

@@ -1,0 +1,124 @@
+[gd_scene load_steps=3 format=3 uid="uid://rtukjr7vcear"]
+
+[ext_resource type="Script" uid="uid://ba7ngdrfty3vp" path="res://ui/tutorial/control_test.gd" id="1_ntjx0"]
+[ext_resource type="Script" uid="uid://uo82qqaogrb" path="res://ui/tutorial/game_fire_virtual_gamepad.gd" id="2_7hfg5"]
+
+[node name="VirtualGamepad" type="Control" node_paths=PackedStringArray("visual_clues")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_ntjx0")
+commands = Array[String](["Test systemów bojowych", "Test interfejsu"])
+visual_clues = [NodePath("move"), NodePath("game_fire")]
+
+[node name="Command" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 47.0
+grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 32
+text = "Przetestujmy poruszanie się"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="move" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -109.0
+offset_top = -378.0
+offset_right = 123.0
+offset_bottom = -216.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ui_up" type="Label" parent="move"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -41.5
+offset_right = 41.5
+offset_bottom = 78.0
+grow_horizontal = 2
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 64
+text = "↑"
+horizontal_alignment = 1
+
+[node name="ui_down" type="Label" parent="move"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -27.5
+offset_top = -78.0
+offset_right = 27.5
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 64
+text = "↓"
+horizontal_alignment = 1
+
+[node name="ui_right" type="Label" parent="move"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -59.0
+offset_top = -78.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 64
+text = "→"
+horizontal_alignment = 2
+
+[node name="ui_left" type="Label" parent="move"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -78.0
+offset_right = 62.0
+grow_vertical = 0
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 64
+text = "←"
+
+[node name="game_fire" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -109.5
+offset_top = -328.0
+offset_right = 109.5
+offset_bottom = -250.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 64
+text = "CTRL"
+horizontal_alignment = 1
+script = ExtResource("2_7hfg5")
+
+[connection signal="visibility_changed" from="game_fire" to="game_fire" method="_on_visibility_changed"]
