@@ -24,7 +24,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  EXPORT_NAME: Space_Scout
+  EXPORT_NAME: spacescout
   GODOT_VERSION: "4.4.1"
 
 jobs:
